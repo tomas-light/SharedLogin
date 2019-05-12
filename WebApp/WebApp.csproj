@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <UserSecretsId>aspnet-WebApp-1B0C9643-D416-41C8-B463-15E881445966</UserSecretsId>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharedLogin.Configuration\SharedLogin.Configuration.csproj" />
+    <ProjectReference Include="..\SharedLogin.Infrastructure.Contexts\SharedLogin.Infrastructure.Contexts.csproj" />
+    <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories.Features\SharedLogin.Infrastructure.Repositories.Sql.Master.csproj" />
+    <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories\SharedLogin.Infrastructure.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>

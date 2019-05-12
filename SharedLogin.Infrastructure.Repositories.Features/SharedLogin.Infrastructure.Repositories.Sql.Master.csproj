@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharedLogin.Domain\SharedLogin.Domain.csproj" />
+    <ProjectReference Include="..\SharedLogin.Infrastructure.Contexts\SharedLogin.Infrastructure.Contexts.csproj" />
+    <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories\SharedLogin.Infrastructure.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
