@@ -8,19 +8,19 @@
 	{
 		public static void Configure(IServiceCollection services, string connectionString)
 		{
-			var factory = new SqlContextFactory(connectionString);
-			var context = factory.CreateDbContext();
-			
+			var context = CreateContext(connectionString);			
 			//context.Database.EnsureCreated();
 			context.Database.Migrate();
 
-			//services.AddScoped<SqlDbContext>((serviceProvider) => context);
-
-			services.AddScoped<SqlDbContext>(serviceProvider => new SqlContextFactory(connectionString).CreateDbContext());
-
-			//services.AddSingleton<SqlContextFactory>((serviceProvider) => connectionString);
+			services.AddScoped<SqlDbContext>(serviceProvider => CreateContext(connectionString));
 
 			//services.AddScoped<Func<string, SqlDbContext>>((serviceProvider) => );
+		}
+
+		private static SqlDbContext CreateContext(string connectionString)
+		{
+			var factory = new SqlContextFactory(connectionString);
+			return factory.CreateDbContext();
 		}
 	}
 }
