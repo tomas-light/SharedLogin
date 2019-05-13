@@ -4,30 +4,30 @@
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	public interface ISharedAccountsRepository<TAccountPrimaryKey>
+	public interface ISharedAccountsRepository
 	{
 		// get list
 
-		Task<IList<SharedAccount<TAccountPrimaryKey>>> FindAllAsync();
+		Task<List<SharedAccount>> FindAllAsync();
 
-		Task<IList<SharedAccount<TAccountPrimaryKey>>> FindByUserIdAsync(TAccountPrimaryKey userId);
+		Task<IList<SharedAccount>> FindByUserIdAsync(string userId);
 
-		Task<IList<SharedAccount<TAccountPrimaryKey>>> FindByAccountIdAsync(TAccountPrimaryKey accountId);
+		Task<IList<SharedAccount>> FindByAccountIdAsync(string accountId);
 
 		// get one
 
-		Task<SharedAccount<TAccountPrimaryKey>> FindByIdsAsync(TAccountPrimaryKey userId, TAccountPrimaryKey accountId);
+		Task<SharedAccount> FindByIdsAsync(string userId, string accountId);
 
-		Task<SharedAccount<TAccountPrimaryKey>> FindByIdAsync(int id);
+		Task<SharedAccount> FindByIdAsync(int id);
 
 		// create
 
-		Task<SharedAccount<TAccountPrimaryKey>> AddAsync(SharedAccount<TAccountPrimaryKey> sharedAccount);
+		Task<SharedAccount> AddAsync(SharedAccount sharedAccount);
 
 		// delete
 
-		Task RemoveByIdAsync(TAccountPrimaryKey id);
+		Task RemoveByIdAsync(string id);
 
-		Task RemoveAsync(SharedAccount<TAccountPrimaryKey> sharedAccount);
+		Task RemoveAsync(SharedAccount sharedAccount);
 	}
 }

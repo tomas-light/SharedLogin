@@ -10,10 +10,6 @@
 	using WebApp.Data;
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
-    using WebApp.Configuration;
-    using SharedLogin.Infrastructure.Contexts;
-    using SharedLogin.Infrastructure.Repositories;
-    using SharedLogin.Infrastructure.Repositories.Sql.Master;
     using SharedLogin.Configuration;
 
     public class Startup
@@ -35,7 +31,11 @@
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			services.AddDefaultDabaseConnection(Configuration);
+			var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+			services.AddDbContext<ApplicationDbContext>(options =>
+				options.UseSqlServer(connectionString)
+			);
 
 			services.AddDefaultIdentity<IdentityUser>()
 				.AddDefaultUI(UIFramework.Bootstrap4)
@@ -43,8 +43,7 @@
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			var ioc = new IoC(services);
-			ioc.RegisterRepository<string>();
+			SharedLoginConfiguration.Configure(services, Configuration, connectionString);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,8 +60,6 @@
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
-
-			app.CreateSharedLoginDataBase(Configuration);
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();

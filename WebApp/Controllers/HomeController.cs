@@ -11,9 +11,9 @@
 
 	public class HomeController : Controller
 	{
-		private readonly ISharedAccountsRepository<string> sharedAccountsRepository;
+		private readonly ISharedAccountsRepository sharedAccountsRepository;
 
-		public HomeController(ISharedAccountsRepository<string> sharedAccountsRepository)
+		public HomeController(ISharedAccountsRepository sharedAccountsRepository)
 		{
 			this.sharedAccountsRepository = sharedAccountsRepository;
 		}

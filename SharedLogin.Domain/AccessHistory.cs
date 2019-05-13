@@ -2,11 +2,11 @@
 {
 	using System;
 
-	public class AccessHistory<TAccountPrimaryKey> : DomainModel
+	public class AccessHistory : DomainModel
 	{
 		public int Id { get; set; }
 
-		public TAccountPrimaryKey SharedAccountId { get; set; }
+		public string SharedAccountId { get; set; }
 
 		public string AccountName { get; set; }
 
@@ -16,6 +16,6 @@
 
 		public DateTime? EndLoginDateTime { get; set; }
 
-		public SharedAccount<TAccountPrimaryKey> SharedAccount { get; set; }
+		public SharedAccount SharedAccount { get; set; }
 	}
 }

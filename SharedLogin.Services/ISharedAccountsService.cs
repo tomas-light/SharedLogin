@@ -4,16 +4,16 @@
 	using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface ISharedAccountsService<TAccountPrimaryKey> : IService
+    public interface ISharedAccountsService : IService
 	{
-		Task<TAccountPrimaryKey> GetCurrentUserIdAsync();
+		Task<string> GetCurrentUserIdAsync();
 
-		Task<TAccountPrimaryKey> GetCurrentAccountIdAsync();
+		Task<string> GetCurrentAccountIdAsync();
 
-		Task<IList<SharedAccount<TAccountPrimaryKey>>> GetCurrentSharedAccountsByCurrentUserAsync();
+		Task<IList<SharedAccount>> GetCurrentSharedAccountsByCurrentUserAsync();
 
-		Task<IList<SharedAccount<TAccountPrimaryKey>>> GetCurrentSharedAccountsByUserIdAsync(TAccountPrimaryKey userId);
+		Task<IList<SharedAccount>> GetCurrentSharedAccountsByUserIdAsync(string userId);
 
-		Task<SharedAccount<TAccountPrimaryKey>> AddAsync();
+		Task<SharedAccount> AddAsync();
 	}
 }

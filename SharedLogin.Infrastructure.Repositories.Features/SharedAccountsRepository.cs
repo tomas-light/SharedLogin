@@ -5,63 +5,61 @@
     using SharedLogin.Infrastructure.Contexts;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
-    public class SharedAccountsRepository<TAccountPrimaryKey> : ISharedAccountsRepository<TAccountPrimaryKey>
+    public class SharedAccountsRepository : ISharedAccountsRepository
 	{
-		private readonly SqlDbContext<TAccountPrimaryKey> dbContext;
+		private readonly SqlDbContext dbContext;
 
-		public SharedAccountsRepository(SqlDbContext<TAccountPrimaryKey> dbContext)
+		public SharedAccountsRepository(SqlDbContext dbContext)
 		{
 			this.dbContext = dbContext;
 		}
 
 		// get list
 
-		public Task<IList<SharedAccount<TAccountPrimaryKey>>> FindAllAsync()
+		public Task<List<SharedAccount>> FindAllAsync()
 		{
-			var result = dbContext.SharedAccounts.AsNoTracking().Cast<IList<SharedAccount<TAccountPrimaryKey>>>().ToListAsync();
-			return result as Task<IList<SharedAccount<TAccountPrimaryKey>>>;
+			return dbContext.SharedAccounts.AsNoTracking().ToListAsync();
 		}
 
-		public Task<IList<SharedAccount<TAccountPrimaryKey>>> FindByUserIdAsync(TAccountPrimaryKey userId)
+		public Task<IList<SharedAccount>> FindByUserIdAsync(string userId)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<IList<SharedAccount<TAccountPrimaryKey>>> FindByAccountIdAsync(TAccountPrimaryKey accountId)
+		public Task<IList<SharedAccount>> FindByAccountIdAsync(string accountId)
 		{
 			throw new NotImplementedException();
 		}
 
 		// get one
 
-		public Task<SharedAccount<TAccountPrimaryKey>> FindByIdsAsync(TAccountPrimaryKey userId, TAccountPrimaryKey accountId)
+		public Task<SharedAccount> FindByIdsAsync(string userId, string accountId)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<SharedAccount<TAccountPrimaryKey>> FindByIdAsync(int id)
+		public Task<SharedAccount> FindByIdAsync(int id)
 		{
 			throw new NotImplementedException();
 		}
 
 		// create
 
-		public Task<SharedAccount<TAccountPrimaryKey>> AddAsync(SharedAccount<TAccountPrimaryKey> sharedAccount)
+		public Task<SharedAccount> AddAsync(SharedAccount sharedAccount)
 		{
 			throw new NotImplementedException();
 		}
 
 		// delete
 
-		public Task RemoveByIdAsync(TAccountPrimaryKey id)
+		public Task RemoveByIdAsync(string id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task RemoveAsync(SharedAccount<TAccountPrimaryKey> sharedAccount)
+		public Task RemoveAsync(SharedAccount sharedAccount)
 		{
 			throw new NotImplementedException();
 		}

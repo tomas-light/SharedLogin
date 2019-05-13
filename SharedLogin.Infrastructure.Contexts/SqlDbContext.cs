@@ -3,11 +3,11 @@
 	using Microsoft.EntityFrameworkCore;
     using SharedLogin.Domain;
 
-    public class SqlDbContext<TAccountPrimaryKey> : BaseDbContext<TAccountPrimaryKey>
+    public class SqlDbContext : BaseDbContext
 	{
 		// Is it work ???
-		// DbContextOptions<SqlDbContext<TAccountPrimaryKey>> options
-		public SqlDbContext(DbContextOptions<BaseDbContext<TAccountPrimaryKey>> options)
+		// DbContextOptions<SqlDbContext> options
+		public SqlDbContext(DbContextOptions<BaseDbContext> options)
 			: base(options)
 		{
 		}
@@ -21,8 +21,10 @@
 
 		private static void BuildSharedAccounts(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<SharedAccount<TAccountPrimaryKey>>(sharedAccount =>
+			modelBuilder.Entity<SharedAccount>(sharedAccount =>
 			{
+				sharedAccount.ToTable("SharedAccounts");
+
 				sharedAccount.HasMany(ah => ah.AccessHistories)
 					.WithOne(accessHistory => accessHistory.SharedAccount);
 			});
@@ -30,12 +32,11 @@
 
 		private static void BuildAccessHistory(ModelBuilder modelBuilder)
 		{
-			//modelBuilder.Entity<AccessHistory<TAccountPrimaryKey>>();
-
-			//modelBuilder.Entity<AccessHistory<TAccountPrimaryKey>>(accessHistory =>
-			//{
-			//	accessHistory.HasKey(ah => new { ah.Id }).HasName("PK_access_history");
-			//});
+			modelBuilder.Entity<AccessHistory>(accessHistory =>
+			{
+				accessHistory.ToTable("AccessHistories");
+				//accessHistory.HasKey(ah => new { ah.Id }).HasName("PK_access_history");
+			});
 		}
 	}
 }
