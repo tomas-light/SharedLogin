@@ -25,7 +25,7 @@
 			{
 				sharedAccount.ToTable("SharedAccounts");
 
-				sharedAccount.HasMany(ah => ah.AccessHistories)
+				sharedAccount.HasMany(sa => sa.AccessHistories)
 					.WithOne(accessHistory => accessHistory.SharedAccount);
 			});
 		}
@@ -36,6 +36,12 @@
 			{
 				accessHistory.ToTable("AccessHistories");
 				//accessHistory.HasKey(ah => new { ah.Id }).HasName("PK_access_history");
+
+				accessHistory
+					.HasOne(ah => ah.SharedAccount)
+					.WithMany()
+					.HasForeignKey(ah => ah.SharedAccountId)
+					.OnDelete(DeleteBehavior.Cascade);
 			});
 		}
 	}

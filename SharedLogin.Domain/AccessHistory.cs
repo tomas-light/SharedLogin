@@ -6,7 +6,7 @@
 	{
 		public int Id { get; set; }
 
-		public string SharedAccountId { get; set; }
+		public int SharedAccountId { get; set; }
 
 		public string AccountName { get; set; }
 

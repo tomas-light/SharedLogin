@@ -11,7 +11,7 @@
 			var factory = new SqlContextFactory(connectionString);
 			var context = factory.CreateDbContext();
 			
-			context.Database.EnsureCreated();
+			//context.Database.EnsureCreated();
 			context.Database.Migrate();
 
 			//services.AddScoped<SqlDbContext>((serviceProvider) => context);

@@ -28,7 +28,7 @@ namespace SharedLogin.Infrastructure.Contexts.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    SharedAccountId = table.Column<string>(nullable: true),
+                    SharedAccountId = table.Column<int>(nullable: false),
                     AccountName = table.Column<string>(nullable: true),
                     UserName = table.Column<string>(nullable: true),
                     LoginDateTime = table.Column<DateTime>(nullable: false),
@@ -39,12 +39,23 @@ namespace SharedLogin.Infrastructure.Contexts.Migrations
                 {
                     table.PrimaryKey("PK_AccessHistories", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AccessHistories_SharedAccounts_SharedAccountId",
+                        column: x => x.SharedAccountId,
+                        principalTable: "SharedAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_AccessHistories_SharedAccounts_SharedAccountId1",
                         column: x => x.SharedAccountId1,
                         principalTable: "SharedAccounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessHistories_SharedAccountId",
+                table: "AccessHistories",
+                column: "SharedAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccessHistories_SharedAccountId1",

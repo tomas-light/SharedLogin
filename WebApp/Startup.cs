@@ -1,18 +1,23 @@
-﻿namespace WebApp
-{
-	using Microsoft.AspNetCore.Builder;
-	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Identity.UI;
-	using Microsoft.AspNetCore.Hosting;
-	using Microsoft.AspNetCore.Http;
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.EntityFrameworkCore;
-	using WebApp.Data;
-	using Microsoft.Extensions.Configuration;
-	using Microsoft.Extensions.DependencyInjection;
-    using SharedLogin.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApp.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SharedLogin.Configuration;
 
-    public class Startup
+namespace WebApp
+{
+	public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -31,19 +36,16 @@
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			var connectionString = Configuration.GetConnectionString("DefaultConnection");
-
 			services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseSqlServer(connectionString)
-			);
-
+				options.UseSqlServer(
+					Configuration.GetConnectionString("DefaultConnection")));
 			services.AddDefaultIdentity<IdentityUser>()
 				.AddDefaultUI(UIFramework.Bootstrap4)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			SharedLoginConfiguration.Configure(services, Configuration, connectionString);
+			SharedLoginConfiguration.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

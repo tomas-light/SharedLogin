@@ -1,26 +1,30 @@
-﻿namespace WebApp.Controllers
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using Microsoft.AspNetCore.Mvc;
-	using SharedLogin.Infrastructure.Repositories;
-	using WebApp.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using SharedLogin.Infrastructure.Repositories;
+using WebApp.Data;
+using WebApp.Models;
 
+namespace WebApp.Controllers
+{
 	public class HomeController : Controller
 	{
+		private readonly ApplicationDbContext applicationDbContext;
 		private readonly ISharedAccountsRepository sharedAccountsRepository;
 
-		public HomeController(ISharedAccountsRepository sharedAccountsRepository)
+		public HomeController(ISharedAccountsRepository sharedAccountsRepository, ApplicationDbContext applicationDbContext)
 		{
 			this.sharedAccountsRepository = sharedAccountsRepository;
+			this.applicationDbContext = applicationDbContext;
 		}
 
 		public async Task<IActionResult> Index()
 		{
-			var res = await this.sharedAccountsRepository.FindAllAsync();
+			var result1 = applicationDbContext.Users.ToList();
+			var result = await this.sharedAccountsRepository.FindAllAsync();
 			return View();
 		}
 

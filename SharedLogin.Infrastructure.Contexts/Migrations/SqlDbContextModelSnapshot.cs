@@ -31,13 +31,15 @@ namespace SharedLogin.Infrastructure.Contexts.Migrations
 
                     b.Property<DateTime>("LoginDateTime");
 
-                    b.Property<string>("SharedAccountId");
+                    b.Property<int>("SharedAccountId");
 
                     b.Property<int?>("SharedAccountId1");
 
                     b.Property<string>("UserName");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SharedAccountId");
 
                     b.HasIndex("SharedAccountId1");
 
@@ -62,6 +64,11 @@ namespace SharedLogin.Infrastructure.Contexts.Migrations
             modelBuilder.Entity("SharedLogin.Domain.AccessHistory", b =>
                 {
                     b.HasOne("SharedLogin.Domain.SharedAccount", "SharedAccount")
+                        .WithMany()
+                        .HasForeignKey("SharedAccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SharedLogin.Domain.SharedAccount")
                         .WithMany("AccessHistories")
                         .HasForeignKey("SharedAccountId1");
                 });
