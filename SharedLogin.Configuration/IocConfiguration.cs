@@ -4,11 +4,11 @@
     using Microsoft.Extensions.DependencyInjection;
 	using SharedLogin.Infrastructure.Repositories;
 	using SharedLogin.Infrastructure.Repositories.Sql.Master;
-    using SharedLogin.Services;
-    using SharedLogin.Services.Core;
-    using SharedLogin.Services.Core.Claims;
+	using SharedLogin.Services;
+	using SharedLogin.Services.Core;
+	using SharedLogin.Services.Core.Claims;
 
-    public static class IocConfiguration
+	public static class IocConfiguration
 	{
 		public static void Configure(IServiceCollection services)
 		{

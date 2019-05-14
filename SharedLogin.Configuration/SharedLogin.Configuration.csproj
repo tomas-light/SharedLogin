@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -10,9 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SharedLogin.Services\SharedLogin.Services.csproj" />
+    <ProjectReference Include="..\SharedLogin.Services.Core\SharedLogin.Services.Core.csproj" />
     <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories.Features\SharedLogin.Infrastructure.Repositories.Sql.Master.csproj" />
-    <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories\SharedLogin.Infrastructure.Repositories.csproj" />
-    <ProjectReference Include="..\SharedLogin.Services.Features\SharedLogin.Services.Core.csproj" />
   </ItemGroup>
 
 </Project>
