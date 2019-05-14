@@ -2,4 +2,10 @@
 
 How to setup for Asp.Net Core:
 
-`SharedLoginConfiguration.Configure(services, configuration, connectionString);`
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc();    
+    SharedLoginConfiguration.Configure(services, Configuration, Configuration.GetConnectionString("MyDbConnection"));    
+}
+```
