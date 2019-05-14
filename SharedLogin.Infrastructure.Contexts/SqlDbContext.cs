@@ -1,12 +1,10 @@
 ﻿namespace SharedLogin.Infrastructure.Contexts
 {
 	using Microsoft.EntityFrameworkCore;
-    using SharedLogin.Domain;
+    using SharedLogin.Core.DataModels;
 
     public class SqlDbContext : BaseDbContext
 	{
-		// Is it work ???
-		// DbContextOptions<SqlDbContext> options
 		public SqlDbContext(DbContextOptions<BaseDbContext> options)
 			: base(options)
 		{
@@ -35,7 +33,6 @@
 			modelBuilder.Entity<AccessHistory>(accessHistory =>
 			{
 				accessHistory.ToTable("AccessHistories");
-				//accessHistory.HasKey(ah => new { ah.Id }).HasName("PK_access_history");
 
 				accessHistory
 					.HasOne(ah => ah.SharedAccount)

@@ -1,8 +1,8 @@
-﻿namespace SharedLogin.Domain
+﻿namespace SharedLogin.Core.DataModels
 {
 	using System.Collections.Generic;
 
-	public class SharedAccount : DomainModel
+	public class SharedAccount : DataModel
 	{
 		public int Id { get; set; }
 

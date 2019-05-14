@@ -1,8 +1,8 @@
-﻿namespace SharedLogin.Domain
+﻿namespace SharedLogin.Core.DataModels
 {
 	using System;
 
-	public class AccessHistory : DomainModel
+	public class AccessHistory : DataModel
 	{
 		public int Id { get; set; }
 

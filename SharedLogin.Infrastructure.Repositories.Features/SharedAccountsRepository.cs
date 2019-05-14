@@ -1,10 +1,10 @@
 ﻿namespace SharedLogin.Infrastructure.Repositories.Sql.Master
 {
     using Microsoft.EntityFrameworkCore;
-    using SharedLogin.Domain;
+    using SharedLogin.Core.DataModels;
     using SharedLogin.Infrastructure.Contexts;
-    using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class SharedAccountsRepository : ISharedAccountsRepository
@@ -23,45 +23,59 @@
 			return dbContext.SharedAccounts.AsNoTracking().ToListAsync();
 		}
 
-		public Task<IList<SharedAccount>> FindByUserIdAsync(string userId)
+		public Task<List<SharedAccount>> FindByUserIdAsync(string userId)
 		{
-			throw new NotImplementedException();
+			return dbContext.SharedAccounts.AsNoTracking()
+					.Where(sharedAccount => sharedAccount.UserId == userId)
+					.ToListAsync();
 		}
 
-		public Task<IList<SharedAccount>> FindByAccountIdAsync(string accountId)
+		public Task<List<SharedAccount>> FindByAccountIdAsync(string accountId)
 		{
-			throw new NotImplementedException();
+			return dbContext.SharedAccounts.AsNoTracking()
+					.Where(sharedAccount => sharedAccount.AccountId == accountId)
+					.ToListAsync();
 		}
 
 		// get one
 
 		public Task<SharedAccount> FindByIdsAsync(string userId, string accountId)
 		{
-			throw new NotImplementedException();
+			return dbContext.SharedAccounts.AsNoTracking()
+					.FirstOrDefaultAsync(sharedAccount => 
+						sharedAccount.UserId == userId && 
+						sharedAccount.AccountId == accountId
+					);
 		}
 
 		public Task<SharedAccount> FindByIdAsync(int id)
 		{
-			throw new NotImplementedException();
+			return dbContext.SharedAccounts.AsNoTracking()
+					.FirstOrDefaultAsync(sharedAccount => sharedAccount.Id == id);
 		}
 
 		// create
 
-		public Task<SharedAccount> AddAsync(SharedAccount sharedAccount)
+		public async Task<SharedAccount> AddAsync(SharedAccount sharedAccount)
 		{
-			throw new NotImplementedException();
+			await dbContext.SharedAccounts.AddAsync(sharedAccount);
+			await dbContext.SaveChangesAsync();
+			return sharedAccount;
 		}
 
 		// delete
 
-		public Task RemoveByIdAsync(string id)
+		public async Task RemoveByIdAsync(int id)
 		{
-			throw new NotImplementedException();
+			var sharedAccount = await this.FindByIdAsync(id);
+			dbContext.SharedAccounts.Remove(sharedAccount);
+			await dbContext.SaveChangesAsync();
 		}
 
-		public Task RemoveAsync(SharedAccount sharedAccount)
+		public async Task RemoveAsync(SharedAccount sharedAccount)
 		{
-			throw new NotImplementedException();
+			dbContext.SharedAccounts.Remove(sharedAccount);
+			await dbContext.SaveChangesAsync();
 		}
 	}
 }

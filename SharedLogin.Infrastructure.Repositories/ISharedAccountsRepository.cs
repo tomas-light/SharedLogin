@@ -1,18 +1,18 @@
 ﻿namespace SharedLogin.Infrastructure.Repositories
 {
-	using SharedLogin.Domain;
+	using SharedLogin.Core.DataModels;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
-	public interface ISharedAccountsRepository
+	public interface ISharedAccountsRepository : IRepository
 	{
 		// get list
 
 		Task<List<SharedAccount>> FindAllAsync();
 
-		Task<IList<SharedAccount>> FindByUserIdAsync(string userId);
+		Task<List<SharedAccount>> FindByUserIdAsync(string userId);
 
-		Task<IList<SharedAccount>> FindByAccountIdAsync(string accountId);
+		Task<List<SharedAccount>> FindByAccountIdAsync(string accountId);
 
 		// get one
 
@@ -26,7 +26,7 @@
 
 		// delete
 
-		Task RemoveByIdAsync(string id);
+		Task RemoveByIdAsync(int id);
 
 		Task RemoveAsync(SharedAccount sharedAccount);
 	}

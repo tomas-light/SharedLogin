@@ -1,6 +1,6 @@
 ﻿namespace SharedLogin.Services
 {
-	using SharedLogin.Domain;
+	using SharedLogin.Core.DataModels;
 	using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -10,10 +10,12 @@
 
 		Task<string> GetCurrentAccountIdAsync();
 
-		Task<IList<SharedAccount>> GetCurrentSharedAccountsByCurrentUserAsync();
+		Task<IList<SharedAccount>> GetSharedAccountsByCurrentUserAsync();
 
-		Task<IList<SharedAccount>> GetCurrentSharedAccountsByUserIdAsync(string userId);
+		Task<List<SharedAccount>> GetSharedAccountsByUserIdAsync(string userId);
+		
+		Task SetCurrentAccountIdAsync(string accountId);
 
-		Task<SharedAccount> AddAsync();
+		Task<SharedAccount> AddAsync(string accountId);
 	}
 }

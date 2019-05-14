@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SharedLogin.Domain\SharedLogin.Domain.csproj" />
+    <ProjectReference Include="..\SharedLogin.Domain\SharedLogin.Core.csproj" />
   </ItemGroup>
 
 </Project>

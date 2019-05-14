@@ -1,7 +1,7 @@
 ﻿namespace SharedLogin.Infrastructure.Contexts
 {
 	using Microsoft.EntityFrameworkCore;
-    using SharedLogin.Domain;
+    using SharedLogin.Core.DataModels;
 
     public class BaseDbContext : DbContext
 	{

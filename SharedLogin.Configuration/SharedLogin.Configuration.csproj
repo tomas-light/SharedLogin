@@ -5,12 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories.Features\SharedLogin.Infrastructure.Repositories.Sql.Master.csproj" />
     <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories\SharedLogin.Infrastructure.Repositories.csproj" />
+    <ProjectReference Include="..\SharedLogin.Services.Features\SharedLogin.Services.Core.csproj" />
   </ItemGroup>
 
 </Project>

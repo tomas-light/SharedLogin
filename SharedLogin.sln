@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28902.138
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogin.Services.Features", "SharedLogin.Services.Features\SharedLogin.Services.Features.csproj", "{AFA11033-32EB-427D-987C-BBB95D368C7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogin.Services.Core", "SharedLogin.Services.Features\SharedLogin.Services.Core.csproj", "{AFA11033-32EB-427D-987C-BBB95D368C7A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogin.Domain", "SharedLogin.Domain\SharedLogin.Domain.csproj", "{AA5EBE45-23B5-4D83-9857-F0A97D89D010}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogin.Core", "SharedLogin.Domain\SharedLogin.Core.csproj", "{AA5EBE45-23B5-4D83-9857-F0A97D89D010}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogin.Services", "SharedLogin.Services\SharedLogin.Services.csproj", "{5E6FD000-2B78-4F46-BA13-94C5D2D0B394}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogin.Infrastructure.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogin.Configuration", "SharedLogin.Configuration\SharedLogin.Configuration.csproj", "{6F870313-8159-47AE-9C66-874A30904130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{48474B75-2E73-4261-903F-2C58BA875432}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{48474B75-2E73-4261-903F-2C58BA875432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
