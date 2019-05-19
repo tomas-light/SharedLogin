@@ -3,7 +3,7 @@
 	using Microsoft.EntityFrameworkCore;
     using System;
 
-    public class PostgreSqlContextFactory<TUserPrimaryKey> where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    public class PostgreSqlContextFactory
 	{
 		private readonly string connectionString;
 
@@ -12,11 +12,11 @@
 			this.connectionString = connectionString;
 		}
 
-		public PostgreSqlDbContext<TUserPrimaryKey> CreateDbContext()
+		public PostgreSqlDbContext CreateDbContext()
 		{
-			var builder = new DbContextOptionsBuilder<BaseDbContext<TUserPrimaryKey>>();
+			var builder = new DbContextOptionsBuilder<BaseDbContext>();
 			builder.UseNpgsql(this.connectionString);
-			var context = new PostgreSqlDbContext<TUserPrimaryKey>(builder.Options);
+			var context = new PostgreSqlDbContext(builder.Options);
 			return context;
 		}
 	}

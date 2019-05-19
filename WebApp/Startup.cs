@@ -45,7 +45,7 @@ namespace WebApp
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			Configger<string>.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
+			Configger.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

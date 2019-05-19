@@ -4,15 +4,14 @@
     using Core.Services.Histories;
     using System;
 
-    abstract class MapperConfiguration<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    abstract class MapperConfiguration
 	{
 		public static void Configure()
 		{
 			var mappingConfig = new AutoMapper.MapperConfiguration(mc =>
 			{
-				mc.AddProfile<AccountMappingProfile<TUserPrimaryKey>>();
-				mc.AddProfile<HistoryMappingProfile<TUserPrimaryKey>>();
+				mc.AddProfile<AccountMappingProfile>();
+				mc.AddProfile<HistoryMappingProfile>();
 			});
 
 			var mapper = mappingConfig.CreateMapper();

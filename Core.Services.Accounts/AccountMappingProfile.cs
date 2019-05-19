@@ -5,8 +5,7 @@
 	using Domain = Core.Models;
 	using Data = Infrastructure.Models;
 
-	public class AccountMappingProfile<TUserPrimaryKey> : Profile
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class AccountMappingProfile : Profile
 	{
 		public AccountMappingProfile()
 		{
@@ -16,12 +15,12 @@
 
 		private void MapDataModelToDomain()
 		{
-			CreateMap<Domain.Account<TUserPrimaryKey>, Data.Account<TUserPrimaryKey>>();
+			CreateMap<Domain.Account, Data.Account>();
 		}
 
 		private void MapDomainModelToData()
 		{
-			CreateMap<Data.Account<TUserPrimaryKey>, Domain.Account<TUserPrimaryKey>>();
+			CreateMap<Data.Account, Domain.Account>();
 		}
 	}
 }

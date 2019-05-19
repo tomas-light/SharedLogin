@@ -16,23 +16,22 @@
 	using Infrastructure.Repositories;
 	using Utils;
 
-    public class AccountService<TUserPrimaryKey> : IAccountService<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    public class AccountService : IAccountService
 	{
-		private readonly IAccountRepository<TUserPrimaryKey> accountRepository;
-		private readonly IHistoryService<TUserPrimaryKey> historyService;
+		private readonly IAccountRepository accountRepository;
+		private readonly IHistoryService historyService;
 		private readonly IHttpContextAccessor httpContextAccessor;
-		private readonly UserManager<IdentityUser<TUserPrimaryKey>> userManager;
+		private readonly UserManager<IdentityUser> userManager;
 		private readonly IMapper mapper;
 
-		private Func<Data.Account<TUserPrimaryKey>, Domain.Account<TUserPrimaryKey>> mapDataToDomain;
-		private Func<Domain.Account<TUserPrimaryKey>, Data.Account<TUserPrimaryKey>> mapDomainToData;
+		private Func<Data.Account, Domain.Account> mapDataToDomain;
+		private Func<Domain.Account, Data.Account> mapDomainToData;
 
 		public AccountService(
-			IAccountRepository<TUserPrimaryKey> accountRepository,
-			IHistoryService<TUserPrimaryKey> historyService,
+			IAccountRepository accountRepository,
+			IHistoryService historyService,
 			IHttpContextAccessor httpContextAccessor,
-			UserManager<IdentityUser<TUserPrimaryKey>> userManager,
+			UserManager<IdentityUser> userManager,
 			IMapper mapper)
 		{
 			this.accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
@@ -41,11 +40,11 @@
 			this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
-			this.mapDataToDomain = this.mapper.Map<Data.Account<TUserPrimaryKey>, Domain.Account<TUserPrimaryKey>>;
-			this.mapDomainToData = this.mapper.Map<Domain.Account<TUserPrimaryKey>, Data.Account<TUserPrimaryKey>>;
+			this.mapDataToDomain = this.mapper.Map<Data.Account, Domain.Account>;
+			this.mapDomainToData = this.mapper.Map<Domain.Account, Data.Account>;
 		}
 
-		public async Task<TUserPrimaryKey> GetUserIdAsync()
+		public async Task<string> GetUserIdAsync()
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			var user = await this.userManager.GetUserAsync(currentUserClaims);
@@ -57,7 +56,7 @@
 			return user.Id;
 		}
 
-		public async Task<Domain.Account<TUserPrimaryKey>> GetAccountAsync(TUserPrimaryKey userId, TUserPrimaryKey accesibleAccountId)
+		public async Task<Domain.Account> GetAccountAsync(string userId, string accesibleAccountId)
 		{
 			var dataAccount = await this.accountRepository.FindByIdsAsync(userId, accesibleAccountId);
 			if (dataAccount == null)
@@ -69,7 +68,7 @@
 			return domainAccount;
 		}
 
-		public Task<TUserPrimaryKey> GetActivatedAccountIdAsync()
+		public Task<string> GetActivatedAccountIdAsync()
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			var accountId = currentUserClaims.GetActiveAccountId();
@@ -77,20 +76,20 @@
 			return Task.FromResult(genericId);
 		}
 
-		public async Task<List<Domain.Account<TUserPrimaryKey>>> GetAccessibleAccountsAsync()
+		public async Task<List<Domain.Account>> GetAccessibleAccountsAsync()
 		{
 			var currentUserId = await this.GetActivatedAccountIdAsync();
 			var accounts = await this.accountRepository.FindByOwnerIdAsync(currentUserId);
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
-		public async Task<List<Domain.Account<TUserPrimaryKey>>> GetAccessibleAccountsByUserIdAsync(TUserPrimaryKey userId)
+		public async Task<List<Domain.Account>> GetAccessibleAccountsByUserIdAsync(string userId)
 		{
 			var accounts = await this.accountRepository.FindByOwnerIdAsync(userId);
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
-		public async Task ActivateAccountIdAsync(TUserPrimaryKey accountId)
+		public async Task ActivateAccountIdAsync(string accountId)
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			if (currentUserClaims == null)
@@ -126,7 +125,7 @@
 			await this.historyService.UpdateLastLogoutTimeAsync(account, owner, accessibleUser);
 		}
 
-		public async Task<Domain.Account<TUserPrimaryKey>> AddAsync(TUserPrimaryKey accountId)
+		public async Task<Domain.Account> AddAsync(string accountId)
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			if (currentUserClaims == null)
@@ -146,7 +145,7 @@
 				throw new ArgumentNullException("User already has access to this account");
 			}
 
-			var account = new Domain.Account<TUserPrimaryKey>
+			var account = new Domain.Account
 			{
 				OwnerId = owner.Id,
 				AccessibleAccountId = accountId,
@@ -158,7 +157,7 @@
 			return account;
 		}
 
-		public async Task DeleteAsync(TUserPrimaryKey accountId)
+		public async Task DeleteAsync(string accountId)
 		{
 			var currentUserId = await this.GetUserIdAsync();
 			var account = await this.accountRepository.FindByIdsAsync(currentUserId, accountId);
@@ -180,9 +179,9 @@
 			return currentUserClaims;
 		}
 		
-		private static TUserPrimaryKey ConvertType(string value)
+		private static string ConvertType(string value)
 		{
-			return TypeConverter.ConvertType<TUserPrimaryKey, string>(value);
+			return TypeConverter.ConvertType<string, string>(value);
 		}
 	}
 }

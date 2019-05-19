@@ -11,22 +11,21 @@
 	using Data = Infrastructure.Models;
     using AutoMapper;
 
-    public class HistoryService<TUserPrimaryKey> : IHistoryService<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    public class HistoryService : IHistoryService
 	{
 		private readonly IMapper mapper;
-		private readonly IHistoryRepository<TUserPrimaryKey> repository;
+		private readonly IHistoryRepository repository;
 
-		private Func<Data.History<TUserPrimaryKey>, Domain.History> mapDataToDomain;
+		private Func<Data.History, Domain.History> mapDataToDomain;
 
 		public HistoryService(
 			IMapper mapper,
-			IHistoryRepository<TUserPrimaryKey> historyRepository)
+			IHistoryRepository historyRepository)
 		{
 			this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 			this.repository = historyRepository ?? throw new ArgumentNullException(nameof(historyRepository));
 
-			this.mapDataToDomain = this.mapper.Map<Data.History<TUserPrimaryKey>, Domain.History>;
+			this.mapDataToDomain = this.mapper.Map<Data.History, Domain.History>;
 		}
 
 		public async Task<Domain.History> GetByIdAcync(int id)
@@ -42,14 +41,14 @@
 		}
 
 		public async Task UpdateLastLogoutTimeAsync(
-			Domain.Account<TUserPrimaryKey> account,
-			IdentityUser<TUserPrimaryKey> owner,
-			IdentityUser<TUserPrimaryKey> accessibleUser)
+			Domain.Account account,
+			IdentityUser owner,
+			IdentityUser accessibleUser)
 		{
 			var dateTime = DateTime.UtcNow;
 			await this.UpdateLastLogoutTimeForAccountAsync(account.Id, dateTime);
 
-			var newAccessHistory = new Data.History<TUserPrimaryKey>
+			var newAccessHistory = new Data.History
 			{
 				AccountId = account.Id,
 				LoginDateTime = dateTime,
@@ -69,7 +68,7 @@
 			}
 		}
 
-		private async Task<Data.History<TUserPrimaryKey>> GetLastHistoryByAccountIdAsync(int accountId)
+		private async Task<Data.History> GetLastHistoryByAccountIdAsync(int accountId)
 		{
 			var histories = await this.repository.FindByAccountIdAsync(accountId);
 			if (!histories.Any())

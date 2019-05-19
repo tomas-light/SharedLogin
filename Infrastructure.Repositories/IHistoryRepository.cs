@@ -5,14 +5,14 @@
 	using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IHistoryRepository<TUserPrimaryKey> where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    public interface IHistoryRepository
 	{
-		Task<History<TUserPrimaryKey>> FindByIdAcync(int id);
+		Task<History> FindByIdAcync(int id);
 
-		Task<List<History<TUserPrimaryKey>>> FindByAccountIdAsync(int accountId);
+		Task<List<History>> FindByAccountIdAsync(int accountId);
 
-		Task<History<TUserPrimaryKey>> AddAsync(History<TUserPrimaryKey> history);
+		Task<History> AddAsync(History history);
 
-		Task<History<TUserPrimaryKey>> UpdateAsync(History<TUserPrimaryKey> history);
+		Task<History> UpdateAsync(History history);
 	}
 }

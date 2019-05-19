@@ -5,8 +5,7 @@
 	using Domain = Core.Models;
 	using Data = Infrastructure.Models;
 
-	public class HistoryMappingProfile<TUserPrimaryKey> : Profile
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class HistoryMappingProfile : Profile
 	{
 		public HistoryMappingProfile()
 		{
@@ -16,12 +15,12 @@
 
 		private void MapDataModelToDomain()
 		{
-			CreateMap<Domain.History, Data.History<TUserPrimaryKey>>();
+			CreateMap<Domain.History, Data.History>();
 		}
 
 		private void MapDomainModelToData()
 		{
-			CreateMap<Data.History<TUserPrimaryKey>, Domain.History>();
+			CreateMap<Data.History, Domain.History>();
 		}
 	}
 }

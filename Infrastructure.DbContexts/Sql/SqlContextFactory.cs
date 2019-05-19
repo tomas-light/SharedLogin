@@ -3,7 +3,7 @@
 	using Microsoft.EntityFrameworkCore;
     using System;
 
-    public class SqlContextFactory<TUserPrimaryKey> where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    public class SqlContextFactory
 	{
 		private readonly string connectionString;
 
@@ -12,11 +12,11 @@
 			this.connectionString = connectionString;
 		}
 
-		public SqlDbContext<TUserPrimaryKey> CreateDbContext()
+		public SqlDbContext CreateDbContext()
 		{
-			var builder = new DbContextOptionsBuilder<BaseDbContext<TUserPrimaryKey>>();
+			var builder = new DbContextOptionsBuilder<BaseDbContext>();
 			builder.UseSqlServer(this.connectionString);
-			var context = new SqlDbContext<TUserPrimaryKey>(builder.Options);
+			var context = new SqlDbContext(builder.Options);
 			return context;
 		}
 	}

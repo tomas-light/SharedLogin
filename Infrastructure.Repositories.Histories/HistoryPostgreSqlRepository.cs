@@ -8,37 +8,36 @@
 	using System.Linq;
 	using System.Threading.Tasks;
 
-	public class HistoryPostgreSqlRepository<TUserPrimaryKey> : IHistoryRepository<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class HistoryPostgreSqlRepository : IHistoryRepository
 	{
-		private readonly PostgreSqlDbContext<TUserPrimaryKey> dbContext;
+		private readonly PostgreSqlDbContext dbContext;
 
-		public HistoryPostgreSqlRepository(PostgreSqlDbContext<TUserPrimaryKey> dbContext)
+		public HistoryPostgreSqlRepository(PostgreSqlDbContext dbContext)
 		{
 			this.dbContext = dbContext;
 		}
 
-		public Task<History<TUserPrimaryKey>> FindByIdAcync(int id)
+		public Task<History> FindByIdAcync(int id)
 		{
 			return dbContext.Histories.AsNoTracking()
 					.FirstOrDefaultAsync(history => history.Id == id);
 		}
 
-		public Task<List<History<TUserPrimaryKey>>> FindByAccountIdAsync(int accountId)
+		public Task<List<History>> FindByAccountIdAsync(int accountId)
 		{
 			return dbContext.Histories.AsNoTracking()
 					.Where(history => history.AccountId == accountId)
 					.ToListAsync();
 		}
 
-		public async Task<History<TUserPrimaryKey>> AddAsync(History<TUserPrimaryKey> history)
+		public async Task<History> AddAsync(History history)
 		{
 			await dbContext.Histories.AddAsync(history);
 			await dbContext.SaveChangesAsync();
 			return history;
 		}
 
-		public async Task<History<TUserPrimaryKey>> UpdateAsync(History<TUserPrimaryKey> history)
+		public async Task<History> UpdateAsync(History history)
 		{
 			dbContext.Histories.Update(history);
 			await dbContext.SaveChangesAsync();

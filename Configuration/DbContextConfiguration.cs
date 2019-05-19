@@ -7,13 +7,12 @@
 	using System.Collections.Generic;
 	using System.Text;
 
-	abstract class DbContextConfiguration<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	abstract class DbContextConfiguration
 	{
 		public static void Configure(IServiceCollection services, string connectionString, DbConfigurationOptions dbConfigurationOptions)
 		{
-			BaseDbContext<TUserPrimaryKey> context;
-			Func<string, BaseDbContext<TUserPrimaryKey>> createContext;
+			BaseDbContext context;
+			Func<string, BaseDbContext> createContext;
 
 			switch (dbConfigurationOptions)
 			{
@@ -36,15 +35,15 @@
 			//services.AddScoped<Func<string, SqlDbContext>>((serviceProvider) => );
 		}
 
-		private static SqlDbContext<TUserPrimaryKey> CreateSqlContext(string connectionString)
+		private static SqlDbContext CreateSqlContext(string connectionString)
 		{
-			var factory = new SqlContextFactory<TUserPrimaryKey>(connectionString);
+			var factory = new SqlContextFactory(connectionString);
 			return factory.CreateDbContext();
 		}
 
-		private static PostgreSqlDbContext<TUserPrimaryKey> CreatePostgreSqlContext(string connectionString)
+		private static PostgreSqlDbContext CreatePostgreSqlContext(string connectionString)
 		{
-			var factory = new PostgreSqlContextFactory<TUserPrimaryKey>(connectionString);
+			var factory = new PostgreSqlContextFactory(connectionString);
 			return factory.CreateDbContext();
 		}
 	}

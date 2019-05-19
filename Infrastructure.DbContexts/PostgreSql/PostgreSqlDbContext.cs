@@ -4,10 +4,9 @@
 	using Microsoft.EntityFrameworkCore;
 	using System;
 
-	public class PostgreSqlDbContext<TUserPrimaryKey> : BaseDbContext<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class PostgreSqlDbContext : BaseDbContext
 	{
-		public PostgreSqlDbContext(DbContextOptions<BaseDbContext<TUserPrimaryKey>> options)
+		public PostgreSqlDbContext(DbContextOptions<BaseDbContext> options)
 			: base(options)
 		{
 		}
@@ -21,7 +20,7 @@
 
 		private static void BuildSharedAccounts(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Account<TUserPrimaryKey>>(account =>
+			modelBuilder.Entity<Account>(account =>
 			{
 				account.ToTable("accessible_accounts");
 
@@ -32,7 +31,7 @@
 
 		private static void BuildAccessHistory(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<History<TUserPrimaryKey>>(history =>
+			modelBuilder.Entity<History>(history =>
 			{
 				history.ToTable("accessible_accounts_histories");
 

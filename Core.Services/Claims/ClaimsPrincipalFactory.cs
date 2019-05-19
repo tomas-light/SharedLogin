@@ -6,17 +6,16 @@
     using System.Security.Claims;
 	using System.Threading.Tasks;
 
-	public class ClaimsPrincipalFactory<TUserPrimaryKey> : UserClaimsPrincipalFactory<IdentityUser<TUserPrimaryKey>>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class ClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser>
 	{
 		public ClaimsPrincipalFactory(
-			UserManager<IdentityUser<TUserPrimaryKey>> userManager,
+			UserManager<IdentityUser> userManager,
 			IOptions<IdentityOptions> optionsAccessor)
 			: base(userManager, optionsAccessor)
 		{
 		}
 
-		public override async Task<ClaimsPrincipal> CreateAsync(IdentityUser<TUserPrimaryKey> user)
+		public override async Task<ClaimsPrincipal> CreateAsync(IdentityUser user)
 		{
 			var principal = await base.CreateAsync(user);
 

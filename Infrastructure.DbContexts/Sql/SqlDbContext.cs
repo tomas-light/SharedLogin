@@ -4,10 +4,9 @@
     using Microsoft.EntityFrameworkCore;
     using System;
 
-	public class SqlDbContext<TUserPrimaryKey> : BaseDbContext<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class SqlDbContext : BaseDbContext
 	{
-		public SqlDbContext(DbContextOptions<BaseDbContext<TUserPrimaryKey>> options)
+		public SqlDbContext(DbContextOptions<BaseDbContext> options)
 			: base(options)
 		{
 		}
@@ -21,7 +20,7 @@
 
 		private static void BuildSharedAccounts(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Account<TUserPrimaryKey>>(account =>
+			modelBuilder.Entity<Account>(account =>
 			{
 				account.ToTable("AccessibleAccounts");
 
@@ -32,7 +31,7 @@
 
 		private static void BuildAccessHistory(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<History<TUserPrimaryKey>>(history =>
+			modelBuilder.Entity<History>(history =>
 			{
 				history.ToTable("AccessibleAccountsHistories");
 

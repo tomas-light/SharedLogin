@@ -13,13 +13,13 @@ namespace WebApp.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ApplicationDbContext applicationDbContext;
-		private readonly UserManager<IdentityUser<string>> userManager;
-		private readonly IAccountService<string> accountService;
+		private readonly UserManager<IdentityUser> userManager;
+		private readonly IAccountService accountService;
 
 		public HomeController(
-			UserManager<IdentityUser<string>> userManager, 
+			UserManager<IdentityUser> userManager, 
 			ApplicationDbContext applicationDbContext,
-			IAccountService<string> accountService)
+			IAccountService accountService)
 		{
 			this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
 			this.applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));

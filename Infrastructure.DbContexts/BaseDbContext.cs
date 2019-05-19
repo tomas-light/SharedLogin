@@ -4,16 +4,15 @@
     using Microsoft.EntityFrameworkCore;
 	using System;
 
-	public class BaseDbContext<TUserPrimaryKey> : DbContext
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class BaseDbContext : DbContext
 	{
-		public BaseDbContext(DbContextOptions<BaseDbContext<TUserPrimaryKey>> options)
+		public BaseDbContext(DbContextOptions<BaseDbContext> options)
 			: base(options)
 		{
 		}
 
-		public DbSet<Account<TUserPrimaryKey>> Accounts { get; set; }
+		public DbSet<Account> Accounts { get; set; }
 
-		public DbSet<History<TUserPrimaryKey>> Histories { get; set; }
+		public DbSet<History> Histories { get; set; }
 	}
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.DbContexts.Migrations
 {
-    [DbContext(typeof(SqlDesignTimeDbContext))]
+    [DbContext(typeof(SqlDbContext))]
     [Migration("20190519152040_Init")]
     partial class Init
     {

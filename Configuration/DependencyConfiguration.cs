@@ -11,8 +11,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using System;
 
-	abstract class DependencyConfiguration<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	abstract class DependencyConfiguration
 	{
 		public static void Configure(IServiceCollection services, DbConfigurationOptions dbConfigurationOptions)
 		{
@@ -32,28 +31,28 @@
 			RegisterAuth(services);
 		}
 
-		public static void RegisterSqlRepository(IServiceCollection services)
-		{
-			services.AddScoped<IAccountRepository<TUserPrimaryKey>, AccountSqlRepository<TUserPrimaryKey>>();
-			services.AddScoped<IHistoryRepository<TUserPrimaryKey>, HistorySqlRepository<TUserPrimaryKey>>();
-		}
-
 		public static void RegisterPostgreSqlRepository(IServiceCollection services)
 		{
-			services.AddScoped<IAccountRepository<TUserPrimaryKey>, AccountPostgreSqlRepository<TUserPrimaryKey>>();
-			services.AddScoped<IHistoryRepository<TUserPrimaryKey>, HistoryPostgreSqlRepository<TUserPrimaryKey>>();
+			services.AddScoped<IAccountRepository, AccountPostgreSqlRepository>();
+			services.AddScoped<IHistoryRepository, HistoryPostgreSqlRepository>();
+		}
+
+		public static void RegisterSqlRepository(IServiceCollection services)
+		{
+			services.AddScoped<IAccountRepository, AccountSqlRepository>();
+			services.AddScoped<IHistoryRepository, HistorySqlRepository>();
 		}
 
 		public static void RegisterServices(IServiceCollection services)
 		{
-			services.AddScoped<IAccountService<TUserPrimaryKey>, AccountService<TUserPrimaryKey>>();
-			services.AddScoped<IHistoryService<TUserPrimaryKey>, HistoryService<TUserPrimaryKey>>();
+			services.AddScoped<IAccountService, AccountService>();
+			services.AddScoped<IHistoryService, HistoryService>();
 		}
 
 		public static void RegisterAuth(IServiceCollection services)
 		{
 			services.AddHttpContextAccessor();
-			services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser<TUserPrimaryKey>>, ClaimsPrincipalFactory<TUserPrimaryKey>>();
+			services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, ClaimsPrincipalFactory>();
 		}
 	}
 }

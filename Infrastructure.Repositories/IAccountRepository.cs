@@ -5,30 +5,30 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    public interface IAccountRepository<TUserPrimaryKey> where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    public interface IAccountRepository
 	{
 		// get list
 
-		Task<List<Account<TUserPrimaryKey>>> FindAllAsync();
+		Task<List<Account>> FindAllAsync();
 
-		Task<List<Account<TUserPrimaryKey>>> FindByOwnerIdAsync(TUserPrimaryKey ownerId);
+		Task<List<Account>> FindByOwnerIdAsync(string ownerId);
 
-		Task<List<Account<TUserPrimaryKey>>> FindByAccessibleAccountIdAsync(TUserPrimaryKey accessibleAccountId);
+		Task<List<Account>> FindByAccessibleAccountIdAsync(string accessibleAccountId);
 
 		// get one
 
-		Task<Account<TUserPrimaryKey>> FindByIdsAsync(TUserPrimaryKey ownerId, TUserPrimaryKey accessibleAccountId);
+		Task<Account> FindByIdsAsync(string ownerId, string accessibleAccountId);
 
-		Task<Account<TUserPrimaryKey>> FindByIdAsync(int id);
+		Task<Account> FindByIdAsync(int id);
 
 		// create
 
-		Task<Account<TUserPrimaryKey>> AddAsync(Account<TUserPrimaryKey> account);
+		Task<Account> AddAsync(Account account);
 
 		// delete
 
 		Task RemoveByIdAsync(int id);
 
-		Task RemoveAsync(Account<TUserPrimaryKey> account);
+		Task RemoveAsync(Account account);
 	}
 }

@@ -8,31 +8,30 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class AccountSqlRepository<TUserPrimaryKey> : IAccountRepository<TUserPrimaryKey>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    public class AccountSqlRepository : IAccountRepository
 	{
-		private readonly SqlDbContext<TUserPrimaryKey> dbContext;
+		private readonly SqlDbContext dbContext;
 
-		public AccountSqlRepository(SqlDbContext<TUserPrimaryKey> dbContext)
+		public AccountSqlRepository(SqlDbContext dbContext)
 		{
 			this.dbContext = dbContext;
 		}
 
 		// get list
 
-		public Task<List<Account<TUserPrimaryKey>>> FindAllAsync()
+		public Task<List<Account>> FindAllAsync()
 		{
 			return dbContext.Accounts.AsNoTracking().ToListAsync();
 		}
 
-		public Task<List<Account<TUserPrimaryKey>>> FindByOwnerIdAsync(TUserPrimaryKey ownerId)
+		public Task<List<Account>> FindByOwnerIdAsync(string ownerId)
 		{
 			return dbContext.Accounts.AsNoTracking()
 					.Where(account => account.OwnerId.Equals(ownerId))
 					.ToListAsync();
 		}
 
-		public Task<List<Account<TUserPrimaryKey>>> FindByAccessibleAccountIdAsync(TUserPrimaryKey accessibleAccountId)
+		public Task<List<Account>> FindByAccessibleAccountIdAsync(string accessibleAccountId)
 		{
 			return dbContext.Accounts.AsNoTracking()
 					.Where(account => account.AccessibleAccountId.Equals(accessibleAccountId))
@@ -41,7 +40,7 @@
 
 		// get one
 
-		public Task<Account<TUserPrimaryKey>> FindByIdsAsync(TUserPrimaryKey ownerId, TUserPrimaryKey accessibleAccountId)
+		public Task<Account> FindByIdsAsync(string ownerId, string accessibleAccountId)
 		{
 			return dbContext.Accounts.AsNoTracking()
 					.FirstOrDefaultAsync(account =>
@@ -50,7 +49,7 @@
 					);
 		}
 
-		public Task<Account<TUserPrimaryKey>> FindByIdAsync(int id)
+		public Task<Account> FindByIdAsync(int id)
 		{
 			return dbContext.Accounts.AsNoTracking()
 					.FirstOrDefaultAsync(account => account.Id == id);
@@ -58,7 +57,7 @@
 
 		// create
 
-		public async Task<Account<TUserPrimaryKey>> AddAsync(Account<TUserPrimaryKey> account)
+		public async Task<Account> AddAsync(Account account)
 		{
 			await dbContext.Accounts.AddAsync(account);
 			await dbContext.SaveChangesAsync();
@@ -74,7 +73,7 @@
 			await dbContext.SaveChangesAsync();
 		}
 
-		public async Task RemoveAsync(Account<TUserPrimaryKey> account)
+		public async Task RemoveAsync(Account account)
 		{
 			dbContext.Accounts.Remove(account);
 			await dbContext.SaveChangesAsync();

@@ -2,7 +2,7 @@
 {
 	using System;
 
-	public class History<TUserPrimaryKey> where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+	public class History
 	{
 		public int Id { get; set; }
 
@@ -16,6 +16,6 @@
 
 		public DateTime? LogoutDateTime { get; set; }
 
-		public Account<TUserPrimaryKey> AccessibleAccount { get; set; }
+		public Account AccessibleAccount { get; set; }
 	}
 }
