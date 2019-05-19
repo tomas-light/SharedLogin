@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Services.Accounts\Core.Services.Accounts.csproj" />
+    <ProjectReference Include="..\Core.Services.Histories\Core.Services.Histories.csproj" />
+    <ProjectReference Include="..\Infrastructure.DbContexts\Infrastructure.DbContexts.csproj" />
+  </ItemGroup>
+
+</Project>
