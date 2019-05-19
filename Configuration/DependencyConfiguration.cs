@@ -1,5 +1,6 @@
 ﻿namespace Configuration
 {
+    using AutoMapper;
     using Core.Services;
     using Core.Services.Accounts;
     using Core.Services.Claims;
@@ -9,7 +10,6 @@
     using Infrastructure.Repositories.Histories;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
 
 	abstract class DependencyConfiguration
 	{
@@ -26,6 +26,9 @@
 					RegisterSqlRepository(services);
 					break;
 			}
+
+			var mapper = MapperConfiguration.Configure();
+			services.AddScoped<IMapper>(s => mapper);
 
 			RegisterServices(services);
 			RegisterAuth(services);

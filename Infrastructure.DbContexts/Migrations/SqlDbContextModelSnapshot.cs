@@ -4,16 +4,14 @@ using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.DbContexts.Migrations
 {
     [DbContext(typeof(SqlDbContext))]
-    [Migration("20190519152040_Init")]
-    partial class Init
+    partial class SqlDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +19,7 @@ namespace Infrastructure.DbContexts.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Infrastructure.Models.Account<string>", b =>
+            modelBuilder.Entity("Infrastructure.Models.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +34,7 @@ namespace Infrastructure.DbContexts.Migrations
                     b.ToTable("AccessibleAccounts");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.History<string>", b =>
+            modelBuilder.Entity("Infrastructure.Models.History", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,9 +42,9 @@ namespace Infrastructure.DbContexts.Migrations
 
                     b.Property<string>("AccessibleAccountName");
 
-                    b.Property<int?>("Account<string>Id");
-
                     b.Property<int>("AccountId");
+
+                    b.Property<int?>("AccountId1");
 
                     b.Property<DateTime>("LoginDateTime");
 
@@ -56,23 +54,23 @@ namespace Infrastructure.DbContexts.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Account<string>Id");
-
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("AccountId1");
 
                     b.ToTable("AccessibleAccountsHistories");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.History<string>", b =>
+            modelBuilder.Entity("Infrastructure.Models.History", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Account<string>")
-                        .WithMany("AccessHistories")
-                        .HasForeignKey("Account<string>Id");
-
-                    b.HasOne("Infrastructure.Models.Account<string>", "AccessibleAccount")
+                    b.HasOne("Infrastructure.Models.Account", "AccessibleAccount")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Infrastructure.Models.Account")
+                        .WithMany("AccessHistories")
+                        .HasForeignKey("AccountId1");
                 });
 #pragma warning restore 612, 618
         }

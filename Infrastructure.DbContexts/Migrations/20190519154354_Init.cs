@@ -33,34 +33,34 @@ namespace Infrastructure.DbContexts.Migrations
                     OwnerName = table.Column<string>(nullable: true),
                     LoginDateTime = table.Column<DateTime>(nullable: false),
                     LogoutDateTime = table.Column<DateTime>(nullable: true),
-                    AccountstringId = table.Column<int>(name: "Account<string>Id", nullable: true)
+                    AccountId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AccessibleAccountsHistories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AccessibleAccountsHistories_AccessibleAccounts_Account<string>Id",
-                        column: x => x.AccountstringId,
-                        principalTable: "AccessibleAccounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AccessibleAccountsHistories_AccessibleAccounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "AccessibleAccounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AccessibleAccountsHistories_AccessibleAccounts_AccountId1",
+                        column: x => x.AccountId1,
+                        principalTable: "AccessibleAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AccessibleAccountsHistories_Account<string>Id",
-                table: "AccessibleAccountsHistories",
-                column: "Account<string>Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccessibleAccountsHistories_AccountId",
                 table: "AccessibleAccountsHistories",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessibleAccountsHistories_AccountId1",
+                table: "AccessibleAccountsHistories",
+                column: "AccountId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
