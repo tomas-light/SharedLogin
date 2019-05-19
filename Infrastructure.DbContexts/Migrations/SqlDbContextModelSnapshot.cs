@@ -19,7 +19,7 @@ namespace Infrastructure.DbContexts.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Infrastructure.Models.Account", b =>
+            modelBuilder.Entity("Infrastructure.Entities.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,7 @@ namespace Infrastructure.DbContexts.Migrations
                     b.ToTable("AccessibleAccounts");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.History", b =>
+            modelBuilder.Entity("Infrastructure.Entities.History", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,14 +61,14 @@ namespace Infrastructure.DbContexts.Migrations
                     b.ToTable("AccessibleAccountsHistories");
                 });
 
-            modelBuilder.Entity("Infrastructure.Models.History", b =>
+            modelBuilder.Entity("Infrastructure.Entities.History", b =>
                 {
-                    b.HasOne("Infrastructure.Models.Account", "AccessibleAccount")
+                    b.HasOne("Infrastructure.Entities.Account", "AccessibleAccount")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Infrastructure.Models.Account")
+                    b.HasOne("Infrastructure.Entities.Account")
                         .WithMany("AccessHistories")
                         .HasForeignKey("AccountId1");
                 });

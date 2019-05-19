@@ -11,7 +11,7 @@
 
 	using Core.Services.Claims;
 	using CoreClaimTypes = Core.Services.Claims.ClaimTypes;
-	using Data = Infrastructure.Models;
+	using Data = Infrastructure.Entities;
 	using Domain = Core.Models;
 	using Infrastructure.Repositories;
 	using Utils;

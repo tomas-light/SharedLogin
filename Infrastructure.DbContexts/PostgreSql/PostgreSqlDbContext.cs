@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.DbContexts
 {
-	using Infrastructure.Models;
+	using Infrastructure.Entities;
 	using Microsoft.EntityFrameworkCore;
 	using System;
 

@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Models", "Core.Models\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Services", "Core.Services\Core.Services.csproj", "{0AFBAF1A-34A4-4FB0-B1C1-5707AA1BB662}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Models", "Infrastructure.Models\Infrastructure.Models.csproj", "{BBDB2009-D72D-4131-9405-7BC4E63C4D21}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Repositories", "Infrastructure.Repositories\Infrastructure.Repositories.csproj", "{4F613231-660B-4091-9FB8-5BEF3E74F4B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.DbContexts", "Infrastructure.DbContexts\Infrastructure.DbContexts.csproj", "{43E4D7A2-BB95-466D-9419-6C8CA377169B}"
@@ -23,13 +21,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Services.Accounts", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{EFDF4E6D-2DD7-433A-BD13-E5213376D946}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Services.Histories", "Core.Services.Histories\Core.Services.Histories.csproj", "{DF95A9EC-6ECC-4116-B76E-7C30FA4FA693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Services.Histories", "Core.Services.Histories\Core.Services.Histories.csproj", "{DF95A9EC-6ECC-4116-B76E-7C30FA4FA693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configuration\Configuration.csproj", "{F2D2D3ED-CFDB-4DB7-B45C-D2A1014CD642}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration", "Configuration\Configuration.csproj", "{F2D2D3ED-CFDB-4DB7-B45C-D2A1014CD642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Repositories.Accounts", "Infrastructure.Repositories.Accounts\Infrastructure.Repositories.Accounts.csproj", "{8A9FD5F4-2D7E-4F7D-B81F-1EB440F6CD4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Repositories.Accounts", "Infrastructure.Repositories.Accounts\Infrastructure.Repositories.Accounts.csproj", "{8A9FD5F4-2D7E-4F7D-B81F-1EB440F6CD4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Repositories.Histories", "Infrastructure.Repositories.Histories\Infrastructure.Repositories.Histories.csproj", "{A9A11B7E-125E-421E-8747-CB0EACA32CEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Repositories.Histories", "Infrastructure.Repositories.Histories\Infrastructure.Repositories.Histories.csproj", "{A9A11B7E-125E-421E-8747-CB0EACA32CEC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Entities", "Infrastructure.Entities\Infrastructure.Entities.csproj", "{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +49,6 @@ Global
 		{0AFBAF1A-34A4-4FB0-B1C1-5707AA1BB662}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AFBAF1A-34A4-4FB0-B1C1-5707AA1BB662}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AFBAF1A-34A4-4FB0-B1C1-5707AA1BB662}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBDB2009-D72D-4131-9405-7BC4E63C4D21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBDB2009-D72D-4131-9405-7BC4E63C4D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBDB2009-D72D-4131-9405-7BC4E63C4D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBDB2009-D72D-4131-9405-7BC4E63C4D21}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F613231-660B-4091-9FB8-5BEF3E74F4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4F613231-660B-4091-9FB8-5BEF3E74F4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F613231-660B-4091-9FB8-5BEF3E74F4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,6 +81,10 @@ Global
 		{A9A11B7E-125E-421E-8747-CB0EACA32CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9A11B7E-125E-421E-8747-CB0EACA32CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9A11B7E-125E-421E-8747-CB0EACA32CEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,13 +92,13 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7A406EDC-7D30-44CC-9921-186E0039E57D} = {69C116D9-39E1-49DD-AD33-DA6FA55C153A}
 		{0AFBAF1A-34A4-4FB0-B1C1-5707AA1BB662} = {69C116D9-39E1-49DD-AD33-DA6FA55C153A}
-		{BBDB2009-D72D-4131-9405-7BC4E63C4D21} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 		{4F613231-660B-4091-9FB8-5BEF3E74F4B2} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 		{43E4D7A2-BB95-466D-9419-6C8CA377169B} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 		{B516F398-DE96-4D0F-85EB-BA4F74ABB938} = {69C116D9-39E1-49DD-AD33-DA6FA55C153A}
 		{DF95A9EC-6ECC-4116-B76E-7C30FA4FA693} = {69C116D9-39E1-49DD-AD33-DA6FA55C153A}
 		{8A9FD5F4-2D7E-4F7D-B81F-1EB440F6CD4C} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 		{A9A11B7E-125E-421E-8747-CB0EACA32CEC} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
+		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24991D4B-3C1D-460E-A03A-0B82B3084A03}

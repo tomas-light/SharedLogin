@@ -1,7 +1,7 @@
 ﻿namespace Infrastructure.Repositories.Histories
 {
 	using Infrastructure.DbContexts;
-	using Infrastructure.Models;
+	using Infrastructure.Entities;
 	using Microsoft.EntityFrameworkCore;
 	using System;
 	using System.Collections.Generic;

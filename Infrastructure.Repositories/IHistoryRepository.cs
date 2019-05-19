@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.Repositories
 {
-    using Infrastructure.Models;
+    using Infrastructure.Entities;
     using System;
 	using System.Collections.Generic;
     using System.Threading.Tasks;

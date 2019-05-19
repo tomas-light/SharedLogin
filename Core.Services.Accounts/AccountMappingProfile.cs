@@ -3,7 +3,7 @@
     using AutoMapper;
     using System;
 	using Domain = Core.Models;
-	using Data = Infrastructure.Models;
+	using Data = Infrastructure.Entities;
 
 	public class AccountMappingProfile : Profile
 	{

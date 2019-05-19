@@ -8,7 +8,7 @@
 
 	using Infrastructure.Repositories;
 	using Domain = Core.Models;
-	using Data = Infrastructure.Models;
+	using Data = Infrastructure.Entities;
     using AutoMapper;
 
     public class HistoryService : IHistoryService

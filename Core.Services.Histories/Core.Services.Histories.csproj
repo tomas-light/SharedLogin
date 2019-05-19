@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core.Models\Core.Models.csproj" />
     <ProjectReference Include="..\Core.Services\Core.Services.csproj" />
-    <ProjectReference Include="..\Infrastructure.Models\Infrastructure.Models.csproj" />
+    <ProjectReference Include="..\Infrastructure.Entities\Infrastructure.Entities.csproj" />
     <ProjectReference Include="..\Infrastructure.Repositories\Infrastructure.Repositories.csproj" />
   </ItemGroup>
 
