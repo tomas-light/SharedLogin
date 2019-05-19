@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SharedLogin.Configuration;
+using Configuration;
 
 namespace WebApp
 {
@@ -45,7 +45,7 @@ namespace WebApp
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			SharedLoginConfiguration.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"));
+			Configger<string>.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

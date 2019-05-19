@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharedLogin.Infrastructure.Contexts\SharedLogin.Infrastructure.Contexts.csproj" />
-    <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories\SharedLogin.Infrastructure.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

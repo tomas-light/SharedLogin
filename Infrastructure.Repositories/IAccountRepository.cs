@@ -23,12 +23,12 @@
 
 		// create
 
-		Task<Account<TUserPrimaryKey>> AddAsync(Account<TUserPrimaryKey> accessibleAccount);
+		Task<Account<TUserPrimaryKey>> AddAsync(Account<TUserPrimaryKey> account);
 
 		// delete
 
 		Task RemoveByIdAsync(int id);
 
-		Task RemoveAsync(Account<TUserPrimaryKey> accessibleAccount);
+		Task RemoveAsync(Account<TUserPrimaryKey> account);
 	}
 }

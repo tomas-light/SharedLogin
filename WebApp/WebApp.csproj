@@ -14,7 +14,9 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\SharedLogin.Configuration\SharedLogin.Configuration.csproj" />
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
+    <ProjectReference Include="..\Core.Models\Core.Models.csproj" />
+    <ProjectReference Include="..\Core.Services\Core.Services.csproj" />
   </ItemGroup>
 
 </Project>

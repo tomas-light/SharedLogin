@@ -6,12 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Services.Accounts\Core.Services.Accounts.csproj" />
     <ProjectReference Include="..\Core.Services.Histories\Core.Services.Histories.csproj" />
     <ProjectReference Include="..\Infrastructure.DbContexts\Infrastructure.DbContexts.csproj" />
+    <ProjectReference Include="..\Infrastructure.Repositories.Accounts\Infrastructure.Repositories.Accounts.csproj" />
+    <ProjectReference Include="..\Infrastructure.Repositories.Histories\Infrastructure.Repositories.Histories.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿namespace Configuration
 {
     using Infrastructure.DbContexts;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 	using System;
 	using System.Collections.Generic;
@@ -9,27 +10,41 @@
 	abstract class DbContextConfiguration<TUserPrimaryKey>
 		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
 	{
-		public static void Configure(IServiceCollection services, string connectionString)
+		public static void Configure(IServiceCollection services, string connectionString, DbConfigurationOptions dbConfigurationOptions)
 		{
-			var context = CreateContext(connectionString);
+			BaseDbContext<TUserPrimaryKey> context;
+			Func<string, BaseDbContext<TUserPrimaryKey>> createContext;
+
+			switch (dbConfigurationOptions)
+			{
+				case DbConfigurationOptions.PostgreSql:
+					createContext = CreatePostgreSqlContext;
+					break;
+
+				case DbConfigurationOptions.Sql:
+				default:
+					createContext = CreateSqlContext;
+					break;
+			}
+
+			context = createContext(connectionString);
 			//context.Database.EnsureCreated();
 			context.Database.Migrate();
 
-			services.AddScoped<SqlDbContext<TUserPrimaryKey>>(serviceProvider => CreateSqlContext(connectionString));
-			services.AddScoped<PostgreSqlDbContext<TUserPrimaryKey>>(serviceProvider => CreatePostgreSqlContext(connectionString));
+			services.AddScoped(serviceProvider => createContext(connectionString));
 
 			//services.AddScoped<Func<string, SqlDbContext>>((serviceProvider) => );
 		}
 
 		private static SqlDbContext<TUserPrimaryKey> CreateSqlContext(string connectionString)
 		{
-			var factory = new SqlContextFactory(connectionString);
+			var factory = new SqlContextFactory<TUserPrimaryKey>(connectionString);
 			return factory.CreateDbContext();
 		}
 
 		private static PostgreSqlDbContext<TUserPrimaryKey> CreatePostgreSqlContext(string connectionString)
 		{
-			var factory = new PostgreSqlContextFactory(connectionString);
+			var factory = new PostgreSqlContextFactory<TUserPrimaryKey>(connectionString);
 			return factory.CreateDbContext();
 		}
 	}

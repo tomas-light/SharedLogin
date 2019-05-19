@@ -10,8 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SharedLogin.Services\SharedLogin.Services.csproj" />
-    <ProjectReference Include="..\SharedLogin.Services.Core\SharedLogin.Services.Core.csproj" />
     <ProjectReference Include="..\SharedLogin.Infrastructure.Repositories.Sql.Core\SharedLogin.Infrastructure.Repositories.Sql.Core.csproj" />
   </ItemGroup>
 
