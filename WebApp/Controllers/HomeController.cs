@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SharedLogin.Infrastructure.Repositories;
-using SharedLogin.Services;
 using WebApp.Data;
 using WebApp.Models;
 
@@ -14,26 +13,37 @@ namespace WebApp.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ApplicationDbContext applicationDbContext;
-		private readonly ISharedAccountsService sharedAccountsService;
+		private readonly UserManager<IdentityUser> userManager;
+		private readonly IAccountService accountService;
 
-		public HomeController(ISharedAccountsService sharedAccountsService, ApplicationDbContext applicationDbContext)
+		public HomeController(
+			UserManager<IdentityUser> userManager, 
+			ApplicationDbContext applicationDbContext,
+			IAccountService accountService)
 		{
-			this.sharedAccountsService = sharedAccountsService ?? throw new ArgumentNullException(nameof(sharedAccountsService));
-			this.applicationDbContext = applicationDbContext;
+			this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+			this.applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
+			this.accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
 		}
 
 		public async Task<IActionResult> Index()
 		{
 			var result1 = applicationDbContext.Users.ToList();
-			var result = await this.sharedAccountsService.GetSharedAccountsByCurrentUserAsync();
+			var result = await this.accountService.GetActivatedAccountIdAsync();
 			return View();
 		}
 
 		public async Task<IActionResult> Privacy()
 		{
-			const string accountId = "98d717d5-c1eb-4349-9b3b-ad0362e0e695";
-			var sharedAccount = await this.sharedAccountsService.AddAsync(accountId);
-			await this.sharedAccountsService.SetCurrentAccountIdAsync(accountId);
+			var currentUser = await this.userManager.GetUserAsync(HttpContext.User);
+			var user = applicationDbContext.Users.FirstOrDefault(u => u.Id != currentUser.Id);
+			if (user == null)
+			{
+				return View();
+			}
+
+			var sharedAccount = await this.accountService.AddAsync(user.Id);
+			await this.accountService.ActivateAccountIdAsync(user.Id);
 			return View();
 		}
 
