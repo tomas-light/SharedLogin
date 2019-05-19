@@ -59,11 +59,6 @@
 		public async Task<Domain.Account> GetAccountAsync(string userId, string accesibleAccountId)
 		{
 			var dataAccount = await this.accountRepository.FindByIdsAsync(userId, accesibleAccountId);
-			if (dataAccount == null)
-			{
-				throw new NullReferenceException("User does not have access to this account");
-			}
-
 			var domainAccount = mapDataToDomain(dataAccount);
 			return domainAccount;
 		}
