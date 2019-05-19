@@ -5,18 +5,17 @@
 	using System;
     using System.Reflection;
 
-    class SqlDesignTimeDbContextFactory<TUserPrimaryKey> : IDesignTimeDbContextFactory<SqlDbContext<TUserPrimaryKey>>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    class SqlDesignTimeDbContextFactory : IDesignTimeDbContextFactory<SqlDesignTimeDbContext>
 	{
-		public SqlDbContext<TUserPrimaryKey> CreateDbContext(string[] args)
+		public SqlDesignTimeDbContext CreateDbContext(string[] args)
 		{
-			var builder = new DbContextOptionsBuilder<BaseDbContext<TUserPrimaryKey>>();
+			var builder = new DbContextOptionsBuilder<BaseDbContext<string>>();
 			builder.UseSqlServer(
 				"Server=(localdb)\\mssqllocaldb;Database=<My_db_name>;Trusted_Connection=True;MultipleActiveResultSets=true",
 				optionsBuilder =>
-					optionsBuilder.MigrationsAssembly(typeof(SqlDbContext<TUserPrimaryKey>).GetTypeInfo().Assembly.GetName().Name)
+					optionsBuilder.MigrationsAssembly(typeof(SqlDesignTimeDbContext).GetTypeInfo().Assembly.GetName().Name)
 			);
-			return new SqlDbContext<TUserPrimaryKey>(builder.Options);
+			return new SqlDesignTimeDbContext(builder.Options);
 		}
 	}
 }

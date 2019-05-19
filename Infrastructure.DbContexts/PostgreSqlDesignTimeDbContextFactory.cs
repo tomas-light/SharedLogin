@@ -5,18 +5,17 @@
 	using System;
     using System.Reflection;
 
-    class PostgreSqlDesignTimeDbContextFactory<TUserPrimaryKey> : IDesignTimeDbContextFactory<PostgreSqlDbContext<TUserPrimaryKey>>
-		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
+    class PostgreSqlDesignTimeDbContextFactory : IDesignTimeDbContextFactory<PostgreSqlDesignTimeDbContext>
 	{
-		public PostgreSqlDbContext<TUserPrimaryKey> CreateDbContext(string[] args)
+		public PostgreSqlDesignTimeDbContext CreateDbContext(string[] args)
 		{
-			var builder = new DbContextOptionsBuilder<BaseDbContext<TUserPrimaryKey>>();
+			var builder = new DbContextOptionsBuilder<BaseDbContext<string>>();
 			builder.UseNpgsql(
 				"User ID=postgres;Password=root;Host=localhost;Port=5432;Database=<Your_Database_Name>;",
 				optionsBuilder =>
-					optionsBuilder.MigrationsAssembly(typeof(PostgreSqlDbContext<TUserPrimaryKey>).GetTypeInfo().Assembly.GetName().Name)
+					optionsBuilder.MigrationsAssembly(typeof(PostgreSqlDesignTimeDbContext).GetTypeInfo().Assembly.GetName().Name)
 			);
-			return new PostgreSqlDbContext<TUserPrimaryKey>(builder.Options);
+			return new PostgreSqlDesignTimeDbContext(builder.Options);
 		}
 	}
 }
