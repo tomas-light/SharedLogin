@@ -9,7 +9,7 @@ public void ConfigureServices(IServiceCollection services)
     
     // other code
     
-    SharedLoginConfiguration.Configure(services, Configuration, Configuration.GetConnectionString("MyDbConnection"));    
+    Configger.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
 }
 ```
 
