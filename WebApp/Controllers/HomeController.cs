@@ -13,11 +13,11 @@ namespace WebApp.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ApplicationDbContext applicationDbContext;
-		private readonly UserManager<IdentityUser<string>> userManager;
+		private readonly UserManager<IdentityUser> userManager;
 		private readonly IAccountService<string> accountService;
 
 		public HomeController(
-			UserManager<IdentityUser<string>> userManager, 
+			UserManager<IdentityUser> userManager, 
 			ApplicationDbContext applicationDbContext,
 			IAccountService<string> accountService)
 		{

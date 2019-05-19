@@ -22,7 +22,7 @@
 		private readonly IAccountRepository<TUserPrimaryKey> accountRepository;
 		private readonly IHistoryService<TUserPrimaryKey> historyService;
 		private readonly IHttpContextAccessor httpContextAccessor;
-		private readonly UserManager<IdentityUser<TUserPrimaryKey>> userManager;
+		private readonly UserManager<IdentityUser> userManager;
 		private readonly IMapper mapper;
 
 		private Func<Data.Account<TUserPrimaryKey>, Domain.Account<TUserPrimaryKey>> mapDataToDomain;
@@ -32,7 +32,7 @@
 			IAccountRepository<TUserPrimaryKey> accountRepository,
 			IHistoryService<TUserPrimaryKey> historyService,
 			IHttpContextAccessor httpContextAccessor,
-			UserManager<IdentityUser<TUserPrimaryKey>> userManager,
+			UserManager<IdentityUser> userManager,
 			IMapper mapper)
 		{
 			this.accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
@@ -54,17 +54,12 @@
 				throw new NullReferenceException(nameof(user));
 			}
 
-			return user.Id;
+			return ConvertType(user.Id);
 		}
 
 		public async Task<Domain.Account<TUserPrimaryKey>> GetAccountAsync(TUserPrimaryKey userId, TUserPrimaryKey accesibleAccountId)
 		{
 			var dataAccount = await this.accountRepository.FindByIdsAsync(userId, accesibleAccountId);
-			if (dataAccount == null)
-			{
-				throw new NullReferenceException("User does not have access to this account");
-			}
-
 			var domainAccount = mapDataToDomain(dataAccount);
 			return domainAccount;
 		}
@@ -104,7 +99,7 @@
 				throw new NullReferenceException("User for current claims not found");
 			}
 
-			var account = await this.GetAccountAsync(owner.Id, accountId);
+			var account = await this.GetAccountAsync(ConvertType(owner.Id), accountId);
 			if (account == null)
 			{
 				throw new NullReferenceException("User does not have access to this account");
@@ -140,7 +135,7 @@
 				throw new NullReferenceException("User for current claims not found");
 			}
 
-			var existingAccount = await this.GetAccountAsync(owner.Id, accountId);
+			var existingAccount = await this.GetAccountAsync(ConvertType(owner.Id), accountId);
 			if (existingAccount != null)
 			{
 				throw new ArgumentNullException("User already has access to this account");
@@ -148,7 +143,7 @@
 
 			var account = new Domain.Account<TUserPrimaryKey>
 			{
-				OwnerId = owner.Id,
+				OwnerId = ConvertType(owner.Id),
 				AccessibleAccountId = accountId,
 			};
 			var dataAccount = mapDomainToData(account);
@@ -183,6 +178,11 @@
 		private static TUserPrimaryKey ConvertType(string value)
 		{
 			return TypeConverter.ConvertType<TUserPrimaryKey, string>(value);
+		}
+		
+		private static string ConvertType(TUserPrimaryKey value)
+		{
+			return value.ToString();
 		}
 	}
 }

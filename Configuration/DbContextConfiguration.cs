@@ -4,8 +4,6 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 	using System;
-	using System.Collections.Generic;
-	using System.Text;
 
 	abstract class DbContextConfiguration<TUserPrimaryKey>
 		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
@@ -13,27 +11,23 @@
 		public static void Configure(IServiceCollection services, string connectionString, DbConfigurationOptions dbConfigurationOptions)
 		{
 			BaseDbContext<TUserPrimaryKey> context;
-			Func<string, BaseDbContext<TUserPrimaryKey>> createContext;
 
 			switch (dbConfigurationOptions)
 			{
 				case DbConfigurationOptions.PostgreSql:
-					createContext = CreatePostgreSqlContext;
+					context = CreatePostgreSqlContext(connectionString);
+					services.AddScoped(serviceProvider => CreatePostgreSqlContext(connectionString));
 					break;
 
 				case DbConfigurationOptions.Sql:
 				default:
-					createContext = CreateSqlContext;
+					context = CreateSqlContext(connectionString);
+					services.AddScoped(serviceProvider => CreateSqlContext(connectionString));
 					break;
 			}
 
-			context = createContext(connectionString);
-			//context.Database.EnsureCreated();
+			context.Database.EnsureCreated();
 			context.Database.Migrate();
-
-			services.AddScoped(serviceProvider => createContext(connectionString));
-
-			//services.AddScoped<Func<string, SqlDbContext>>((serviceProvider) => );
 		}
 
 		private static SqlDbContext<TUserPrimaryKey> CreateSqlContext(string connectionString)

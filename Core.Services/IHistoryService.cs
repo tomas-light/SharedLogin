@@ -14,7 +14,7 @@
 
 		Task UpdateLastLogoutTimeAsync(
 			Account<TUserPrimaryKey> account,
-			IdentityUser<TUserPrimaryKey> owner,
-			IdentityUser<TUserPrimaryKey> accessibleUser);
+			IdentityUser owner,
+			IdentityUser accessibleUser);
 	}
 }

@@ -43,8 +43,8 @@
 
 		public async Task UpdateLastLogoutTimeAsync(
 			Domain.Account<TUserPrimaryKey> account,
-			IdentityUser<TUserPrimaryKey> owner,
-			IdentityUser<TUserPrimaryKey> accessibleUser)
+			IdentityUser owner,
+			IdentityUser accessibleUser)
 		{
 			var dateTime = DateTime.UtcNow;
 			await this.UpdateLastLogoutTimeForAccountAsync(account.Id, dateTime);

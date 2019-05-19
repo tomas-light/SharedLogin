@@ -7,7 +7,7 @@
     abstract class MapperConfiguration<TUserPrimaryKey>
 		 where TUserPrimaryKey : IEquatable<TUserPrimaryKey>
 	{
-		public static void Configure()
+		public static AutoMapper.IMapper Configure()
 		{
 			var mappingConfig = new AutoMapper.MapperConfiguration(mc =>
 			{
@@ -16,6 +16,7 @@
 			});
 
 			var mapper = mappingConfig.CreateMapper();
+			return mapper;
 		}
 	}
 }

@@ -27,6 +27,9 @@
 					RegisterSqlRepository(services);
 					break;
 			}
+			
+			var mapper = MapperConfiguration<TUserPrimaryKey>.Configure();
+			services.AddScoped(serviceProvider => mapper);
 
 			RegisterServices(services);
 			RegisterAuth(services);
