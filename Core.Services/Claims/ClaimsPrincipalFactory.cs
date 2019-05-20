@@ -2,8 +2,7 @@
 {
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.Extensions.Options;
-    using System;
-    using System.Security.Claims;
+	using System.Security.Claims;
 	using System.Threading.Tasks;
 
 	public class ClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser>

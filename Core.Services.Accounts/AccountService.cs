@@ -14,14 +14,14 @@
 	using Data = Infrastructure.Entities;
 	using Domain = Core.Models;
 	using Infrastructure.Repositories;
-	using Utils;
 
-    public class AccountService : IAccountService
+	public class AccountService : IAccountService
 	{
 		private readonly IAccountRepository accountRepository;
 		private readonly IHistoryService historyService;
 		private readonly IHttpContextAccessor httpContextAccessor;
 		private readonly UserManager<IdentityUser> userManager;
+		private readonly RoleManager<IdentityRole> roleManager;
 		private readonly IMapper mapper;
 
 		private Func<Data.Account, Domain.Account> mapDataToDomain;
@@ -32,12 +32,14 @@
 			IHistoryService historyService,
 			IHttpContextAccessor httpContextAccessor,
 			UserManager<IdentityUser> userManager,
+			RoleManager<IdentityRole> roleManager,
 			IMapper mapper)
 		{
 			this.accountRepository = accountRepository ?? throw new ArgumentNullException(nameof(accountRepository));
 			this.historyService = historyService ?? throw new ArgumentNullException(nameof(historyService));
 			this.httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 			this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+			this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 			this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
 			this.mapDataToDomain = this.mapper.Map<Data.Account, Domain.Account>;
@@ -58,7 +60,9 @@
 
 		public async Task<Domain.Account> GetAccountAsync(string userId, string accesibleAccountId)
 		{
-			var dataAccount = await this.accountRepository.FindByIdsAsync(userId, accesibleAccountId);
+			var dataAccount = await this.accountRepository.FindByIdsAsync(
+				userId, 
+				accesibleAccountId);
 			var domainAccount = mapDataToDomain(dataAccount);
 			return domainAccount;
 		}
@@ -67,24 +71,30 @@
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			var accountId = currentUserClaims.GetActiveAccountId();
-			var genericId = ConvertType(accountId);
-			return Task.FromResult(genericId);
+			return Task.FromResult(accountId);
+		}
+
+		public Task<string> GetActivatedAccountRoleIdAsync()
+		{
+			var currentUserClaims = GetClaimsFromHttpContext();
+			var roleId = currentUserClaims.GetActiveAccountRoleId();
+			return Task.FromResult(roleId);
 		}
 
 		public async Task<List<Domain.Account>> GetAccessibleAccountsAsync()
 		{
 			var currentUserId = await this.GetActivatedAccountIdAsync();
-			var accounts = await this.accountRepository.FindByOwnerIdAsync(currentUserId);
+			var accounts = await this.accountRepository.FindByUserIdAsync(currentUserId);
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
 		public async Task<List<Domain.Account>> GetAccessibleAccountsByUserIdAsync(string userId)
 		{
-			var accounts = await this.accountRepository.FindByOwnerIdAsync(userId);
+			var accounts = await this.accountRepository.FindByUserIdAsync(userId);
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
-		public async Task ActivateAccountIdAsync(string accountId)
+		public async Task ActivateAccountByIdAsync(string accountId)
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			if (currentUserClaims == null)
@@ -110,14 +120,35 @@
 				throw new NullReferenceException("Account not found");
 			}
 
+			var accountRoles = await this.userManager.GetRolesAsync(accessibleUser);
+			if (accountRoles == null || !accountRoles.Any())
+			{
+				throw new NullReferenceException("Target user does not have any roles");
+			}
+
 			var claimsIdentity = currentUserClaims.Identities.First();
 			var accountClaim = claimsIdentity.FindFirst(CoreClaimTypes.ActiveAccountId);
 			claimsIdentity.RemoveClaim(accountClaim);
 
+			var accountRoleClaim = claimsIdentity.FindFirst(CoreClaimTypes.ActiveAccountRoleId);
+			claimsIdentity.RemoveClaim(accountRoleClaim);
+
+			var loginDateTime = DateTime.UtcNow;
+			await this.historyService.UpdateLastLogoutTimeAsync(account, loginDateTime);
+
 			var newAccountClaim = new Claim(CoreClaimTypes.ActiveAccountId, accountId.ToString());
 			claimsIdentity.AddClaim(newAccountClaim);
 
-			await this.historyService.UpdateLastLogoutTimeAsync(account, owner, accessibleUser);
+			await this.historyService.AddAsync(account, owner.UserName, accessibleUser.UserName, loginDateTime);
+
+			var role = await this.roleManager.FindByNameAsync(accountRoles.First());
+			if (role == null)
+			{
+				throw new NullReferenceException("Role not found");
+			}
+
+			var newAccountRoleClaim = new Claim(CoreClaimTypes.ActiveAccountRoleId, role.Id);
+			claimsIdentity.AddClaim(newAccountRoleClaim);
 		}
 
 		public async Task<Domain.Account> AddAsync(string accountId)
@@ -140,16 +171,15 @@
 				throw new ArgumentNullException("User already has access to this account");
 			}
 
-			var account = new Domain.Account
+			var dataAccount = new Data.Account
 			{
-				OwnerId = owner.Id,
+				UserId = owner.Id,
 				AccessibleAccountId = accountId,
 			};
-			var dataAccount = mapDomainToData(account);
 			var createdAccount = await this.accountRepository.AddAsync(dataAccount);
 
-			account = mapDataToDomain(createdAccount);
-			return account;
+			var domainAccount = mapDataToDomain(createdAccount);
+			return domainAccount;
 		}
 
 		public async Task DeleteAsync(string accountId)
@@ -172,11 +202,6 @@
 				throw new NullReferenceException(nameof(currentUserClaims));
 			}
 			return currentUserClaims;
-		}
-		
-		private static string ConvertType(string value)
-		{
-			return TypeConverter.ConvertType<string, string>(value);
 		}
 	}
 }

@@ -24,10 +24,10 @@
 			return dbContext.Accounts.AsNoTracking().ToListAsync();
 		}
 
-		public Task<List<Account>> FindByOwnerIdAsync(string ownerId)
+		public Task<List<Account>> FindByUserIdAsync(string ownerId)
 		{
 			return dbContext.Accounts.AsNoTracking()
-					.Where(account => account.OwnerId.Equals(ownerId))
+					.Where(account => account.UserId.Equals(ownerId))
 					.ToListAsync();
 		}
 
@@ -44,7 +44,7 @@
 		{
 			return dbContext.Accounts.AsNoTracking()
 					.FirstOrDefaultAsync(account =>
-						account.OwnerId.Equals(ownerId) &&
+						account.UserId.Equals(ownerId) &&
 						account.AccessibleAccountId.Equals(accessibleAccountId)
 					);
 		}

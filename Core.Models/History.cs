@@ -8,7 +8,7 @@
 
 		public string AccessibleAccountName { get; set; }
 
-		public string OwnerName { get; set; }
+		public string UserName { get; set; }
 
 		public DateTime LoginDateTime { get; set; }
 

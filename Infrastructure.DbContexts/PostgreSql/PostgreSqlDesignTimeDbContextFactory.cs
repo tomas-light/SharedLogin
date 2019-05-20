@@ -1,11 +1,10 @@
 ﻿namespace Infrastructure.DbContexts
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Design;
-	using System;
-    using System.Reflection;
+	using Microsoft.EntityFrameworkCore;
+	using Microsoft.EntityFrameworkCore.Design;
+	using System.Reflection;
 
-    class PostgreSqlDesignTimeDbContextFactory : IDesignTimeDbContextFactory<PostgreSqlDbContext>
+	class PostgreSqlDesignTimeDbContextFactory : IDesignTimeDbContextFactory<PostgreSqlDbContext>
 	{
 		public PostgreSqlDbContext CreateDbContext(string[] args)
 		{

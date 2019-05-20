@@ -3,15 +3,14 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
-	using Microsoft.AspNetCore.Identity;
-    using System.Linq;
+	using System.Linq;
 
 	using Infrastructure.Repositories;
 	using Domain = Core.Models;
 	using Data = Infrastructure.Entities;
-    using AutoMapper;
+	using AutoMapper;
 
-    public class HistoryService : IHistoryService
+	public class HistoryService : IHistoryService
 	{
 		private readonly IMapper mapper;
 		private readonly IHistoryRepository repository;
@@ -40,22 +39,27 @@
 			return histories.Select(mapDataToDomain).ToList();
 		}
 
-		public async Task UpdateLastLogoutTimeAsync(
+		public async Task<Domain.History> AddAsync(
 			Domain.Account account,
-			IdentityUser owner,
-			IdentityUser accessibleUser)
+			string userName,
+			string accessibleAccountNamem,
+			DateTime loginDateTime)
 		{
-			var dateTime = DateTime.UtcNow;
-			await this.UpdateLastLogoutTimeForAccountAsync(account.Id, dateTime);
-
-			var newAccessHistory = new Data.History
+			var newHistory = new Data.History
 			{
 				AccountId = account.Id,
-				LoginDateTime = dateTime,
-				OwnerName = owner.UserName,
-				AccessibleAccountName = accessibleUser.UserName,
+				LoginDateTime = loginDateTime,
+				UserName = userName,
+				AccessibleAccountName = accessibleAccountNamem,
 			};
-			await this.repository.AddAsync(newAccessHistory);
+			await this.repository.AddAsync(newHistory);
+
+			return mapDataToDomain(newHistory);
+		}
+
+		public async Task UpdateLastLogoutTimeAsync(Domain.Account account, DateTime logoutDateTime)
+		{
+			await this.UpdateLastLogoutTimeForAccountAsync(account.Id, logoutDateTime);
 		}
 
 		private async Task UpdateLastLogoutTimeForAccountAsync(int accountId, DateTime dateTime)

@@ -39,7 +39,7 @@
 					.HasOne(ah => ah.AccessibleAccount)
 					.WithMany()
 					.HasForeignKey(ah => ah.AccountId)
-					.OnDelete(DeleteBehavior.Cascade);
+					.OnDelete(DeleteBehavior.SetNull);
 			});
 		}
 	}
