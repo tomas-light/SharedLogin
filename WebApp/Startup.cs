@@ -12,8 +12,11 @@
 
 	using Configuration;
 	using WebApp.Data;
+    using System;
+    using Infrastructure.DbContexts.Sql;
+    using Infrastructure.DbContexts.PostgreSql;
 
-	public class Startup
+    public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -22,7 +25,7 @@
 
 		public IConfiguration Configuration { get; }
 
-		public void ConfigureServices(IServiceCollection services)
+		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
@@ -32,7 +35,6 @@
 			});
 
 			this.AddSqlContext(services);
-			//this.AddPostgreSqlContext(services);
 
 			services.AddDefaultIdentity<IdentityUser>()
 				.AddDefaultUI(UIFramework.Bootstrap4)
@@ -40,8 +42,24 @@
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			services.AddSharedLogin(Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
-			//services.AddSharedLogin(Configuration, Configuration.GetConnectionString("PostgreSqlConnection"), DbConfigurationOptions.PostgreSql);
+			var dbConfiguration = new SqlDbConfiguration
+			{
+				Database = Configuration.GetValue<string>("ConnectionStrings:Sql:Database"),
+				Server = Configuration.GetValue<string>("ConnectionStrings:Sql:Server"),
+				IsMultipleActiveResultSets = Configuration.GetValue<bool>("ConnectionStrings:Sql:MultipleActiveResultSets"),
+				IsTrastedConnection = Configuration.GetValue<bool>("ConnectionStrings:Sql:Trusted_Connection"),
+			};
+			return services.AddSharedLogin(dbConfiguration, DbConfigurationOptions.Sql);
+
+			//var dbConfiguration = new PostgreSqlDbConfiguration
+			//{
+			//	UserId = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:User ID"),
+			//	Password = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Password"),
+			//	Host = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Host"),
+			//	Port = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Port"),
+			//	Database = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Database"),
+			//};
+			//return services.AddSharedLogin(dbConfiguration, DbConfigurationOptions.PostgreSql);
 		}
 
 		private void AddSqlContext(IServiceCollection services)

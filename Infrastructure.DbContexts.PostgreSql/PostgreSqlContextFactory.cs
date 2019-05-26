@@ -1,14 +1,11 @@
 ﻿namespace Infrastructure.DbContexts.PostgreSql
 {
-	using Microsoft.EntityFrameworkCore;
-
     public class PostgreSqlContextFactory : IDbContextFactory
 	{
-		public BaseDbContext Create(string connectionString)
+		public BaseDbContext Create(IDbConfiguration dbConfiguration)
 		{
-			var builder = new DbContextOptionsBuilder<BaseDbContext>();
-			builder.UseNpgsql(connectionString);
-			var context = new PostgreSqlDbContext(builder.Options);
+			var dbContextOptions = PostgreSqlDbContextOptionsFactory.Create(dbConfiguration);
+			var context = new PostgreSqlDbContext(dbContextOptions);
 			return context;
 		}
 	}

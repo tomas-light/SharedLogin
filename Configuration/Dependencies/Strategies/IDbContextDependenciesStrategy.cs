@@ -7,6 +7,6 @@
 	{
 		IDbContextFactory GetContextFactory();
 
-		IModule GetDependenciesModule();
+		IModule GetDependenciesModule(IDbConfiguration dbConfiguration);
 	}
 }

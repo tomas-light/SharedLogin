@@ -2,7 +2,7 @@
 {
 	using Autofac.Core;
 
-    using Configuration.Dependencies.Repositories;
+	using Configuration.Dependencies.Repositories;
     using Infrastructure.DbContexts;
     using Infrastructure.DbContexts.Sql;
 
@@ -13,9 +13,9 @@
 			return new SqlContextFactory();
 		}
 
-		public IModule GetDependenciesModule()
+		public IModule GetDependenciesModule(IDbConfiguration dbConfiguration)
 		{
-			return new SqlModule();
+			return new SqlModule(dbConfiguration);
 		}
 	}
 }

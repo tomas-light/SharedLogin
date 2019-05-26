@@ -13,9 +13,9 @@
 			return new PostgreSqlContextFactory();
 		}
 
-		public IModule GetDependenciesModule()
+		public IModule GetDependenciesModule(IDbConfiguration dbConfiguration)
 		{
-			return new PostgreSqlModule();
+			return new PostgreSqlModule(dbConfiguration);
 		}
 	}
 }

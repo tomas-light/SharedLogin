@@ -2,6 +2,6 @@
 {
 	public interface IDbContextFactory
 	{
-		BaseDbContext Create(string connectionString);
+		BaseDbContext Create(IDbConfiguration dbConfiguration);
 	}
 }
