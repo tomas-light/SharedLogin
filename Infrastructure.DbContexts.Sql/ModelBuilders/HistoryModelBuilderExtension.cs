@@ -15,7 +15,7 @@
 					.HasOne(ah => ah.AccessibleAccount)
 					.WithMany()
 					.HasForeignKey(ah => ah.AccountId)
-					.OnDelete(DeleteBehavior.SetNull);
+					.OnDelete(DeleteBehavior.Restrict);
 			});
 
 			return modelBuilder;

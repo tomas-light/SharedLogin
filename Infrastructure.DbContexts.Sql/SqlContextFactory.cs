@@ -3,7 +3,7 @@
 	using Microsoft.EntityFrameworkCore;
 	using Infrastructure.DbContexts;
 
-	public class SqlContextCreator : IDbContextCreator
+	public class SqlContextFactory : IDbContextFactory
 	{
 		public BaseDbContext Create(string connectionString)
 		{

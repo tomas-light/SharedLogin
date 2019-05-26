@@ -2,7 +2,7 @@
 {
 	using Microsoft.EntityFrameworkCore;
 
-    public class PostgreSqlContextCreator : IDbContextCreator
+    public class PostgreSqlContextFactory : IDbContextFactory
 	{
 		public BaseDbContext Create(string connectionString)
 		{

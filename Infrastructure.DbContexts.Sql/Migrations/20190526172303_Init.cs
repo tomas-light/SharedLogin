@@ -43,7 +43,7 @@ namespace Infrastructure.DbContexts.Sql.Migrations
                         column: x => x.AccountId,
                         principalTable: "AccessibleAccounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AccessibleAccountsHistories_AccessibleAccounts_AccountId1",
                         column: x => x.AccountId1,

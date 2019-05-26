@@ -43,7 +43,7 @@ namespace Infrastructure.DbContexts.PostgreSql.Migrations
                         column: x => x.AccountId,
                         principalTable: "accessible_accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_accessible_accounts_histories_accessible_accounts_AccountId1",
                         column: x => x.AccountId1,

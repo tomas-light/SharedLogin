@@ -3,10 +3,10 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-	using Configuration.DbContexts;
 	using Configuration.Dependencies;
+    using Configuration.Dependencies.Strategies;
 
-	public static class SharedLoginServiceCollectionExtension
+    public static class SharedLoginServiceCollectionExtension
 	{
 		public static IServiceCollection AddSharedLogin(
 			this IServiceCollection services, 
@@ -14,16 +14,19 @@
 			string dbConnectionString, 
 			DbConfigurationOptions dbConfigurationOptions = DbConfigurationOptions.Sql)
 		{
-			var dbContextCreatorFactory = new DbContextCreatorFactory();
-			var dbContextCreator = dbContextCreatorFactory.Make(dbConfigurationOptions);
+			var strategyFactory = new DbContextDependenciesStrategyFactory();
+			var strategy = strategyFactory.Make(dbConfigurationOptions);
 
-			var context = dbContextCreator.Create(dbConnectionString);
+			var dbContextFactory = strategy.GetContextFactory();
+			var repositoryModule = strategy.GetDependenciesModule();
+
+			var context = dbContextFactory.Create(dbConnectionString);
 
 			var dbContextConfigurator = new DbContextConfigurator();
 			dbContextConfigurator.Configure(context);
 
 			var dependencyConfigurator = new DependencyConfigurator();
-			dependencyConfigurator.Configure(services);
+			dependencyConfigurator.Configure(services, repositoryModule);
 
 			return services;
 		}

@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure.DbContexts
 {
-	public interface IDbContextCreator
+	public interface IDbContextFactory
 	{
 		BaseDbContext Create(string connectionString);
 	}

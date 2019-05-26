@@ -1,4 +1,4 @@
-﻿namespace Configuration.DbContexts
+﻿namespace Configuration
 {
     using Microsoft.EntityFrameworkCore;
 	using Infrastructure.DbContexts;
