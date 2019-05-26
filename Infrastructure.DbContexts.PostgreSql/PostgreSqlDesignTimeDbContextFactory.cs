@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.DbContexts
+﻿namespace Infrastructure.DbContexts.PostgreSql
 {
 	using Microsoft.EntityFrameworkCore;
 	using Microsoft.EntityFrameworkCore.Design;

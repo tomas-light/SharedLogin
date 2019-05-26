@@ -2,7 +2,6 @@
 {
     using Infrastructure.Entities;
     using Microsoft.EntityFrameworkCore;
-	using System;
 
 	public class BaseDbContext : DbContext
 	{

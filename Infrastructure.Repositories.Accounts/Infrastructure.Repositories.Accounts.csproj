@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.DbContexts.PostgreSql\Infrastructure.DbContexts.PostgreSql.csproj" />
+    <ProjectReference Include="..\Infrastructure.DbContexts.Sql\Infrastructure.DbContexts.Sql.csproj" />
     <ProjectReference Include="..\Infrastructure.DbContexts\Infrastructure.DbContexts.csproj" />
     <ProjectReference Include="..\Infrastructure.Entities\Infrastructure.Entities.csproj" />
     <ProjectReference Include="..\Infrastructure.Repositories\Infrastructure.Repositories.csproj" />

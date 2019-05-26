@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApp.Data;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Configuration;
-
-namespace WebApp
+﻿namespace WebApp
 {
+	using Microsoft.AspNetCore.Builder;
+	using Microsoft.AspNetCore.Identity;
+	using Microsoft.AspNetCore.Identity.UI;
+	using Microsoft.AspNetCore.Hosting;
+	using Microsoft.AspNetCore.Http;
+	using Microsoft.AspNetCore.Mvc;
+	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Configuration;
+	using Microsoft.Extensions.DependencyInjection;
+
+	using Configuration;
+	using WebApp.Data;
+
 	public class Startup
 	{
 		public Startup(IConfiguration configuration)
@@ -26,7 +22,6 @@ namespace WebApp
 
 		public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.Configure<CookiePolicyOptions>(options =>
@@ -36,23 +31,35 @@ namespace WebApp
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			//services.AddDbContext<ApplicationDbContext>(options =>
-			//	options.UseSqlServer(
-			//		Configuration.GetConnectionString("DefaultConnection")));
-			services.AddDbContext<ApplicationDbContext>(options =>
-				options.UseNpgsql(
-					Configuration.GetConnectionString("PostgreSqlConnection")));
+			this.AddSqlContext(services);
+			//this.AddPostgreSqlContext(services);
+
 			services.AddDefaultIdentity<IdentityUser>()
 				.AddDefaultUI(UIFramework.Bootstrap4)
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-			//Configger.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
-			Configger.Configure(services, Configuration, Configuration.GetConnectionString("PostgreSqlConnection"), DbConfigurationOptions.PostgreSql);
+			services.AddSharedLogin(Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
+			//services.AddSharedLogin(Configuration, Configuration.GetConnectionString("PostgreSqlConnection"), DbConfigurationOptions.PostgreSql);
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		private void AddSqlContext(IServiceCollection services)
+		{
+			services.AddDbContext<ApplicationDbContext>(optionBuilder =>
+				optionBuilder.UseSqlServer(
+					Configuration.GetConnectionString("DefaultConnection")));
+		}
+
+		private void AddPostgreSqlContext(IServiceCollection services)
+		{
+			services
+				.AddEntityFrameworkNpgsql()
+				.AddDbContext<ApplicationDbContext>(optionBuilder =>
+					optionBuilder.UseNpgsql(
+						Configuration.GetConnectionString("PostgreSqlConnection")));
+		}
+
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
 			if (env.IsDevelopment())

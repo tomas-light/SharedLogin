@@ -3,13 +3,12 @@
     using AutoMapper;
     using Core.Services.Accounts;
     using Core.Services.Histories;
-    using System;
 
-    abstract class MapperConfiguration
+    internal class MapperConfigurator
 	{
 		public static IMapper Configure()
 		{
-			var mappingConfig = new AutoMapper.MapperConfiguration(mc =>
+			var mappingConfig = new MapperConfiguration(mc =>
 			{
 				mc.AddProfile<AccountMappingProfile>();
 				mc.AddProfile<HistoryMappingProfile>();
