@@ -31,6 +31,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Repositories
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Entities", "Infrastructure.Entities\Infrastructure.Entities.csproj", "{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.DbContexts.Sql", "Infrastructure.DbContexts.Sql\Infrastructure.DbContexts.Sql.csproj", "{EB36D4B6-0A1B-42F9-A76C-396E84809130}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.DbContexts.PostgreSql", "Infrastructure.DbContexts.PostgreSql\Infrastructure.DbContexts.PostgreSql.csproj", "{C6EDDA18-2B6D-4BC1-8015-C70C5E002F66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +89,14 @@ Global
 		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB36D4B6-0A1B-42F9-A76C-396E84809130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB36D4B6-0A1B-42F9-A76C-396E84809130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB36D4B6-0A1B-42F9-A76C-396E84809130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB36D4B6-0A1B-42F9-A76C-396E84809130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6EDDA18-2B6D-4BC1-8015-C70C5E002F66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6EDDA18-2B6D-4BC1-8015-C70C5E002F66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6EDDA18-2B6D-4BC1-8015-C70C5E002F66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6EDDA18-2B6D-4BC1-8015-C70C5E002F66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +111,8 @@ Global
 		{8A9FD5F4-2D7E-4F7D-B81F-1EB440F6CD4C} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 		{A9A11B7E-125E-421E-8747-CB0EACA32CEC} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 		{6FEF29DB-7294-421C-A024-2F0D3B1FF2CD} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
+		{EB36D4B6-0A1B-42F9-A76C-396E84809130} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
+		{C6EDDA18-2B6D-4BC1-8015-C70C5E002F66} = {E0E744AB-1E43-4C13-85F5-9C51C0C36867}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {24991D4B-3C1D-460E-A03A-0B82B3084A03}

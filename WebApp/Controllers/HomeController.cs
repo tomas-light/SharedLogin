@@ -29,7 +29,7 @@ namespace WebApp.Controllers
 		public async Task<IActionResult> Index()
 		{
 			var result1 = applicationDbContext.Users.ToList();
-			var result = await this.accountService.GetActivatedAccountIdAsync();
+			//var result = await this.accountService.GetActivatedAccountIdAsync();
 			return View();
 		}
 

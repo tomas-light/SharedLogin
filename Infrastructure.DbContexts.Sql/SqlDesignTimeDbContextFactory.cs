@@ -1,8 +1,7 @@
-﻿namespace Infrastructure.DbContexts
+﻿namespace Infrastructure.DbContexts.Sql
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
-	using System;
     using System.Reflection;
 
     class SqlDesignTimeDbContextFactory : IDesignTimeDbContextFactory<SqlDbContext>

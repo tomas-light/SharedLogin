@@ -9,17 +9,7 @@
 	{
 		public HistoryMappingProfile()
 		{
-			MapDataModelToDomain();
-			MapDomainModelToData();
-		}
-
-		private void MapDataModelToDomain()
-		{
 			CreateMap<Domain.History, Data.History>();
-		}
-
-		private void MapDomainModelToData()
-		{
 			CreateMap<Data.History, Domain.History>();
 		}
 	}

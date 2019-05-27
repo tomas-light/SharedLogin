@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Infrastructure.DbContexts.Migrations
+namespace Infrastructure.DbContexts.Sql.Migrations
 {
     public partial class Init : Migration
     {
@@ -14,8 +14,8 @@ namespace Infrastructure.DbContexts.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccessibleAccountId = table.Column<string>(nullable: true),
-                    OwnerId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true),
+                    AccessibleAccountId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,8 +29,8 @@ namespace Infrastructure.DbContexts.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     AccountId = table.Column<int>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
                     AccessibleAccountName = table.Column<string>(nullable: true),
-                    OwnerName = table.Column<string>(nullable: true),
                     LoginDateTime = table.Column<DateTime>(nullable: false),
                     LogoutDateTime = table.Column<DateTime>(nullable: true),
                     AccountId1 = table.Column<int>(nullable: true)
@@ -43,7 +43,7 @@ namespace Infrastructure.DbContexts.Migrations
                         column: x => x.AccountId,
                         principalTable: "AccessibleAccounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AccessibleAccountsHistories_AccessibleAccounts_AccountId1",
                         column: x => x.AccountId1,

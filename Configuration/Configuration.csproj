@@ -5,14 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
     <PackageReference Include="AutoMapper" Version="8.1.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Core.Services.Accounts\Core.Services.Accounts.csproj" />
     <ProjectReference Include="..\Core.Services.Histories\Core.Services.Histories.csproj" />
+    <ProjectReference Include="..\Infrastructure.DbContexts.PostgreSql\Infrastructure.DbContexts.PostgreSql.csproj" />
+    <ProjectReference Include="..\Infrastructure.DbContexts.Sql\Infrastructure.DbContexts.Sql.csproj" />
     <ProjectReference Include="..\Infrastructure.DbContexts\Infrastructure.DbContexts.csproj" />
     <ProjectReference Include="..\Infrastructure.Repositories.Accounts\Infrastructure.Repositories.Accounts.csproj" />
     <ProjectReference Include="..\Infrastructure.Repositories.Histories\Infrastructure.Repositories.Histories.csproj" />

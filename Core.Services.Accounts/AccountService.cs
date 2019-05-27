@@ -11,8 +11,8 @@
 
 	using Core.Services.Claims;
 	using CoreClaimTypes = Core.Services.Claims.ClaimTypes;
+	using Core = Core.Models;
 	using Data = Infrastructure.Entities;
-	using Domain = Core.Models;
 	using Infrastructure.Repositories;
 
 	public class AccountService : IAccountService
@@ -24,8 +24,8 @@
 		private readonly RoleManager<IdentityRole> roleManager;
 		private readonly IMapper mapper;
 
-		private Func<Data.Account, Domain.Account> mapDataToDomain;
-		private Func<Domain.Account, Data.Account> mapDomainToData;
+		private Func<Data.Account, Core.Account> mapDataToDomain;
+		private Func<Core.Account, Data.Account> mapDomainToData;
 
 		public AccountService(
 			IAccountRepository accountRepository,
@@ -42,8 +42,8 @@
 			this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 			this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
-			this.mapDataToDomain = this.mapper.Map<Data.Account, Domain.Account>;
-			this.mapDomainToData = this.mapper.Map<Domain.Account, Data.Account>;
+			this.mapDataToDomain = this.mapper.Map<Data.Account, Core.Account>;
+			this.mapDomainToData = this.mapper.Map<Core.Account, Data.Account>;
 		}
 
 		public async Task<string> GetUserIdAsync()
@@ -58,7 +58,7 @@
 			return user.Id;
 		}
 
-		public async Task<Domain.Account> GetAccountAsync(string userId, string accesibleAccountId)
+		public async Task<Core.Account> GetAccountAsync(string userId, string accesibleAccountId)
 		{
 			var dataAccount = await this.accountRepository.FindByIdsAsync(
 				userId, 
@@ -81,14 +81,14 @@
 			return Task.FromResult(roleId);
 		}
 
-		public async Task<List<Domain.Account>> GetAccessibleAccountsAsync()
+		public async Task<List<Core.Account>> GetAccessibleAccountsAsync()
 		{
 			var currentUserId = await this.GetActivatedAccountIdAsync();
 			var accounts = await this.accountRepository.FindByUserIdAsync(currentUserId);
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
-		public async Task<List<Domain.Account>> GetAccessibleAccountsByUserIdAsync(string userId)
+		public async Task<List<Core.Account>> GetAccessibleAccountsByUserIdAsync(string userId)
 		{
 			var accounts = await this.accountRepository.FindByUserIdAsync(userId);
 			return accounts.Select(mapDataToDomain).ToList();
@@ -151,7 +151,7 @@
 			claimsIdentity.AddClaim(newAccountRoleClaim);
 		}
 
-		public async Task<Domain.Account> AddAsync(string accountId)
+		public async Task<Core.Account> AddAsync(string accountId)
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			if (currentUserClaims == null)
