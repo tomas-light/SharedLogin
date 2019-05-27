@@ -49,7 +49,7 @@
 				IsMultipleActiveResultSets = Configuration.GetValue<bool>("ConnectionStrings:Sql:MultipleActiveResultSets"),
 				IsTrastedConnection = Configuration.GetValue<bool>("ConnectionStrings:Sql:Trusted_Connection"),
 			};
-			return services.AddSharedLogin(dbConfiguration, DbConfigurationOptions.Sql);
+			return services.AddSharedLogin<ApplicationDbContext, IdentityUser, IdentityRole, string>(dbConfiguration, DbConfigurationOptions.Sql);
 
 			//var dbConfiguration = new PostgreSqlDbConfiguration
 			//{
