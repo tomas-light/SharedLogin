@@ -1,0 +1,20 @@
+{
+  "extends": ["tslint:latest", "tslint-react", "tslint-eslint-rules", "tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": ["./node_modules/**"]
+  },
+  "defaultSeverity": "warning",
+  "rules": {
+    "no-implicit-dependencies": false,
+    "no-console": {
+      "severity": "warning"
+    },
+    "no-string-literal": false,
+    "member-ordering": false,
+    "jsx-boolean-value": false,
+    "no-submodule-imports": false,
+    "object-literal-sort-keys": false,
+    "jsx-space-before-trailing-slash": true,
+    "object-curly-spacing": [true, "always"]
+  }
+}

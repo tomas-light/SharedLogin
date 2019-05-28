@@ -30,7 +30,7 @@ namespace WebApp.Controllers
 		{
 			var result1 = applicationDbContext.Users.ToList();
 			//var result = await this.accountService.GetActivatedAccountIdAsync();
-			return View();
+			return View("~/Views/Home/App.cshtml");
 		}
 
 		public async Task<IActionResult> Privacy()
