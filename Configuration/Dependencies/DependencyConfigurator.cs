@@ -11,12 +11,11 @@
 
 	using Core.Services.Claims;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
 
     internal class DependencyConfigurator
 	{
 		public IServiceProvider Configure<TContext, TUser, TRole, TKey>(IServiceCollection services, IModule repositoryModule)
-			where TContext : DbContext
+			where TContext : IdentityDbContext<IdentityUser<TKey>, IdentityRole<TKey>, TKey>
 			where TUser : IdentityUser<TKey>
 			where TRole : IdentityRole<TKey>
 			where TKey : IEquatable<TKey>

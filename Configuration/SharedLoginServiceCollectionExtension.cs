@@ -7,7 +7,7 @@
     using Configuration.Dependencies.Strategies;
     using Infrastructure.DbContexts;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
     public static class SharedLoginServiceCollectionExtension
 	{
@@ -15,7 +15,7 @@
 			this IServiceCollection services,
 			IDbConfiguration dbConfiguration, 
 			DbConfigurationOptions dbConfigurationOptions = DbConfigurationOptions.Sql)
-			where TContext : DbContext
+			where TContext : IdentityDbContext<IdentityUser<TKey>, IdentityRole<TKey>, TKey>
 			where TUser : IdentityUser<TKey>
 			where TRole : IdentityRole<TKey>
 			where TKey : IEquatable<TKey>

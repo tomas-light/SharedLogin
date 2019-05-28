@@ -12,11 +12,11 @@
 
 	using Configuration;
 	using WebApp.Data;
-    using System;
-    using Infrastructure.DbContexts.Sql;
-    using Infrastructure.DbContexts.PostgreSql;
+	using System;
+	using Infrastructure.DbContexts.Sql;
+	using Infrastructure.DbContexts.PostgreSql;
 
-    public class Startup
+	public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -59,7 +59,7 @@
 			//	Port = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Port"),
 			//	Database = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Database"),
 			//};
-			//return services.AddSharedLogin(dbConfiguration, DbConfigurationOptions.PostgreSql);
+			//return services.AddSharedLogin<ApplicationDbContext, IdentityUser, IdentityRole, string>(dbConfiguration, DbConfigurationOptions.PostgreSql);
 		}
 
 		private void AddSqlContext(IServiceCollection services)
