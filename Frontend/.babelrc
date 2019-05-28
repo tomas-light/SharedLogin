@@ -1,0 +1,26 @@
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "useBuiltIns": "usage"
+    }],
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
+
+  "plugins": [
+    "@babel/plugin-syntax-dynamic-import",
+    [
+      "module-resolver",
+      {
+        "root": ["./src"],
+        "alias": {
+          "@reducers": "./src/config/redux/Reducers",
+          "@app": "./src/app",
+          "@api": "./src/api",
+          "@models": "./src/models",
+          "@utils": "./src/utils"
+        }
+      }
+    ]
+  ]
+}
