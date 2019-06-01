@@ -15,8 +15,9 @@
 	using System;
 	using Infrastructure.DbContexts.Sql;
 	using Infrastructure.DbContexts.PostgreSql;
+    using WebApp.Controllers;
 
-	public class Startup
+    public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -101,9 +102,25 @@
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute(
-					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+					"default",
+					"{controller}/{action}",
+					new { Controller = "Home", Action = nameof(HomeController.Index) });
 			});
+
+			app.MapWhen(
+				context =>
+				{
+					return !context.Request.Path.Value.ToLower().StartsWith("/api");
+				},
+				builder =>
+				{
+					builder.UseMvc(routes =>
+					{
+						routes.MapSpaFallbackRoute(
+							"spa",
+							new { Controller = "Home", Action = nameof(HomeController.Index) });
+					});
+				});
 		}
 	}
 }
