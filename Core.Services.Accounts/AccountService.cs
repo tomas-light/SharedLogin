@@ -46,7 +46,7 @@
 			this.mapDomainToData = this.mapper.Map<Core.Account, Data.Account>;
 		}
 
-		public async Task<string> GetUserIdAsync()
+		public async Task<string> GetAuthenticatedAccountIdAsync()
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			var user = await this.userManager.GetUserAsync(currentUserClaims);
@@ -56,6 +56,13 @@
 			}
 
 			return user.Id;
+		}
+
+		public Task<string> GetAuthenticatedAccountRoleNameAsync()
+		{
+			var currentUserClaims = GetClaimsFromHttpContext();
+			var roleName = currentUserClaims.GetAuthenticatedAccountRoleName();
+			return Task.FromResult(roleName);
 		}
 
 		public async Task<Core.Account> GetAccountAsync(string userId, string accesibleAccountId)
@@ -184,7 +191,7 @@
 
 		public async Task DeleteAsync(string accountId)
 		{
-			var currentUserId = await this.GetUserIdAsync();
+			var currentUserId = await this.GetAuthenticatedAccountIdAsync();
 			var account = await this.accountRepository.FindByIdsAsync(currentUserId, accountId);
 			if (account == null)
 			{

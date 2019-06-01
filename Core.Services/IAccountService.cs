@@ -10,7 +10,13 @@
 		/// Get id of current user
 		/// </summary>
 		/// <returns>user identificator</returns>
-		Task<string> GetUserIdAsync();
+		Task<string> GetAuthenticatedAccountIdAsync();
+
+		/// <summary>
+		/// Get name role of authenticated user
+		/// </summary>
+		/// <returns>role name</returns>
+		Task<string> GetAuthenticatedAccountRoleNameAsync();
 
 		/// <summary>
 		/// Get <see cref="Account"/> by user id and accesible <see cref="Account"/> id
