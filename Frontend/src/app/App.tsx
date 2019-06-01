@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Provider } from "react-redux";
-
 import { ConnectedRouter } from "connected-react-router";
+
+import withTheme from "@material-ui/core/styles/withTheme";
 
 import { PageComponentRouter } from "./PageComponentRouter";
 import { configureApp } from "../config/configureApp";
@@ -14,8 +15,8 @@ type Props = IAppProps;
 
 class State {}
 
-export class App extends React.Component<Props, State> {
-    render() {
+class App extends React.Component<Props, State> {
+    public render() {
         return (
             <Provider store={store}>
                 <ConnectedRouter history={history}>
@@ -25,3 +26,6 @@ export class App extends React.Component<Props, State> {
         );
     }
 }
+
+const appWithTheme = withTheme(App);
+export { appWithTheme as App }

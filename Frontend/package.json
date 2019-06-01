@@ -7,13 +7,15 @@
     "buildDev": "set NODE_ENV=development && set NODE_OPTIONS=--max_old_space_size=2560 && webpack -d --config webpack/webpack.config.babel.js --color --progress --watch"
   },
   "dependencies": {
-    "@loadable/component": "^5.6.1",
+    "@material-ui/core": "^4.0.0-rc.0",
+    "@material-ui/icons": "^4.0.1",
     "axios": "^0.18.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-polyfill": "^6.26.0",
     "connected-react-router": "^6.3.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
+    "react-loadable": "^5.5.0",
     "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1",
