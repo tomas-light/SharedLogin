@@ -4,20 +4,21 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using WebApp.Data;
     using WebApp.Models.Auth;
 
     [Route("api/[controller]/[action]")]
 	[Authorize]
 	public class AuthController : Controller
 	{
-		private readonly SignInManager<IdentityUser> signInManager;
-		private readonly UserManager<IdentityUser> userManager;
-		private readonly RoleManager<IdentityRole> roleManager;
+		private readonly SignInManager<User> signInManager;
+		private readonly UserManager<User> userManager;
+		private readonly RoleManager<Role> roleManager;
 
 		public AuthController(
-			SignInManager<IdentityUser> signInManager,
-			UserManager<IdentityUser> userManager,
-			RoleManager<IdentityRole> roleManager)
+			SignInManager<User> signInManager,
+			UserManager<User> userManager,
+			RoleManager<Role> roleManager)
 		{
 			this.signInManager = signInManager;
 			this.userManager = userManager;
@@ -26,7 +27,7 @@
 
 		[HttpPost]
 		[AllowAnonymous]
-		public async Task<IActionResult> Login(LoginDTO model)
+		public async Task<IActionResult> Login([FromBody] LoginDTO model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -66,7 +67,7 @@
 
 		[HttpPost]
 		[AllowAnonymous]
-		public async Task<IActionResult> Register(RegisterUserDTO model)
+		public async Task<IActionResult> Register([FromBody] RegisterUserDTO model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -85,7 +86,7 @@
 				return BadRequest();
 			}
 
-			user = new IdentityUser()
+			user = new User()
 			{
 				Email = model.Email,
 				UserName = model.Name
@@ -127,7 +128,7 @@
 				return Conflict();
 			}
 
-			role = new IdentityRole(model.Name);
+			role = new Role(model.Name);
 			var identityResult = await this.roleManager.CreateAsync(role);
 			if (identityResult.Succeeded)
 			{

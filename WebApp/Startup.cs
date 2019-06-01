@@ -10,12 +10,14 @@
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
-	using Configuration;
 	using WebApp.Data;
 	using System;
 	using Infrastructure.DbContexts.Sql;
 	using Infrastructure.DbContexts.PostgreSql;
     using WebApp.Controllers;
+    using Configuration;
+    using WebApp.AppConfiguration;
+    using Autofac.Extensions.DependencyInjection;
 
     public class Startup
 	{
@@ -43,6 +45,9 @@
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			var configurator = new Configurator();
+			var builder = configurator.ConfigureDependencies();
+
 			var dbConfiguration = new SqlDbConfiguration
 			{
 				Database = Configuration.GetValue<string>("ConnectionStrings:Sql:Database"),
@@ -50,7 +55,8 @@
 				IsMultipleActiveResultSets = Configuration.GetValue<bool>("ConnectionStrings:Sql:MultipleActiveResultSets"),
 				IsTrastedConnection = Configuration.GetValue<bool>("ConnectionStrings:Sql:Trusted_Connection"),
 			};
-			return services.AddSharedLogin<ApplicationDbContext, IdentityUser, IdentityRole, string>(dbConfiguration, DbConfigurationOptions.Sql);
+
+			builder.AddSharedLoginServices<ApplicationDbContext, User, Role, string>(dbConfiguration, DbConfigurationOptions.Sql);
 
 			//var dbConfiguration = new PostgreSqlDbConfiguration
 			//{
@@ -61,6 +67,9 @@
 			//	Database = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Database"),
 			//};
 			//return services.AddSharedLogin<ApplicationDbContext, IdentityUser, IdentityRole, string>(dbConfiguration, DbConfigurationOptions.PostgreSql);
+
+			builder.Populate(services);
+			return new AutofacServiceProvider(builder.Build());
 		}
 
 		private void AddSqlContext(IServiceCollection services)
