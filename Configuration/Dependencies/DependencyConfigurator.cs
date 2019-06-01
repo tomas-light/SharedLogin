@@ -34,7 +34,7 @@
 			builder.RegisterType<UserManager<TUser>>().AsSelf().InstancePerDependency();
 			builder.RegisterType<RoleManager<TRole>>().AsSelf().InstancePerDependency();
 
-			builder.RegisterServices();
+			builder.RegisterServices<TUser, TRole, TKey>();
 		}
 
 		public IServiceProvider CreateConfiguredServiceProvider<TContext, TUser, TRole, TKey>(IServiceCollection services, IModule repositoryModule)

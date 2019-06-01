@@ -11,20 +11,20 @@
     using WebApp.Models.Account.Response;
 
     [Authorize]
-	[Route("api/[controller]/[action]")]
+	[Route("api/account")]
 	public class AccountController : Controller
 	{
 		private readonly ApplicationDbContext applicationDbContext;
-		private readonly UserManager<IdentityUser> userManager;
-		private readonly RoleManager<IdentityRole> roleManager;
-		private readonly IAccountService accountService;
+		private readonly UserManager<User> userManager;
+		private readonly RoleManager<Role> roleManager;
+		private readonly IAccountService<User, Role, string> accountService;
 		private readonly IMapper mapper;
 
 		public AccountController(
-			UserManager<IdentityUser> userManager,
-			RoleManager<IdentityRole> roleManager,
+			UserManager<User> userManager,
+			RoleManager<Role> roleManager,
 			ApplicationDbContext applicationDbContext,
-			IAccountService accountService,
+			IAccountService<User, Role, string> accountService,
 			IMapper mapper)
 		{
 			this.userManager = userManager;
@@ -47,22 +47,22 @@
 			var authenticatedAccount = await this.userManager.FindByIdAsync(authenticatedAccountId);
 			if (authenticatedAccount == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
 			var roleName = await this.accountService.GetAuthenticatedAccountRoleNameAsync();
 			if (roleName == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
 			var activeRole = await this.roleManager.FindByNameAsync(roleName);
 			if (activeRole == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
-			var authenticatedAccountDTO = this.mapper.Map<IdentityUser, AccountDTO>(authenticatedAccount);
+			var authenticatedAccountDTO = this.mapper.Map<User, AccountDTO>(authenticatedAccount);
 			this.mapper.Map(activeRole, authenticatedAccountDTO);
 
 			return Ok(authenticatedAccountDTO);
@@ -81,22 +81,22 @@
 			var activeAccount = await this.userManager.FindByIdAsync(accountId);
 			if (activeAccount == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
 			var roleId = await this.accountService.GetActivatedAccountRoleIdAsync();
 			if (roleId == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
 			var activeRole = await this.roleManager.FindByIdAsync(roleId);
 			if (activeRole == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
-			var activeAccountDTO = this.mapper.Map<IdentityUser, AccountDTO>(activeAccount);
+			var activeAccountDTO = this.mapper.Map<User, AccountDTO>(activeAccount);
 			this.mapper.Map(activeRole, activeAccountDTO);
 
 			return Ok(activeAccountDTO);
@@ -111,7 +111,7 @@
 			var user = applicationDbContext.Users.FirstOrDefault(u => u.Id != currentUser.Id);
 			if (user == null)
 			{
-				return BadRequest();
+				return NotFound();
 			}
 
 			var account = await this.accountService.AddAsync(user.Id);

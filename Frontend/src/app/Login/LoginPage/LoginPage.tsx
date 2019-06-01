@@ -5,7 +5,8 @@ import Paper from "@material-ui/core/Paper/Paper";
 import Grid from "@material-ui/core/Grid/Grid";
 import Typography from "@material-ui/core/Typography/Typography";
 import TextField from "@material-ui/core/TextField";
-import {Button} from "@material-ui/core";
+import { Button } from "@material-ui/core";
+import { Callback } from "@utils/types/Callback";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,13 +29,22 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+export const inputIds = {
+    email: "login-email",
+    password: "login-password"
+};
+
 export interface ILoginPageProps {}
 
-export interface ILoginPageCallProps {}
+export interface ILoginPageCallProps {
+    onSubmit: Callback;
+}
 
 type Props = ILoginPageProps & ILoginPageCallProps;
 
 const LoginPage: React.FunctionComponent<Props> = props => {
+    const { onSubmit } = props;
+
     const classes = useStyles();
 
     return (
@@ -51,7 +61,7 @@ const LoginPage: React.FunctionComponent<Props> = props => {
 
                         <TextField
                             required
-                            id="login-email"
+                            id={inputIds.email}
                             label="Email"
                             className={classes.textField}
                             margin="normal"
@@ -61,7 +71,7 @@ const LoginPage: React.FunctionComponent<Props> = props => {
 
                         <TextField
                             required
-                            id="login-password"
+                            id={inputIds.password}
                             label="Password"
                             type={"password"}
                             className={classes.textField}
@@ -70,7 +80,12 @@ const LoginPage: React.FunctionComponent<Props> = props => {
                             fullWidth
                         />
 
-                        <Button variant="contained" color="primary" className={classes.loginButton}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.loginButton}
+                            onClick={onSubmit}
+                        >
                             Login
                         </Button>
                     </Grid>

@@ -56,7 +56,7 @@ const NavBar: React.FunctionComponent<Props> = props => {
                     <Typography variant="h6" className={classes.title}>
                         Shared login
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit" onClick={logout}>Login</Button>
                 </Toolbar>
             </AppBar>
         </div>

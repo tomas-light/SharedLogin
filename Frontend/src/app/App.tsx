@@ -7,7 +7,7 @@ import withTheme from "@material-ui/core/styles/withTheme";
 import { PageComponentRouter } from "./PageComponentRouter";
 import { configureApp } from "../config/configureApp";
 
-const { store, history } = configureApp();
+export const { store, history } = configureApp();
 
 interface IAppProps {}
 

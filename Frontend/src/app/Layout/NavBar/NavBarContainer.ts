@@ -5,6 +5,8 @@ import { push } from "connected-react-router";
 import { Reducers } from "@reducers";
 import { urls } from "@app/PageComponentRouter";
 import { INavBarCallProps, INavBarProps, NavBar } from "./NavBar";
+import {AuthController} from "@api/AuthController";
+import {history} from "@app/App";
 
 const mapStateToProps = (
     state: Reducers,
@@ -26,7 +28,10 @@ const mapDispatchToProps = (
         redirectToNewBug: () => {},
         redirectToNewUser: () => {},
 
-        logout: () => {}
+        logout: () => {
+            dispatch(AuthController.postLogout());
+            history.push(urls.loginPath);
+        }
     };
 };
 

@@ -1,11 +1,9 @@
 import { SagaMiddleware } from "redux-saga";
 
-// import {UsersSagaWatcher} from "@core/Users/PageUsers/redux/saga/UsersSaga.watcher";
+import { LoginPageWatcher } from "@app/Login/LoginPage/saga/LoginPage.watcher";
 
 export function rootSaga(moddleware: SagaMiddleware) {
-    const sagaWatchers = [
-        // UsersSagaWatcher.wathcers
-    ];
+    const sagaWatchers = [LoginPageWatcher.wathcers];
     sagaWatchers.forEach(sagaWatchers => {
         sagaWatchers.forEach(watcher => moddleware.run(watcher));
     });

@@ -18,6 +18,8 @@
     using Configuration;
     using WebApp.AppConfiguration;
     using Autofac.Extensions.DependencyInjection;
+    using System.Net;
+    using System.Threading.Tasks;
 
     public class Startup
 	{
@@ -32,16 +34,32 @@
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			services.Configure<IdentityOptions>(options =>
+			{
+				options.Password.RequireDigit = true;
+				options.Password.RequiredLength = 6;
+				options.Password.RequireLowercase = true;
+				options.Password.RequireNonAlphanumeric = true;
+				options.Password.RequireUppercase = true;
+
+				options.SignIn.RequireConfirmedEmail = false;
+				options.SignIn.RequireConfirmedPhoneNumber = false;
+
+				options.User.AllowedUserNameCharacters =
+						"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+				options.User.RequireUniqueEmail = true;
+			});
+
 			this.AddSqlContext(services);
 
-			services.AddDefaultIdentity<IdentityUser>()
-				.AddDefaultUI(UIFramework.Bootstrap4)
-				.AddEntityFrameworkStores<ApplicationDbContext>();
+			services
+				.AddIdentity<User, Role>()
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

@@ -7,7 +7,7 @@
     using WebApp.Data;
     using WebApp.Models.Auth;
 
-    [Route("api/[controller]/[action]")]
+    [Route("api/auth")]
 	[Authorize]
 	public class AuthController : Controller
 	{
@@ -25,6 +25,7 @@
 			this.roleManager = roleManager;
 		}
 
+		[Route("login")]
 		[HttpPost]
 		[AllowAnonymous]
 		public async Task<IActionResult> Login([FromBody] LoginDTO model)
@@ -37,7 +38,7 @@
 			var user = await this.userManager.FindByEmailAsync(model.Email);
 			if (user == null)
 			{
-				return Unauthorized();
+				return NotFound("User not found");
 			}
 
 			var signInResult = await this.PasswordSignInAsync(model.Email, model.Password);
@@ -46,7 +47,7 @@
 				return Ok();
 			}
 
-			return Unauthorized();
+			return BadRequest(identityResult.Errors);
 		}
 
 		private Task<Microsoft.AspNetCore.Identity.SignInResult> PasswordSignInAsync(string email, string password)
@@ -57,6 +58,7 @@
 			return signInManager.PasswordSignInAsync(email, password, isPersistent, lockoutOnFailure);
 		}
 
+		[Route("logout")]
 		[HttpPost]
 		public async Task<IActionResult> Logout()
 		{
@@ -65,6 +67,7 @@
 			return Ok();
 		}
 
+		[Route("register")]
 		[HttpPost]
 		[AllowAnonymous]
 		public async Task<IActionResult> Register([FromBody] RegisterUserDTO model)
@@ -83,15 +86,17 @@
 			var role = await this.roleManager.FindByIdAsync(model.RoleId);
 			if (role == null)
 			{
-				return BadRequest();
+				return NotFound("User not found");
 			}
 
 			user = new User()
 			{
 				Email = model.Email,
-				UserName = model.Name
+				UserName = model.Email,
+				EmailConfirmed = true,
+				Name = model.Name
 			};
-			var identityResult = await userManager.CreateAsync(user);
+			var identityResult = await userManager.CreateAsync(user, model.Password);
 			if (!identityResult.Succeeded)
 			{
 				return BadRequest(identityResult.Errors);
@@ -109,13 +114,13 @@
 				return Ok();
 			}
 
-			return Unauthorized();
+			return BadRequest(identityResult.Errors);
 		}
 
 		[Route("role")]
 		[HttpPost]
 		[AllowAnonymous]
-		public async Task<IActionResult> CreateRole(RegisterRoleDTO model)
+		public async Task<IActionResult> CreateRole([FromBody] RegisterRoleDTO model)
 		{
 			if (!ModelState.IsValid)
 			{

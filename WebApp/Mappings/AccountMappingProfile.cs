@@ -1,7 +1,7 @@
 ﻿namespace WebApp.Mappings
 {
     using AutoMapper;
-    using Microsoft.AspNetCore.Identity;
+    using WebApp.Data;
     using WebApp.Models.Account.Response;
 
     public class AccountMappingProfile : Profile
@@ -13,10 +13,10 @@
 
 		private void MapResponseModels()
 		{
-			CreateMap<IdentityUser, AccountDTO>()
+			CreateMap<User, AccountDTO>()
 				.ForMember(model => model.Name, opt => opt.MapFrom(user => user.UserName));
 
-			CreateMap<IdentityRole, AccountDTO>()
+			CreateMap<Role, AccountDTO>()
 				.ForMember(model => model.Id, opt => opt.Ignore())
 				.ForMember(model => model.Name, opt => opt.Ignore())
 				.ForMember(model => model.RoleId, opt => opt.MapFrom(role => role.Id))
