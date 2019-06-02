@@ -25,7 +25,7 @@
 
 
   <ItemGroup>
-    <Folder Include="Models\Account\Request\" />
+    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
 </Project>

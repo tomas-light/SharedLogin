@@ -4,7 +4,8 @@
     using Microsoft.AspNetCore.Identity;
     using System;
     using System.Collections.Generic;
-	using System.Threading.Tasks;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
 
 	public interface IAccountService<TUser, TRole, TKey>
 			where TUser : IdentityUser<TKey>
@@ -59,9 +60,15 @@
 		/// <summary>
 		/// Set <see cref="Account"/> id to claims if its <see cref="Account"/> accessible for current user
 		/// </summary>
-		/// <param name="accountId"><see cref="Account"/> identificator</param>
+		/// <param name="accessibleAccountId"><see cref="Account"/> identificator</param>
 		/// <returns></returns>
-		Task ActivateAccountByIdAsync(TKey accountId);
+		Task ActivateAccountByIdAsync(TKey accessibleAccountId);
+
+		/// <summary>
+		/// Set <see cref="Account"/> id to claims if its <see cref="Account"/> accessible for current user
+		/// </summary>
+		/// <returns></returns>
+		Task<string> ActivateAccountByIdAsync(ClaimsPrincipal currentUserClaims, TUser owner, TKey accessibleAccountId);
 
 		/// <summary>
 		/// Allow access to current user <see cref="Account"/> for specified user by his id
@@ -69,6 +76,14 @@
 		/// <param name="userId">user identificator</param>
 		/// <returns>allowed account</returns>
 		Task<Account> AddAsync(TKey usertId);
+
+		/// <summary>
+		/// Allow access to specified user <see cref="Account"/> for specified account by his id and activate it
+		/// </summary>
+		/// <param name="userId">user identificator</param>
+		/// <param name="accountId">account identificator</param>
+		/// <returns>allowed account</returns>
+		Task<Account> AddAndActivateAsync(TKey usertId, TKey accountId);
 
 		/// <summary>
 		/// Deny access to current user <see cref="Account"/> for specified user by his id

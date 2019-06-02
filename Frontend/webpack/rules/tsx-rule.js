@@ -1,4 +1,6 @@
-﻿export function tsxRule() {
+﻿import tsNameof from "ts-nameof";
+
+export function tsxRule() {
     return {
         module: {
             rules: [
@@ -10,6 +12,7 @@
                         {
                             loader: "ts-loader",
                             options: {
+                                getCustomTransformers: () => ({ before: [tsNameof]}),
                                 transpileOnly: true
                             }
                         }

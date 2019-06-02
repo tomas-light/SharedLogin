@@ -2,7 +2,6 @@
 {
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Identity.UI;
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
@@ -13,13 +12,16 @@
 	using WebApp.Data;
 	using System;
 	using Infrastructure.DbContexts.Sql;
-	using Infrastructure.DbContexts.PostgreSql;
     using WebApp.Controllers;
     using Configuration;
     using WebApp.AppConfiguration;
     using Autofac.Extensions.DependencyInjection;
+    using WebApp.Mappings;
+    using Autofac;
+    using AutoMapper;
     using System.Net;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
 
     public class Startup
 	{
@@ -35,7 +37,7 @@
 			services.Configure<CookiePolicyOptions>(options =>
 			{
 				options.CheckConsentNeeded = context => true;
-				options.MinimumSameSitePolicy = SameSiteMode.None;
+				//options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
 			services.Configure<IdentityOptions>(options =>
@@ -54,6 +56,14 @@
 				options.User.RequireUniqueEmail = true;
 			});
 
+			//services.ConfigureApplicationCookie(options =>
+			//{
+			//	options.ExpireTimeSpan = TimeSpan.FromHours(Configuration.GetValue<double>("CookieLifetime"));
+			//	options.SlidingExpiration = true;
+			//});
+
+			//services.Configure<SecurityStampValidatorOptions>(opt => { opt.ValidationInterval = TimeSpan.Zero; });
+
 			this.AddSqlContext(services);
 
 			services
@@ -61,11 +71,17 @@
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
+			var jwtBearerConfigurator = new JwtBearerConfigurator();
+
+			services.AddAuthorization()
+					.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+					.AddJwtBearer(options => jwtBearerConfigurator.CreateOptions(options));
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			var configurator = new Configurator();
 			var builder = configurator.ConfigureDependencies();
-
+			
 			var dbConfiguration = new SqlDbConfiguration
 			{
 				Database = Configuration.GetValue<string>("ConnectionStrings:Sql:Database"),
@@ -74,7 +90,10 @@
 				IsTrastedConnection = Configuration.GetValue<bool>("ConnectionStrings:Sql:Trusted_Connection"),
 			};
 
-			builder.AddSharedLoginServices<ApplicationDbContext, User, Role, string>(dbConfiguration, DbConfigurationOptions.Sql);
+			builder.AddSharedLoginServices<ApplicationDbContext, User, Role, string>(
+				mc => mc.AddProfile<AccountMappingProfile>(),
+				dbConfiguration,
+				DbConfigurationOptions.Sql);
 
 			//var dbConfiguration = new PostgreSqlDbConfiguration
 			//{

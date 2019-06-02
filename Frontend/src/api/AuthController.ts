@@ -1,6 +1,6 @@
 import { call, CallEffect } from "redux-saga/effects";
 
-import { Http } from "@utils/requests/Http";
+import { Http } from "@utils/http/Http";
 import { LoginDTO } from "@models/auth/LoginDTO";
 
 export class AuthController {

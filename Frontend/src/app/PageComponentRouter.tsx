@@ -13,6 +13,8 @@ import { Layout } from "./Layout/Layout";
 // });
 
 import PageLogin from "./Login/LoginPage/LoginPage.container";
+import {ConnectedRouter} from "connected-react-router";
+import {ToastContainer} from "react-toastify";
 
 export const urls = {
     rootPath: "/",
@@ -39,6 +41,7 @@ const PageComponentRouter: React.FunctionComponent<Props> = props => {
                     <Route exact path={urls.editBugPath}
                            component={(props: RouteComponentProps<{id: string}>) => <PageBugEditor/>}/>
                     */}
+                    <ToastContainer />
                 </Layout>
             </Switch>
         </>

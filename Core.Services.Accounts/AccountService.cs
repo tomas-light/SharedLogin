@@ -15,6 +15,7 @@
 	using Data = Infrastructure.Entities;
 	using Infrastructure.Repositories;
     using Utils;
+    using Core.Services.JWT;
 
     public class AccountService<TUser, TRole, TKey> : IAccountService<TUser, TRole, TKey>
 			where TUser : IdentityUser<TKey>
@@ -27,6 +28,7 @@
 		private readonly UserManager<TUser> userManager;
 		private readonly RoleManager<TRole> roleManager;
 		private readonly IMapper mapper;
+		private readonly JwtTokenManager jwtTokenManager;
 
 		private Func<Data.Account, Core.Account> mapDataToDomain;
 
@@ -36,7 +38,8 @@
 			IHttpContextAccessor httpContextAccessor,
 			UserManager<TUser> userManager,
 			RoleManager<TRole> roleManager,
-			IMapper mapper)
+			IMapper mapper,
+			JwtTokenManager jwtTokenManager)
 		{
 			this.accountRepository = accountRepository;
 			this.historyService = historyService;
@@ -44,6 +47,7 @@
 			this.userManager = userManager;
 			this.roleManager = roleManager;
 			this.mapper = mapper;
+			this.jwtTokenManager = jwtTokenManager;
 
 			this.mapDataToDomain = this.mapper.Map<Data.Account, Core.Account>;
 		}
@@ -105,7 +109,7 @@
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
-		public async Task ActivateAccountByIdAsync(TKey accountId)
+		public async Task ActivateAccountByIdAsync(TKey accessibleAccountId)
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			if (currentUserClaims == null)
@@ -119,13 +123,18 @@
 				throw new NullReferenceException("User for current claims not found");
 			}
 
-			var account = await this.GetAccountAsync(owner.Id, accountId);
-			if (account == null)
+			await this.ActivateAccountByIdAsync(currentUserClaims, owner, accessibleAccountId);
+		}
+
+		public async Task<string> ActivateAccountByIdAsync(ClaimsPrincipal currentUserClaims, TUser owner, TKey accessibleAccountId)
+		{
+			var account = await this.GetAccountAsync(owner.Id, accessibleAccountId);
+			if (!owner.Equals(accessibleAccountId) && account == null)
 			{
 				throw new NullReferenceException("User does not have access to this account");
 			}
 
-			var accessibleUser = await this.userManager.FindByIdAsync(accountId.ToString());
+			var accessibleUser = await this.userManager.FindByIdAsync(accessibleAccountId.ToString());
 			if (accessibleUser == null)
 			{
 				throw new NullReferenceException("Account not found");
@@ -139,15 +148,21 @@
 
 			var claimsIdentity = currentUserClaims.Identities.First();
 			var accountClaim = claimsIdentity.FindFirst(CoreClaimTypes.ActiveAccountId);
-			claimsIdentity.RemoveClaim(accountClaim);
+			if (accountClaim != null)
+			{
+				claimsIdentity.RemoveClaim(accountClaim);
+			}
 
 			var accountRoleClaim = claimsIdentity.FindFirst(CoreClaimTypes.ActiveAccountRoleId);
-			claimsIdentity.RemoveClaim(accountRoleClaim);
+			if (accountRoleClaim != null)
+			{
+				claimsIdentity.RemoveClaim(accountRoleClaim);
+			}
 
 			var loginDateTime = DateTime.UtcNow;
 			await this.historyService.UpdateLastLogoutTimeAsync(account, loginDateTime);
 
-			var newAccountClaim = new Claim(CoreClaimTypes.ActiveAccountId, accountId.ToString());
+			var newAccountClaim = new Claim(CoreClaimTypes.ActiveAccountId, accessibleAccountId.ToString());
 			claimsIdentity.AddClaim(newAccountClaim);
 
 			await this.historyService.AddAsync(account, owner.UserName, accessibleUser.UserName, loginDateTime);
@@ -160,6 +175,10 @@
 
 			var newAccountRoleClaim = new Claim(CoreClaimTypes.ActiveAccountRoleId, role.Id.ToString());
 			claimsIdentity.AddClaim(newAccountRoleClaim);
+
+			var token = this.jwtTokenManager.EncodeJwt(claimsIdentity.Claims);
+
+			return token;
 		}
 
 		public async Task<Core.Account> AddAsync(TKey accountId)
@@ -188,6 +207,39 @@
 				AccessibleAccountId = accountId.ToString(),
 			};
 			var createdAccount = await this.accountRepository.AddAsync(dataAccount);
+
+			var domainAccount = mapDataToDomain(createdAccount);
+			return domainAccount;
+		}
+
+		public async Task<Core.Account> AddAndActivateAsync(TKey userId, TKey accountId)
+		{
+			var currentUserClaims = GetClaimsFromHttpContext();
+			if (currentUserClaims == null)
+			{
+				throw new NullReferenceException("User claims not found");
+			}
+
+			var owner = await this.userManager.FindByIdAsync(userId.ToString());
+			if (owner == null)
+			{
+				throw new NullReferenceException("User for current claims not found");
+			}
+
+			var existingAccount = await this.GetAccountAsync(userId, accountId);
+			if (existingAccount != null)
+			{
+				throw new ArgumentNullException("User already has access to this account");
+			}
+
+			var dataAccount = new Data.Account
+			{
+				UserId = userId.ToString(),
+				AccessibleAccountId = accountId.ToString(),
+			};
+			var createdAccount = await this.accountRepository.AddAsync(dataAccount);
+
+			await this.ActivateAccountByIdAsync(currentUserClaims, owner, accountId);
 
 			var domainAccount = mapDataToDomain(createdAccount);
 			return domainAccount;

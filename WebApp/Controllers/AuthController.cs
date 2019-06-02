@@ -1,9 +1,12 @@
 ﻿namespace WebApp.Controllers
 {
-	using System.Threading.Tasks;
+    using System;
+    using System.Threading.Tasks;
+    using Core.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using WebApp.Api;
     using WebApp.Data;
     using WebApp.Models.Auth;
 
@@ -14,15 +17,18 @@
 		private readonly SignInManager<User> signInManager;
 		private readonly UserManager<User> userManager;
 		private readonly RoleManager<Role> roleManager;
+		private readonly IAccountService<User, Role, string> accountService;
 
 		public AuthController(
 			SignInManager<User> signInManager,
 			UserManager<User> userManager,
-			RoleManager<Role> roleManager)
+			RoleManager<Role> roleManager,
+			IAccountService<User, Role, string> accountService)
 		{
 			this.signInManager = signInManager;
 			this.userManager = userManager;
 			this.roleManager = roleManager;
+			this.accountService = accountService;
 		}
 
 		[Route("login")]
@@ -42,12 +48,22 @@
 			}
 
 			var signInResult = await this.PasswordSignInAsync(model.Email, model.Password);
-			if (signInResult.Succeeded)
+			if (!signInResult.Succeeded)
 			{
-				return Ok();
+				return BadRequest("Authorization failed");
 			}
 
-			return BadRequest(identityResult.Errors);
+			var token = new AuthJwtTokenDTO();
+			try
+			{
+				token.Token = await this.accountService.ActivateAccountByIdAsync(this.User, user, user.Id);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+
+			return Ok(token);
 		}
 
 		private Task<Microsoft.AspNetCore.Identity.SignInResult> PasswordSignInAsync(string email, string password)
@@ -111,6 +127,8 @@
 			var signInResult = await this.PasswordSignInAsync(model.Email, model.Password);
 			if (signInResult.Succeeded)
 			{
+				// access to himself
+				await this.accountService.AddAndActivateAsync(user.Id, user.Id);
 				return Ok();
 			}
 

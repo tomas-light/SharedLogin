@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { HttpResponse } from "@utils/requests/HttpResponse";
+import { HttpResponse } from "@utils/http/HttpResponse";
 
 export class Http {
     public static get<T = any>(url: string, isResolveResponse: boolean = true): Promise<T | HttpResponse<T>> {

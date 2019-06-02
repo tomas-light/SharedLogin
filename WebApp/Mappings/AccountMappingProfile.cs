@@ -14,7 +14,10 @@
 		private void MapResponseModels()
 		{
 			CreateMap<User, AccountDTO>()
-				.ForMember(model => model.Name, opt => opt.MapFrom(user => user.UserName));
+				.ForMember(model => model.Id, opt => opt.MapFrom(user => user.Id))
+				.ForMember(model => model.Name, opt => opt.MapFrom(user => user.UserName))
+				.ForMember(model => model.Email, opt => opt.MapFrom(user => user.Email))
+				.ForMember(model => model.Avatar, opt => opt.MapFrom(user => user.Avatar));
 
 			CreateMap<Role, AccountDTO>()
 				.ForMember(model => model.Id, opt => opt.Ignore())

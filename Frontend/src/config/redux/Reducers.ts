@@ -1,22 +1,12 @@
-import { Reducer } from "redux";
-import { LocationChangeAction, RouterState } from "connected-react-router";
+import { RouterState } from "connected-react-router";
 
-/*
-import { BugsStore } from "@core/Bugs/PageBugs/redux/BugsStore";
-import { BugEditorStore } from "@core/Bugs/PageBugEditor/redux/BugEditorStore";
-import { UsersStore } from "@core/Users/PageUsers/redux/UsersStore";
-import { UserEditorStore } from "@core/Users/PageUserEditor/redux/UserEditorStore";
-*/
+import { LayoutStore } from "@app/Layout/redux/LayoutStore";
+import { SessionStore } from "./SessionStore/SessionStore";
 
 export { createReducers } from "./createReducers";
 
 export class Reducers {
-  router: Reducer<RouterState, LocationChangeAction>;
-  /*
-  bugsStore: BugsStore;
-  bugEditorStore: BugEditorStore;
-
-  usersStore: UsersStore;
-  userEditorStore: UserEditorStore;
-  */
+  router: RouterState;
+  session: SessionStore;
+  layoutStore: LayoutStore;
 }

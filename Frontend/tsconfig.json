@@ -20,6 +20,7 @@
       "@reducers": ["config/redux/Reducers"],
       "@api/*": ["api/*"],
       "@app/*": ["app/*"],
+      "@config/*": ["config/*"],
       "@models/*": ["models/*"],
       "@utils/*": ["utils/*"]
     },

@@ -1,33 +1,13 @@
 import React from "react";
 
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper/Paper";
 import Grid from "@material-ui/core/Grid/Grid";
 import Typography from "@material-ui/core/Typography/Typography";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
-import { Callback } from "@utils/types/Callback";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            backgroundColor: "#F4F4F4",
-            height: "100%",
-            width: "100%"
-        },
-        paper: {
-            margin: "auto",
-            padding: 16,
-            width: 300
-        },
-        signInText: {},
-        textField: {},
-        loginButton: {
-            marginTop: 16,
-            width: "100%"
-        }
-    })
-);
+import { Callback } from "@utils/types/Callback";
+import { useLoginPageStyles as useStyles } from "./LoginPage.styles";
 
 export const inputIds = {
     email: "login-email",

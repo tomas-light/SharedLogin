@@ -8,6 +8,8 @@
 
 		public string Name { get; set; }
 
+		public string Avatar { get; set; }
+
 		public string RoleId { get; set; }
 
 		public string RoleName { get; set; }
