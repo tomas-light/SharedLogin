@@ -6,15 +6,22 @@ import { AuthController } from "@api/AuthController";
 import { LoginDTO } from "@models/auth/LoginDTO";
 import { urls } from "@app/PageComponentRouter";
 import { history } from "@app/App";
-import { LayoutStoreActions } from "@app/Layout/redux/LayoutStore.actions";
+import { LayoutActions } from "@app/Layout/redux/Layout.actions";
 import { AuthJwtTokenDTO } from "@models/auth/AuthJwtTokenDTO";
-import { SessionStoreActions } from "@config/redux/SessionStore/SessionStore.actions";
 
 export const sessionStorageKeys = {
     jwtToken: "shared-auth-token"
 };
 
 export class LoginPageSaga {
+    public static * updateJwtToken(token: string) {
+        sessionStorage.setItem(sessionStorageKeys.jwtToken, token);
+    }
+
+    public static getJwtToken() {
+        return sessionStorage.getItem(sessionStorageKeys.jwtToken);
+    }
+
     public static *login(action: AppAction<LoginDTO>) {
         const response: HttpResponse<
             AuthJwtTokenDTO
@@ -24,12 +31,9 @@ export class LoginPageSaga {
             return;
         }
 
-        // unnecessary store
-        yield put(SessionStoreActions.setToken(response.data.token));
+        yield LoginPageSaga.updateJwtToken(response.data.token);
 
-        sessionStorage.setItem(sessionStorageKeys.jwtToken, response.data.token);
-
-        yield put(LayoutStoreActions.load());
+        yield put(LayoutActions.load());
 
         history.push(urls.rootPath);
     }

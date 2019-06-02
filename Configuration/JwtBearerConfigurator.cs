@@ -21,12 +21,11 @@
 				ValidateAudience = true,
 
 				// установка потребителя токена
-				//ValidAudience = SharedAuthOptions.Audience,
-				ValidAudience = "https://localhost:5001",
+				ValidAudience = SharedAuthOptions.Audience,
 
 				// будет ли валидироваться время существования
 				//ValidateLifetime = true,
- 
+
 				// установка ключа безопасности
 				IssuerSigningKey = SharedAuthOptions.GenerateSymmetricSecurityKey(),
 

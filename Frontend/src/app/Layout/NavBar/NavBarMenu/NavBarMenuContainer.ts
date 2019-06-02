@@ -2,11 +2,9 @@ import { connect } from "react-redux";
 import { AnyAction, Dispatch } from "redux";
 
 import { Reducers } from "@reducers";
-import { urls } from "@app/PageComponentRouter";
 import { INavBarMenuProps, INavBarMenuCallProps, INavBarMenuOwnProps, NavBarMenu } from "./NavBarMenu";
-import { AuthController } from "@api/AuthController";
-import { history } from "@app/App";
 import {ComponentType} from "react";
+import {LayoutActions} from "@app/Layout/redux/Layout.actions";
 
 const mapStateToProps = (state: Reducers): INavBarMenuProps => {
     return {
@@ -17,10 +15,8 @@ const mapStateToProps = (state: Reducers): INavBarMenuProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): INavBarMenuCallProps => {
     return {
-        onAccountClick: () => {
-            // dispatch(AuthController.postLogout());
-            // history.push(urls.loginPath);
-        }
+        onAccountClick: (accountId: string) =>
+            dispatch(LayoutActions.activateAccount(accountId))
     };
 };
 

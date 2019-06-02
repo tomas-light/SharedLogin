@@ -98,7 +98,7 @@
 
 		public async Task<List<Core.Account>> GetAccessibleAccountsAsync()
 		{
-			var currentUserId = await this.GetActivatedAccountIdAsync();
+			var currentUserId = await this.GetAuthenticatedAccountIdAsync();
 			var accounts = await this.accountRepository.FindByUserIdAsync(currentUserId.ToString());
 			return accounts.Select(mapDataToDomain).ToList();
 		}
@@ -109,7 +109,41 @@
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
-		public async Task ActivateAccountByIdAsync(TKey accessibleAccountId)
+		public async Task<string> GetCurrentTokenAsync()
+		{
+			var currentUserClaims = GetClaimsFromHttpContext();
+			if (currentUserClaims == null)
+			{
+				throw new NullReferenceException("User claims not found");
+			}
+
+			var user = await this.userManager.GetUserAsync(currentUserClaims);
+			if (user == null)
+			{
+				throw new NullReferenceException(nameof(user));
+			}
+
+			var claimsIdentity = currentUserClaims.Identities.First();
+
+			var newAccountClaim = new Claim(CoreClaimTypes.ActiveAccountId, user.Id.ToString());
+			claimsIdentity.AddClaim(newAccountClaim);
+
+			var roleName = await this.GetAuthenticatedAccountRoleNameAsync();
+			var role = await this.roleManager.FindByNameAsync(roleName);
+			if (role == null)
+			{
+				throw new NullReferenceException("Role not found");
+			}
+
+			var newAccountRoleClaim = new Claim(CoreClaimTypes.ActiveAccountRoleId, role.Id.ToString());
+			claimsIdentity.AddClaim(newAccountRoleClaim);
+
+			var token = this.jwtTokenManager.EncodeJwt(claimsIdentity.Claims);
+
+			return token;
+		}
+
+		public async Task<string> ActivateAccountByIdAsync(TKey accessibleAccountId)
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();
 			if (currentUserClaims == null)
@@ -123,7 +157,7 @@
 				throw new NullReferenceException("User for current claims not found");
 			}
 
-			await this.ActivateAccountByIdAsync(currentUserClaims, owner, accessibleAccountId);
+			return await this.ActivateAccountByIdAsync(currentUserClaims, owner, accessibleAccountId);
 		}
 
 		public async Task<string> ActivateAccountByIdAsync(ClaimsPrincipal currentUserClaims, TUser owner, TKey accessibleAccountId)
@@ -275,7 +309,9 @@
 			var missedClaims = jwtClaims.Where(jwtClaim => !claimTypes.Contains(jwtClaim.Type));
 			if (missedClaims.Any())
 			{
-				currentUserClaims.AddIdentity(new ClaimsIdentity(missedClaims));
+				currentUserClaims.Identities.First().AddClaims(missedClaims);
+
+				//currentUserClaims.AddIdentity(new ClaimsIdentity(missedClaims));
 			}
 
 			return currentUserClaims;

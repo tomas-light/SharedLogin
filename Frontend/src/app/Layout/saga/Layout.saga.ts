@@ -7,22 +7,21 @@ import { urls } from "@app/PageComponentRouter";
 import { history } from "@app/App";
 import { AccountController } from "@api/AccountController";
 import { ActivateAccountDTO } from "@models/accounts/ActivateAccountDTO";
-import { LayoutStoreActions } from "@app/Layout/redux/LayoutStore.actions";
-import { LayoutStoreSelectors } from "@app/Layout/redux/LayoutStore.selectors";
+import { LayoutActions } from "@app/Layout/redux/Layout.actions";
+import { LayoutSelectors } from "@app/Layout/redux/Layout.selectors";
 import { AccountDTO } from "@models/accounts/AccountDTO";
-import { LayoutStore } from "@app/Layout/redux/LayoutStore";
-import { SessionStoreSelectors } from "@config/redux/SessionStore/SessionStore.selectors";
-import { sessionStorageKeys } from "@app/Login/LoginPage/saga/LoginPage.saga";
-import { SessionStoreActions } from "@config/redux/SessionStore/SessionStore.actions";
+import { LayoutStore } from "@app/Layout/redux/Layout.store";
+import { LoginPageSaga } from "@app/Login/LoginPage/saga/LoginPage.saga";
+import { AuthJwtTokenDTO } from "@models/auth/AuthJwtTokenDTO";
 
 export class LayoutSaga {
     public static *load(action: AppAction) {
-
-        let token = yield SessionStoreSelectors.getAuthentificationToken();
+        const token = yield LoginPageSaga.getJwtToken();
         if (!token) {
-            token = sessionStorage.getItem(sessionStorageKeys.jwtToken);
-            // unnecessary store
-            yield put(SessionStoreActions.setToken(token));
+            const response: HttpResponse<
+                AuthJwtTokenDTO
+            > = yield AuthController.getMyToken();
+            yield LoginPageSaga.updateJwtToken(response.data.token);
         }
 
         const accountResponse: HttpResponse<{
@@ -37,7 +36,7 @@ export class LayoutSaga {
         }
 
         yield put(
-            LayoutStoreActions.updateStore({
+            LayoutActions.updateStore({
                 authenticatedAccount: accountResponse.data.authenticatedAccount,
                 activeAccount: accountResponse.data.activeAccount,
                 accessibleAccounts: accountResponse.data.accessibleAccounts
@@ -58,21 +57,25 @@ export class LayoutSaga {
     }
 
     public static *activateAccount(action: AppAction<ActivateAccountDTO>) {
-        const response: HttpResponse = yield AccountController.postActivateAccount(
-            action.payload
-        );
+        const response: HttpResponse<
+            AuthJwtTokenDTO
+        > = yield AccountController.postActivateAccount(action.payload);
         if (response.errorMessage) {
             console.log(response.errorMessage);
             return;
         }
 
-        const accessibleAccounts: AccountDTO[] = yield LayoutStoreSelectors.getAccessibleAccounts();
+        yield LoginPageSaga.updateJwtToken(response.data.token);
+
+        const accessibleAccounts: AccountDTO[] = yield LayoutSelectors.getAccessibleAccounts();
         const activeAccount = accessibleAccounts.find(
             account => account.id === action.payload.accountId
         );
-        yield LayoutStoreActions.updateStore({
-            activeAccount
-        } as LayoutStore);
+        yield put(
+            LayoutActions.updateStore({
+                activeAccount
+            } as LayoutStore)
+        );
 
         history.push(urls.rootPath);
     }

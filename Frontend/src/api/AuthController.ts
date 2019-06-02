@@ -11,4 +11,8 @@ export class AuthController {
     public static postLogout(): CallEffect {
         return call(Http.post, "api/auth/logout");
     }
+
+    public static getMyToken(): CallEffect {
+        return call(Http.get, "api/auth/token");
+    }
 }

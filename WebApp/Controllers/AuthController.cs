@@ -66,6 +66,23 @@
 			return Ok(token);
 		}
 
+		[Route("token")]
+		[HttpGet]
+		public async Task<IActionResult> GetMyToken()
+		{
+			var token = new AuthJwtTokenDTO();
+			try
+			{
+				token.Token = await this.accountService.GetCurrentTokenAsync();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+
+			return Ok(token);
+		}
+
 		private Task<Microsoft.AspNetCore.Identity.SignInResult> PasswordSignInAsync(string email, string password)
 		{
 			const bool isPersistent = true;

@@ -10,18 +10,8 @@
 		public static readonly string Issuer = "Tomas_Light";
 		public static readonly string Audience = "SharedLogin.Client";
 
-		public readonly int LifeTimeInMinutes;
-
-		public SharedAuthOptions()
-		{
-			// 12 hours
-			this.LifeTimeInMinutes = 720;
-		}
-
-		public SharedAuthOptions(int lifeTimeInMinutes)
-		{
-			this.LifeTimeInMinutes = lifeTimeInMinutes;
-		}
+		// 12 hours
+		public static readonly int LifeTimeInMinutes = 720;
 
 		public static SymmetricSecurityKey GenerateSymmetricSecurityKey()
 		{

@@ -58,11 +58,17 @@
 		Task<List<Account>> GetAccessibleAccountsByUserIdAsync(TKey userId);
 
 		/// <summary>
+		/// Generate jwt token for current user
+		/// </summary>
+		/// <returns></returns>
+		Task<string> GetCurrentTokenAsync();
+
+		/// <summary>
 		/// Set <see cref="Account"/> id to claims if its <see cref="Account"/> accessible for current user
 		/// </summary>
 		/// <param name="accessibleAccountId"><see cref="Account"/> identificator</param>
 		/// <returns></returns>
-		Task ActivateAccountByIdAsync(TKey accessibleAccountId);
+		Task<string> ActivateAccountByIdAsync(TKey accessibleAccountId);
 
 		/// <summary>
 		/// Set <see cref="Account"/> id to claims if its <see cref="Account"/> accessible for current user

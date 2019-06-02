@@ -11,8 +11,9 @@
 	using WebApp.Data;
     using WebApp.Models.Account.Request;
 	using WebApp.Models.Account.Response;
+    using WebApp.Models.Auth;
 
-	[Authorize]
+    [Authorize]
 	[Route("api/account")]
 	public class AccountController : Controller
 	{
@@ -208,16 +209,16 @@
 				return BadRequest();
 			}
 
+			var token = new AuthJwtTokenDTO();
 			try
 			{
-				await this.accountService.ActivateAccountByIdAsync(model.AccountId);
+				token.Token = await this.accountService.ActivateAccountByIdAsync(model.AccountId);
 			}
 			catch (NullReferenceException ex)
 			{
 				return BadRequest(ex.Message);
 			}
-
-			return Ok();
+			return Ok(token);
 		}
 	}
 }

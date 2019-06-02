@@ -1,26 +1,26 @@
 import { takeLatest, ForkEffect } from "redux-saga/effects";
 
-import { LayoutStoreActions } from "../redux/LayoutStore.actions";
+import { LayoutActions } from "../redux/Layout.actions";
 import { LayoutSaga } from "./Layout.saga";
 
 export class LayoutWatcher {
     public static *watchLoadLoad(): IterableIterator<ForkEffect> {
         yield takeLatest(
-            LayoutStoreActions.LOAD,
+            LayoutActions.LOAD,
             LayoutSaga.load
         );
     }
 
     public static *watchLoadAccessibleAccounts(): IterableIterator<ForkEffect> {
         yield takeLatest(
-            LayoutStoreActions.LOAD_ACCESSIBLE_ACCOUNTS,
+            LayoutActions.LOAD_ACCESSIBLE_ACCOUNTS,
             LayoutSaga.loadAccessibleAccounts
         );
     }
 
     public static *watchLoadActivateAccount(): IterableIterator<ForkEffect> {
         yield takeLatest(
-            LayoutStoreActions.ACTIVATE_ACCOUNT,
+            LayoutActions.ACTIVATE_ACCOUNT,
             LayoutSaga.activateAccount
         );
     }

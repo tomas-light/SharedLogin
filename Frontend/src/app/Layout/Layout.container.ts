@@ -3,7 +3,7 @@ import { AnyAction, Dispatch } from "redux";
 
 import { ILayoutOwnProps, ILayoutCallProps, Layout } from "./Layout";
 import { ComponentType } from "react";
-import { LayoutStoreActions } from "@app/Layout/redux/LayoutStore.actions";
+import { LayoutActions } from "@app/Layout/redux/Layout.actions";
 
 // const mapStateToProps = (state: Reducers) => {
 //     return {
@@ -14,7 +14,7 @@ import { LayoutStoreActions } from "@app/Layout/redux/LayoutStore.actions";
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): ILayoutCallProps => {
     return {
-        load: () => dispatch(LayoutStoreActions.load())
+        load: () => dispatch(LayoutActions.load())
     };
 };
 
