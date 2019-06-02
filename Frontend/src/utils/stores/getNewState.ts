@@ -5,8 +5,18 @@ export function getNewState<TStore>(
     action: AppAction,
     updatedProperty: string
 ): TStore {
-    return {
-        ...state,
-        [updatedProperty]: action.payload
-    };
+    if (typeof(action.payload) !== "object") {
+        return {
+            ...state,
+            [updatedProperty]: action.payload
+        };
+    }
+
+    const propValue = action.payload[updatedProperty];
+    if (propValue != undefined) {
+        return {
+            ...state,
+            [updatedProperty]: propValue
+        };
+    }
 }

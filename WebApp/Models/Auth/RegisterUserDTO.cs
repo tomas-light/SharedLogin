@@ -11,6 +11,9 @@
 		public string Name { get; set; }
 
 		[Required]
+		public string Avatar { get; set; }
+
+		[Required]
 		public string RoleId { get; set; }
 
 		[Required]

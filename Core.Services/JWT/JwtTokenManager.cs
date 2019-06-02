@@ -29,5 +29,19 @@
 			var encodedJwt = new JwtSecurityTokenHandler().WriteToken(token);
 			return encodedJwt;
 		}
+
+		public IEnumerable<Claim> GetClaimsFromEncodedJwtToken(string encodedJwtToken)
+		{
+			var jwtToken = DecodeJwt(encodedJwtToken);
+			return jwtToken.Claims;
+		}
+
+		public JwtSecurityToken DecodeJwt(string encodedJwtToken)
+		{
+			var handler = new JwtSecurityTokenHandler();
+			var jwtToken = handler.ReadJwtToken(encodedJwtToken);
+
+			return jwtToken;
+		}
 	}
 }

@@ -13,18 +13,23 @@
 			{
 				// укзывает, будет ли валидироваться издатель при валидации токена
 				ValidateIssuer = true,
+
 				// строка, представляющая издателя
 				ValidIssuer = SharedAuthOptions.Issuer,
  
 				// будет ли валидироваться потребитель токена
 				ValidateAudience = true,
+
 				// установка потребителя токена
-				ValidAudience = SharedAuthOptions.Audience,
+				//ValidAudience = SharedAuthOptions.Audience,
+				ValidAudience = "https://localhost:5001",
+
 				// будет ли валидироваться время существования
-				ValidateLifetime = true,
+				//ValidateLifetime = true,
  
 				// установка ключа безопасности
 				IssuerSigningKey = SharedAuthOptions.GenerateSymmetricSecurityKey(),
+
 				// валидация ключа безопасности
 				ValidateIssuerSigningKey = true,
 			};

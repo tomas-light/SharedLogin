@@ -26,7 +26,7 @@ export class HttpInterceptor {
         const jwtToken = this.store.getState().session.jwtToken;
 
         if (jwtToken) {
-            config.headers.Authorization = "Bearer " + jwtToken;
+            config.headers.Authorization = jwtToken;
         }
         else {
             config.headers.Authorization = null;

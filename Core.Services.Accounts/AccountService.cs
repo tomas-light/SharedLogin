@@ -264,7 +264,39 @@
 			{
 				throw new NullReferenceException(nameof(currentUserClaims));
 			}
+
+			var jwtClaims = this.GetClaimsFromJwtToken();
+			if (!jwtClaims.Any())
+			{
+				return currentUserClaims;
+			}
+
+			var claimTypes = currentUserClaims.Claims.Select(c => c.Type);
+			var missedClaims = jwtClaims.Where(jwtClaim => !claimTypes.Contains(jwtClaim.Type));
+			if (missedClaims.Any())
+			{
+				currentUserClaims.AddIdentity(new ClaimsIdentity(missedClaims));
+			}
+
 			return currentUserClaims;
+		}
+
+		private IEnumerable<Claim> GetClaimsFromJwtToken()
+		{
+			var request = httpContextAccessor.HttpContext?.Request;
+			if (request == null)
+			{
+				throw new NullReferenceException("request is not found in http context");
+			}
+
+			var encodedJwtToken = request.Headers["Authorization"];
+			if (!encodedJwtToken.Any())
+			{
+				return new List<Claim>();
+			}
+
+			var claims = this.jwtTokenManager.GetClaimsFromEncodedJwtToken(encodedJwtToken);
+			return claims;
 		}
 
 		private static TKey ConvertType(string value)
