@@ -4,7 +4,7 @@ import { LayoutActions } from "../redux/Layout.actions";
 import { LayoutSaga } from "./Layout.saga";
 
 export class LayoutWatcher {
-    public static *watchLoadLoad(): IterableIterator<ForkEffect> {
+    public static *watchLoad(): IterableIterator<ForkEffect> {
         yield takeLatest(
             LayoutActions.LOAD,
             LayoutSaga.load
@@ -18,7 +18,7 @@ export class LayoutWatcher {
         );
     }
 
-    public static *watchLoadActivateAccount(): IterableIterator<ForkEffect> {
+    public static *watchActivateAccount(): IterableIterator<ForkEffect> {
         yield takeLatest(
             LayoutActions.ACTIVATE_ACCOUNT,
             LayoutSaga.activateAccount
@@ -27,9 +27,9 @@ export class LayoutWatcher {
 
     public static get wathcers(): Array<() => IterableIterator<ForkEffect>> {
         return [
-            LayoutWatcher.watchLoadLoad,
+            LayoutWatcher.watchLoad,
             LayoutWatcher.watchLoadAccessibleAccounts,
-            LayoutWatcher.watchLoadActivateAccount
+            LayoutWatcher.watchActivateAccount
         ];
     }
 }

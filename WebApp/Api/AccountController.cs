@@ -8,7 +8,7 @@
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
-	using WebApp.Data;
+    using WebApp.Data;
     using WebApp.Models.Account.Request;
 	using WebApp.Models.Account.Response;
     using WebApp.Models.Auth;
@@ -61,21 +61,6 @@
 			}
 		}
 
-		[Route("auth")]
-		[HttpGet]
-		public async Task<IActionResult> GetAuthenticatedAccount()
-		{
-			try
-			{
-				var authenticatedAccountDTO = await this.GetAuthenticatedAccountInfo();
-				return Ok(authenticatedAccountDTO);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-
 		private async Task<AccountDTO> GetAuthenticatedAccountInfo()
 		{
 			var authenticatedAccountId = await this.accountService.GetAuthenticatedAccountIdAsync();
@@ -108,21 +93,6 @@
 			return authenticatedAccountDTO;
 		}
 
-		[Route("active")]
-		[HttpGet]
-		public async Task<IActionResult> GetActiveAccount()
-		{
-			try
-			{
-				var activeAccountDTO = await this.GetActiveAccountInfo();
-				return Ok(activeAccountDTO);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-		}
-
 		private async Task<AccountDTO> GetActiveAccountInfo()
 		{
 			var accountId = await this.accountService.GetActivatedAccountIdAsync();
@@ -143,31 +113,16 @@
 				throw new NullReferenceException();
 			}
 
-			var activeRole = await this.roleManager.FindByIdAsync(roleId);
-			if (activeRole == null)
+			var role = await this.roleManager.FindByIdAsync(roleId);
+			if (role == null)
 			{
-				throw new NullReferenceException(nameof(activeRole));
+				throw new NullReferenceException(nameof(role));
 			}
 
 			var activeAccountDTO = this.mapper.Map<User, AccountDTO>(activeAccount);
-			this.mapper.Map(activeRole, activeAccountDTO);
+			this.mapper.Map(role, activeAccountDTO);
 
 			return activeAccountDTO;
-		}
-
-		[Route("active")]
-		[HttpGet]
-		public async Task<IActionResult> GetAccessibleAccounts()
-		{
-			try
-			{
-				var accessibleAccountsDTO = await this.GetAccessibleAccountsInfo();
-				return Ok(accessibleAccountsDTO);
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
 		}
 
 		private async Task<AccountDTO[]> GetAccessibleAccountsInfo()
@@ -179,11 +134,18 @@
 			}
 
 			var accountIds = accessibleAccounts.Select(account => account.AccessibleAccountId).ToList();
+			var accessibleAccountsDTO = this.GetAccountsDTO()
+											.Where(user => accountIds.Contains(user.Id))
+											.ToArray();
 
+			return accessibleAccountsDTO;
+		}
+
+		private IQueryable<AccountDTO> GetAccountsDTO()
+		{
 			var data = from userRole in this.dbContext.UserRoles
 					   join user in this.dbContext.Users on userRole.UserId equals user.Id
 					   join role in this.dbContext.Roles on userRole.RoleId equals role.Id
-					   where accountIds.Contains(user.Id)
 					   select
 						   new AccountDTO
 						   {
@@ -194,10 +156,7 @@
 							   RoleId = role.Id,
 							   RoleName = role.Name,
 						   };
-
-			var accessibleAccountsDTO = data.ToArray();
-
-			return accessibleAccountsDTO;
+			return data;
 		}
 
 		[Route("activate")]
@@ -214,11 +173,53 @@
 			{
 				token.Token = await this.accountService.ActivateAccountByIdAsync(model.AccountId);
 			}
-			catch (NullReferenceException ex)
+			catch (Exception ex)
 			{
 				return BadRequest(ex.Message);
 			}
 			return Ok(token);
+		}
+
+		[Route("users")]
+		[HttpGet]
+		public IActionResult GetAllUsers()
+		{
+			var dto = new UsersDTO
+			{
+				Users = this.GetAccountsDTO().ToArray(),
+			};
+
+			return Ok(dto);
+		}
+
+		[Route("access")]
+		[HttpPost]
+		public async Task<IActionResult> AddAccess([FromBody] ActivateAccountDTO model)
+		{
+			try
+			{
+				await this.accountService.AddAsync(model.AccountId);
+				return Ok(model);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+		}
+
+		[Route("access/{accountId}")]
+		[HttpDelete]
+		public async Task<IActionResult> RemoveAccess(string accountId)
+		{
+			try
+			{
+				await this.accountService.DeleteAsync(accountId);
+				return Ok(accountId);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
 		}
 	}
 }

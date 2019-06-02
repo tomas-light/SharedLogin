@@ -20,7 +20,7 @@ export class Http {
         return isResolveResponse ? Http.resolvePromise(promise) : promise;
     }
 
-    public static delete(url: string, isResolveResponse: boolean = true): Promise<HttpResponse> {
+    public static delete(url: string, data?: any, isResolveResponse: boolean = true): Promise<HttpResponse> {
         const promise = axios.delete(url);
 
         return isResolveResponse ? Http.resolvePromise(promise) : promise;

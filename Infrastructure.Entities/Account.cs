@@ -10,6 +10,8 @@
 
 		public string AccessibleAccountId { get; set; }
 
+		public bool IsAllow { get; set; }
+
 		public virtual ICollection<History> AccessHistories { get; set; }
 	}
 }

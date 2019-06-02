@@ -12,7 +12,8 @@ import { ToastContainer } from "react-toastify";
 // });
 
 import PageLogin from "./Login/LoginPage/LoginPage.container";
-import { LayoutContainer } from "@app/Layout/Layout.container";
+import Layout from "@app/Layout/Layout.container";
+import MainPage from "@app/Main/MainPage/MainPage.container";
 
 export const urls = {
     rootPath: "/",
@@ -31,18 +32,13 @@ const PageComponentRouter: React.FunctionComponent<Props> = props => {
     const {} = props;
 
     return (
-        <>
-            <Switch>
-                <Route exact path={urls.loginPath} component={PageLogin} />
-                <LayoutContainer>
-                    {/*
-                    <Route exact path={urls.editBugPath}
-                           component={(props: RouteComponentProps<{id: string}>) => <PageBugEditor/>}/>
-                    */}
-                    <ToastContainer />
-                </LayoutContainer>
-            </Switch>
-        </>
+        <Switch>
+            <Route exact path={urls.loginPath} component={PageLogin} />
+            <Layout>
+                <Route exact path={urls.rootPath} component={MainPage}/>
+                <ToastContainer />
+            </Layout>
+        </Switch>
     );
 };
 

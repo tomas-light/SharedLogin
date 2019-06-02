@@ -229,16 +229,10 @@
 				throw new NullReferenceException("User for current claims not found");
 			}
 
-			var existingAccount = await this.GetAccountAsync(owner.Id, accountId);
-			if (existingAccount != null)
-			{
-				throw new ArgumentNullException("User already has access to this account");
-			}
-
 			var dataAccount = new Data.Account
 			{
-				UserId = owner.Id.ToString(),
-				AccessibleAccountId = accountId.ToString(),
+				UserId = accountId.ToString(),
+				AccessibleAccountId = owner.Id.ToString(),
 			};
 			var createdAccount = await this.accountRepository.AddAsync(dataAccount);
 
@@ -260,16 +254,10 @@
 				throw new NullReferenceException("User for current claims not found");
 			}
 
-			var existingAccount = await this.GetAccountAsync(userId, accountId);
-			if (existingAccount != null)
-			{
-				throw new ArgumentNullException("User already has access to this account");
-			}
-
 			var dataAccount = new Data.Account
 			{
-				UserId = userId.ToString(),
-				AccessibleAccountId = accountId.ToString(),
+				UserId = accountId.ToString(),
+				AccessibleAccountId = userId.ToString(),
 			};
 			var createdAccount = await this.accountRepository.AddAsync(dataAccount);
 
@@ -282,7 +270,7 @@
 		public async Task DeleteAsync(TKey accountId)
 		{
 			var currentUserId = await this.GetAuthenticatedAccountIdAsync();
-			var account = await this.accountRepository.FindByIdsAsync(currentUserId.ToString(), accountId.ToString());
+			var account = await this.accountRepository.FindByIdsAsync(accountId.ToString(), currentUserId.ToString());
 			if (account == null)
 			{
 				return;
@@ -310,8 +298,6 @@
 			if (missedClaims.Any())
 			{
 				currentUserClaims.Identities.First().AddClaims(missedClaims);
-
-				//currentUserClaims.AddIdentity(new ClaimsIdentity(missedClaims));
 			}
 
 			return currentUserClaims;
