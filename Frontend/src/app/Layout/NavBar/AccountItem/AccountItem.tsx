@@ -7,19 +7,16 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import createStyles from "@material-ui/core/styles/createStyles";
 
 import { AccountDTO } from "@models/accounts/AccountDTO";
-import {GreenCheckIcon} from "../../../../shared/icons/GreenCheckIcon";
+import { GreenCheckIcon } from "../../../../shared/icons/GreenCheckIcon";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-            width: "auto"
-        },
+        root: {},
         textContainer: {
             padding: "0 16px",
             flex: 1
-        },
-        textGridItem: {
-            width: "100%"
         },
         name: {
             fontSize: 14,
@@ -28,9 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
         roleName: {
             fontSize: 12,
             whiteSpace: "nowrap"
-        },
-        chevron: {
-            margin: "auto"
         }
     })
 );
@@ -54,29 +48,40 @@ const AccountItem: React.FunctionComponent<Props> = props => {
                 <Avatar src={account.avatar} />
             </Grid>
 
-            <Grid item container direction={"column"} className={classes.textContainer}>
-                <Grid item className={classes.textGridItem}>
-                    <Typography variant="caption" className={classes.name}>
-                        {account.name}
-                    </Typography>
-                </Grid>
-                <Grid item className={classes.textGridItem}>
-                    <Typography variant="caption" className={classes.roleName}>
-                        {account.roleName}
-                    </Typography>
-                </Grid>
+            <Grid
+                item
+                container
+                direction={"column"}
+                className={classes.textContainer}
+            >
+                <Typography
+                    variant="caption"
+                    component={"p"}
+                    className={classes.name}
+                >
+                    {account.name}
+                </Typography>
+                <Typography
+                    variant="caption"
+                    component={"p"}
+                    className={classes.roleName}
+                >
+                    {account.roleName}
+                </Typography>
             </Grid>
 
-            <Grid item>
-                {renderIcon()}
-            </Grid>
+            <Grid item>{renderIcon()}</Grid>
         </Grid>
     );
 
     function renderIcon() {
         if (isActiveAccount) {
             return (
-                <GreenCheckIcon />
+                <Tooltip title={"Activated account"}>
+                    <IconButton>
+                        <GreenCheckIcon />
+                    </IconButton>
+                </Tooltip>
             );
         }
 

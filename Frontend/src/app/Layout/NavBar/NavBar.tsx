@@ -12,19 +12,26 @@ import { ExpandMore } from "@material-ui/icons";
 import { Callback } from "@utils/types/Callback";
 import { AccountDTO } from "@models/accounts/AccountDTO";
 import { AccountItem } from "@app/Layout/NavBar/AccountItem/AccountItem";
-import {NavBarMenuContainer} from "@app/Layout/NavBar/NavBarMenu/NavBarMenuContainer";
+import { NavBarMenuContainer } from "@app/Layout/NavBar/NavBarMenu/NavBarMenuContainer";
+import createStyles from "@material-ui/core/styles/createStyles";
+import { Grid } from "@material-ui/core";
 
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        flexGrow: 1
-    },
-    menuButton: {
-        marginRight: theme.spacing(2)
-    },
-    title: {
-        flexGrow: 1
-    }
-}));
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            flexGrow: 1
+        },
+        menuButton: {
+            marginRight: theme.spacing(2)
+        },
+        title: {
+            flexGrow: 1
+        },
+        account: {
+            width: "auto"
+        }
+    })
+);
 
 export interface INavBarProps {
     authenticatedAccount: AccountDTO;
@@ -69,14 +76,16 @@ const NavBar: React.FunctionComponent<Props> = props => {
                         Shared login
                     </Typography>
 
-                    <AccountItem
-                        account={authenticatedAccount}
-                        icon={
-                            <IconButton onClick={handleMenu}>
-                                <ExpandMore />
-                            </IconButton>
-                        }
-                    />
+                    <Grid className={classes.account}>
+                        <AccountItem
+                            account={authenticatedAccount}
+                            icon={
+                                <IconButton onClick={handleMenu}>
+                                    <ExpandMore />
+                                </IconButton>
+                            }
+                        />
+                    </Grid>
 
                     <NavBarMenuContainer
                         anchorEl={anchorEl}

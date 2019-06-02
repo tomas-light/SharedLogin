@@ -11,9 +11,7 @@ import { AccountItem } from "@app/Layout/NavBar/AccountItem/AccountItem";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {},
-    menuItem: {
-
-    }
+    item: {}
 }));
 
 export interface INavBarMenuProps {
@@ -46,16 +44,16 @@ const NavBarMenu: React.FunctionComponent<Props> = props => {
     const classes = useStyles();
 
     return (
-        <Menu
-            anchorEl={anchorEl}
-            open={isOpen}
-            onClose={onClose}
-        >
+        <Menu anchorEl={anchorEl} open={isOpen} onClose={onClose}>
             {accessibleAccounts.map(account => {
                 const isActiveAccount = account.id === activeAccount.id;
 
                 return (
-                    <MenuItem key={"menu-account-" + account.id} className={classes.menuItem}>
+                    <MenuItem
+                        key={"menu-account-" + account.id}
+                        className={classes.item}
+                        button={false}
+                    >
                         <AccountItem
                             account={account}
                             isActiveAccount={isActiveAccount}
