@@ -11,11 +11,22 @@ import {GreenCheckIcon} from "../../../../shared/icons/GreenCheckIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            width: "auto"
+        },
+        textContainer: {
+            padding: "0 16px",
+            flex: 1
+        },
         textGridItem: {
             width: "100%"
         },
-        roleName: {
+        name: {
             fontSize: 14,
+            whiteSpace: "nowrap"
+        },
+        roleName: {
+            fontSize: 12,
             whiteSpace: "nowrap"
         },
         chevron: {
@@ -38,14 +49,16 @@ const AccountItem: React.FunctionComponent<Props> = props => {
     const classes = useStyles();
 
     return (
-        <Grid container>
+        <Grid container className={classes.root} justify={"center"}>
             <Grid item>
                 <Avatar src={account.avatar} />
             </Grid>
 
-            <Grid item container direction={"column"}>
+            <Grid item container direction={"column"} className={classes.textContainer}>
                 <Grid item className={classes.textGridItem}>
-                    {account.name}
+                    <Typography variant="caption" className={classes.name}>
+                        {account.name}
+                    </Typography>
                 </Grid>
                 <Grid item className={classes.textGridItem}>
                     <Typography variant="caption" className={classes.roleName}>

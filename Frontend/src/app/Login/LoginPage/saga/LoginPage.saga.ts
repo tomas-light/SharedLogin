@@ -6,12 +6,13 @@ import { AuthController } from "@api/AuthController";
 import { LoginDTO } from "@models/auth/LoginDTO";
 import { urls } from "@app/PageComponentRouter";
 import { history } from "@app/App";
-import { AccountDTO } from "@models/accounts/AccountDTO";
 import { LayoutStoreActions } from "@app/Layout/redux/LayoutStore.actions";
-import { LayoutStore } from "@app/Layout/redux/LayoutStore";
-import { AccountController } from "@api/AccountController";
 import { AuthJwtTokenDTO } from "@models/auth/AuthJwtTokenDTO";
 import { SessionStoreActions } from "@config/redux/SessionStore/SessionStore.actions";
+
+export const sessionStorageKeys = {
+    jwtToken: "shared-auth-token"
+};
 
 export class LoginPageSaga {
     public static *login(action: AppAction<LoginDTO>) {
@@ -23,24 +24,12 @@ export class LoginPageSaga {
             return;
         }
 
+        // unnecessary store
         yield put(SessionStoreActions.setToken(response.data.token));
 
-        const accountResponse: HttpResponse<{
-            authenticatedAccount: AccountDTO;
-            activeAccount: AccountDTO;
-            accessibleAccounts: AccountDTO[];
-        }> = yield AccountController.getCurrentInformation();
+        sessionStorage.setItem(sessionStorageKeys.jwtToken, response.data.token);
 
-        if (!accountResponse.data) {
-            console.log(response.errorMessage);
-            return;
-        }
-
-        yield put(LayoutStoreActions.updateStore({
-            authenticatedAccount: accountResponse.data.authenticatedAccount,
-            activeAccount: accountResponse.data.activeAccount,
-            accessibleAccounts: accountResponse.data.accessibleAccounts
-        } as LayoutStore));
+        yield put(LayoutStoreActions.load());
 
         history.push(urls.rootPath);
     }

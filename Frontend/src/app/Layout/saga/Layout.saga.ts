@@ -1,16 +1,50 @@
+import { put } from "redux-saga/effects";
+
 import { HttpResponse } from "@utils/http/HttpResponse";
 import { AppAction } from "@utils/types/AppAction";
 import { AuthController } from "@api/AuthController";
 import { urls } from "@app/PageComponentRouter";
 import { history } from "@app/App";
-import {AccountController} from "@api/AccountController";
-import {ActivateAccountDTO} from "@models/accounts/ActivateAccountDTO";
-import {LayoutStoreActions} from "@app/Layout/redux/LayoutStore.actions";
-import {LayoutStoreSelectors} from "@app/Layout/redux/LayoutStore.selectors";
-import {AccountDTO} from "@models/accounts/AccountDTO";
-import {LayoutStore} from "@app/Layout/redux/LayoutStore";
+import { AccountController } from "@api/AccountController";
+import { ActivateAccountDTO } from "@models/accounts/ActivateAccountDTO";
+import { LayoutStoreActions } from "@app/Layout/redux/LayoutStore.actions";
+import { LayoutStoreSelectors } from "@app/Layout/redux/LayoutStore.selectors";
+import { AccountDTO } from "@models/accounts/AccountDTO";
+import { LayoutStore } from "@app/Layout/redux/LayoutStore";
+import { SessionStoreSelectors } from "@config/redux/SessionStore/SessionStore.selectors";
+import { sessionStorageKeys } from "@app/Login/LoginPage/saga/LoginPage.saga";
+import { SessionStoreActions } from "@config/redux/SessionStore/SessionStore.actions";
 
 export class LayoutSaga {
+    public static *load(action: AppAction) {
+
+        let token = yield SessionStoreSelectors.getAuthentificationToken();
+        if (!token) {
+            token = sessionStorage.getItem(sessionStorageKeys.jwtToken);
+            // unnecessary store
+            yield put(SessionStoreActions.setToken(token));
+        }
+
+        const accountResponse: HttpResponse<{
+            authenticatedAccount: AccountDTO;
+            activeAccount: AccountDTO;
+            accessibleAccounts: AccountDTO[];
+        }> = yield AccountController.getCurrentInformation();
+
+        if (!accountResponse.data) {
+            console.log(accountResponse.errorMessage);
+            return;
+        }
+
+        yield put(
+            LayoutStoreActions.updateStore({
+                authenticatedAccount: accountResponse.data.authenticatedAccount,
+                activeAccount: accountResponse.data.activeAccount,
+                accessibleAccounts: accountResponse.data.accessibleAccounts
+            } as LayoutStore)
+        );
+    }
+
     public static *loadAccessibleAccounts(action: AppAction) {
         const response: HttpResponse = yield AuthController.postLogin(
             action.payload

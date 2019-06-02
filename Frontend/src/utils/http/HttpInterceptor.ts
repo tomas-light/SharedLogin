@@ -1,14 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import { Store } from "redux";
 
-import { Reducers } from "@reducers";
 import { urls } from "@app/PageComponentRouter";
+import { sessionStorageKeys } from "@app/Login/LoginPage/saga/LoginPage.saga";
 
 export class HttpInterceptor {
-    private store: Store<Reducers>;
-
-    constructor(store: Store<Reducers>) {
+    constructor() {
         axios.interceptors.request.use(
             this.requestFulfilled,
             this.requestRejected
@@ -18,19 +15,22 @@ export class HttpInterceptor {
             this.responseFulfilled,
             this.responseRejected
         );
-
-        this.store = store;
     }
 
-    private requestFulfilled = (config: AxiosRequestConfig): AxiosRequestConfig => {
-        const jwtToken = this.store.getState().session.jwtToken;
+    private requestFulfilled = (
+        config: AxiosRequestConfig
+    ): AxiosRequestConfig => {
+        try {
+            const jwtToken = sessionStorage.getItem(
+                sessionStorageKeys.jwtToken
+            );
 
-        if (jwtToken) {
-            config.headers.Authorization = jwtToken;
-        }
-        else {
-            config.headers.Authorization = null;
-        }
+            if (jwtToken) {
+                config.headers.Authorization = jwtToken;
+            } else {
+                config.headers.Authorization = null;
+            }
+        } catch (e) {}
 
         return config;
     };
@@ -55,7 +55,8 @@ export class HttpInterceptor {
                 break;
         }
 
-        return Promise.reject(error);
+        // return Promise.reject(error);
+        return Promise.resolve(error);
     };
 
     private showError(error: AxiosError) {

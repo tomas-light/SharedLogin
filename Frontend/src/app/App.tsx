@@ -1,15 +1,16 @@
 import * as React from "react";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
-import { ToastContainer } from "react-toastify";
 
 import withTheme from "@material-ui/core/styles/withTheme";
 
+import { configureApp } from "@config/configureApp";
+import { HttpInterceptor } from "@utils/http/HttpInterceptor";
 import { PageComponentRouter } from "./PageComponentRouter";
-import { configureApp } from "../config/configureApp";
-import {HttpInterceptor} from "@utils/http/HttpInterceptor";
 
 export const { store, history } = configureApp();
+
+new HttpInterceptor();
 
 interface IAppProps {}
 
@@ -18,10 +19,10 @@ type Props = IAppProps;
 class State {}
 
 class App extends React.Component<Props, State> {
-    private httpInterceptor;
+    // private httpInterceptor;
 
     public componentDidMount(): void {
-        this.httpInterceptor = new HttpInterceptor(store);
+        // this.httpInterceptor = new HttpInterceptor();
     }
 
     public render() {
@@ -36,4 +37,4 @@ class App extends React.Component<Props, State> {
 }
 
 const appWithTheme = withTheme(App);
-export { appWithTheme as App }
+export { appWithTheme as App };

@@ -45,7 +45,7 @@ const NavBar: React.FunctionComponent<Props> = props => {
     const open = Boolean(anchorEl);
 
     function handleMenu(event: React.MouseEvent<HTMLElement>) {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget.parentElement);
     }
 
     function handleClose() {
@@ -69,26 +69,24 @@ const NavBar: React.FunctionComponent<Props> = props => {
                         Shared login
                     </Typography>
 
-                    <div>
-                        <AccountItem
-                            account={authenticatedAccount}
-                            icon={
-                                <IconButton onClick={handleMenu}>
-                                    <ExpandMore />
-                                </IconButton>
-                            }
-                        />
+                    <AccountItem
+                        account={authenticatedAccount}
+                        icon={
+                            <IconButton onClick={handleMenu}>
+                                <ExpandMore />
+                            </IconButton>
+                        }
+                    />
 
-                        <NavBarMenuContainer
-                            anchorEl={anchorEl}
-                            isOpen={open}
-                            onClose={handleClose}
-                        />
+                    <NavBarMenuContainer
+                        anchorEl={anchorEl}
+                        isOpen={open}
+                        onClose={handleClose}
+                    />
 
-                        <Button color="inherit" onClick={logout}>
-                            Logout
-                        </Button>
-                    </div>
+                    <Button color="inherit" onClick={logout}>
+                        Logout
+                    </Button>
                 </Toolbar>
             </AppBar>
         </div>

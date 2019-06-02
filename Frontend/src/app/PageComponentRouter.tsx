@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Route, RouteComponentProps, Switch } from "react-router";
+import { ToastContainer } from "react-toastify";
 // import Loadable from 'react-loadable';
 
 // import CircularProgress from "@material-ui/core/CircularProgress";
-
-import { Layout } from "./Layout/Layout";
 
 // const LoadingComponent = <CircularProgress />;
 // const PageLogin = Loadable({
@@ -13,8 +12,7 @@ import { Layout } from "./Layout/Layout";
 // });
 
 import PageLogin from "./Login/LoginPage/LoginPage.container";
-import {ConnectedRouter} from "connected-react-router";
-import {ToastContainer} from "react-toastify";
+import { LayoutContainer } from "@app/Layout/Layout.container";
 
 export const urls = {
     rootPath: "/",
@@ -36,16 +34,16 @@ const PageComponentRouter: React.FunctionComponent<Props> = props => {
         <>
             <Switch>
                 <Route exact path={urls.loginPath} component={PageLogin} />
-                <Layout>
+                <LayoutContainer>
                     {/*
                     <Route exact path={urls.editBugPath}
                            component={(props: RouteComponentProps<{id: string}>) => <PageBugEditor/>}/>
                     */}
                     <ToastContainer />
-                </Layout>
+                </LayoutContainer>
             </Switch>
         </>
     );
 };
 
-export { PageComponentRouter as PageComponentRouter}
+export { PageComponentRouter };

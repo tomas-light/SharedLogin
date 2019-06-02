@@ -10,7 +10,10 @@ import { AccountDTO } from "@models/accounts/AccountDTO";
 import { AccountItem } from "@app/Layout/NavBar/AccountItem/AccountItem";
 
 const useStyles = makeStyles((theme: Theme) => ({
-    root: {}
+    root: {},
+    menuItem: {
+
+    }
 }));
 
 export interface INavBarMenuProps {
@@ -44,16 +47,7 @@ const NavBarMenu: React.FunctionComponent<Props> = props => {
 
     return (
         <Menu
-            id="menu-appbar"
             anchorEl={anchorEl}
-            anchorOrigin={{
-                vertical: "top",
-                horizontal: "right"
-            }}
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-            }}
             open={isOpen}
             onClose={onClose}
         >
@@ -61,7 +55,7 @@ const NavBarMenu: React.FunctionComponent<Props> = props => {
                 const isActiveAccount = account.id === activeAccount.id;
 
                 return (
-                    <MenuItem>
+                    <MenuItem key={"menu-account-" + account.id} className={classes.menuItem}>
                         <AccountItem
                             account={account}
                             isActiveAccount={isActiveAccount}
