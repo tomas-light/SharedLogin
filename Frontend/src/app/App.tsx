@@ -16,15 +16,7 @@ interface IAppProps {}
 
 type Props = IAppProps;
 
-class State {}
-
-class App extends React.Component<Props, State> {
-    // private httpInterceptor;
-
-    public componentDidMount(): void {
-        // this.httpInterceptor = new HttpInterceptor();
-    }
-
+class App extends React.Component<Props> {
     public render() {
         return (
             <Provider store={store}>
