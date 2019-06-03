@@ -14,18 +14,18 @@ import { Avatar } from "@material-ui/core";
 export interface IUserTableRowOwnProps {
     user: AccountDTO;
     isCurrent: boolean;
-    isAvailable: boolean;
+    hasAccess: boolean;
 }
 
 export interface IUserTableRowCallProps {
-    addAccess: (accountId: string) => void;
-    removeAccess: (accountId: string) => void;
+    grantAccess: (accountId: string) => void;
+    restrictAccess: (accountId: string) => void;
 }
 
 type Props = IUserTableRowOwnProps & IUserTableRowCallProps;
 
 const UserTableRow: React.FunctionComponent<Props> = props => {
-    const { user, isCurrent, isAvailable, addAccess, removeAccess } = props;
+    const { user, isCurrent, hasAccess, grantAccess, restrictAccess } = props;
 
     return (
         <TableRow>
@@ -41,12 +41,12 @@ const UserTableRow: React.FunctionComponent<Props> = props => {
                             <GreenCheckIcon />
                         </IconButton>
                     </Tooltip>
-                ) : isAvailable ? (
-                    <IconButton onClick={() => removeAccess(user.id)}>
+                ) : hasAccess ? (
+                    <IconButton onClick={() => restrictAccess(user.id)}>
                         <RemoveIcon />
                     </IconButton>
                 ) : (
-                    <IconButton onClick={() => addAccess(user.id)}>
+                    <IconButton onClick={() => grantAccess(user.id)}>
                         <AddIcon />
                     </IconButton>
                 )}

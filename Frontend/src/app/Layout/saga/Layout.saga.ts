@@ -13,6 +13,7 @@ import { AccountDTO } from "@models/accounts/AccountDTO";
 import { LayoutStore } from "@app/Layout/redux/Layout.store";
 import { LoginPageSaga } from "@app/Login/LoginPage/saga/LoginPage.saga";
 import { AuthJwtTokenDTO } from "@models/auth/AuthJwtTokenDTO";
+import {AccountsInformationDTO} from "@models/accounts/AccountsInformationDTO";
 
 export class LayoutSaga {
     public static *load(action: AppAction) {
@@ -24,11 +25,8 @@ export class LayoutSaga {
             yield LoginPageSaga.updateJwtToken(response.data.token);
         }
 
-        const accountResponse: HttpResponse<{
-            authenticatedAccount: AccountDTO;
-            activeAccount: AccountDTO;
-            accessibleAccounts: AccountDTO[];
-        }> = yield AccountController.getCurrentInformation();
+        const accountResponse: HttpResponse<AccountsInformationDTO> =
+            yield AccountController.getCurrentInformation();
 
         if (!accountResponse.data) {
             console.log(accountResponse.errorMessage);

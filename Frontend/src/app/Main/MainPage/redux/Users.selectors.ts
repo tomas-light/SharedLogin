@@ -13,4 +13,9 @@ export class UsersSelectors {
         const store: UsersStore = yield UsersSelectors.getStore();
         return store.allUsers;
     }
+
+    public static *getAccountsThatHaveAccess() {
+        const store: UsersStore = yield UsersSelectors.getStore();
+        return store.usersThatHaveAccess;
+    }
 }

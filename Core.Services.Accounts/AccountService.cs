@@ -109,6 +109,12 @@
 			return accounts.Select(mapDataToDomain).ToList();
 		}
 
+		public async Task<List<Core.Account>> GetAccountsThatHaveAccess(TKey userId)
+		{
+			var accounts = await this.accountRepository.FindByAccessibleAccountIdAsync(userId.ToString());
+			return accounts.Select(mapDataToDomain).ToList();
+		}
+
 		public async Task<string> GetCurrentTokenAsync()
 		{
 			var currentUserClaims = GetClaimsFromHttpContext();

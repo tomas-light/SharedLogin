@@ -3,17 +3,17 @@
 	using System;
 	using System.Linq;
 	using System.Threading.Tasks;
-    using AutoMapper;
-    using Core.Services;
+	using AutoMapper;
+	using Core.Services;
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
-    using WebApp.Data;
-    using WebApp.Models.Account.Request;
+	using WebApp.Data;
+	using WebApp.Models.Account.Request;
 	using WebApp.Models.Account.Response;
-    using WebApp.Models.Auth;
+	using WebApp.Models.Auth;
 
-    [Authorize]
+	[Authorize]
 	[Route("api/account")]
 	public class AccountController : Controller
 	{
@@ -47,13 +47,14 @@
 				var activeAccountDTO = await this.GetActiveAccountInfo();
 				var accessibleAccountsDTO = await this.GetAccessibleAccountsInfo();
 
-				return Ok(new
+				var dto = new AccountsInformationDTO
 				{
-					authenticatedAccount = authenticatedAccountDTO,
-					activeAccount = activeAccountDTO,
-					accessibleAccounts = accessibleAccountsDTO,
-				}
-				);
+					AuthenticatedAccount = authenticatedAccountDTO,
+					ActiveAccount = activeAccountDTO,
+					AccessibleAccounts = accessibleAccountsDTO,
+				};
+
+				return Ok(dto);
 			}
 			catch (Exception ex)
 			{
@@ -182,11 +183,20 @@
 
 		[Route("users")]
 		[HttpGet]
-		public IActionResult GetAllUsers()
+		public async Task<IActionResult> GetAllUsers()
 		{
+			var allUsers = this.GetAccountsDTO().ToArray();
+
+			var currentUserId = await this.accountService.GetAuthenticatedAccountIdAsync();
+			var usersWithAccess = await this.accountService.GetAccountsThatHaveAccess(currentUserId);
+			var usersId = usersWithAccess.Select(u => u.UserId);
+
+			var usersThatHaveAccess = allUsers.Where(user => usersId.Contains(user.Id)).ToArray();
+
 			var dto = new UsersDTO
 			{
-				Users = this.GetAccountsDTO().ToArray(),
+				Users = allUsers,
+				UsersThatHaveAccess = usersThatHaveAccess,
 			};
 
 			return Ok(dto);
@@ -220,6 +230,31 @@
 			{
 				return BadRequest(ex.Message);
 			}
+		}
+
+		/// <summary>
+		/// Get a list of accounts that have access to the current account
+		/// </summary>
+		/// <param name="accountId"></param>
+		/// <returns></returns>
+		[Route("access")]
+		[HttpGet]
+		public async Task<IActionResult> GetAccountsThatHaveAccess()
+		{
+			var currentUserId = await this.accountService.GetAuthenticatedAccountIdAsync();
+			var accountsWithAccess = await this.accountService.GetAccountsThatHaveAccess(currentUserId);
+			var accessibleAccountsId = accountsWithAccess.Select(u => u.AccessibleAccountId).ToList();
+
+			var allUsers = this.GetAccountsDTO();
+
+			var accounts = allUsers.Where(user => accessibleAccountsId.Contains(user.Id)).ToArray();
+
+			var dto = new AccountsWithAccessDTO
+			{
+				Accounts = accounts,
+			};
+
+			return Ok(dto);
 		}
 	}
 }

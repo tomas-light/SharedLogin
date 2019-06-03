@@ -58,6 +58,13 @@
 		Task<List<Account>> GetAccessibleAccountsByUserIdAsync(TKey userId);
 
 		/// <summary>
+		/// Get a list of accounts that have access to the current account
+		/// </summary>
+		/// <param name="userId">identificator of current user</param>
+		/// <returns></returns>
+		Task<List<Account>> GetAccountsThatHaveAccess(TKey userId);
+
+		/// <summary>
 		/// Generate jwt token for current user
 		/// </summary>
 		/// <returns></returns>

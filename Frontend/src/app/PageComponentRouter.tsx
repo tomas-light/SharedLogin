@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Route, RouteComponentProps, Switch } from "react-router";
-import { ToastContainer } from "react-toastify";
 // import Loadable from 'react-loadable';
 
 // import CircularProgress from "@material-ui/core/CircularProgress";
@@ -14,6 +13,7 @@ import { ToastContainer } from "react-toastify";
 import PageLogin from "./Login/LoginPage/LoginPage.container";
 import Layout from "@app/Layout/Layout.container";
 import MainPage from "@app/Main/MainPage/MainPage.container";
+import NotifierContainer from "../shared/Notifier/Notifier.container";
 
 export const urls = {
     rootPath: "/",
@@ -36,7 +36,7 @@ const PageComponentRouter: React.FunctionComponent<Props> = props => {
             <Route exact path={urls.loginPath} component={PageLogin} />
             <Layout>
                 <Route exact path={urls.rootPath} component={MainPage}/>
-                <ToastContainer />
+                <NotifierContainer />
             </Layout>
         </Switch>
     );

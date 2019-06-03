@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme =>
 export interface IUsersProps {
     authenticatedUser: AccountDTO;
     allUsers: AccountDTO[];
-    accessibleAccounts: AccountDTO[];
+    usersThatHaveAccess: AccountDTO[];
 }
 
 type Props = IUsersProps;
@@ -35,7 +35,7 @@ const Users: React.FunctionComponent<Props> = props => {
     const {
         authenticatedUser,
         allUsers,
-        accessibleAccounts
+        usersThatHaveAccess
     } = props;
 
     const classes = useStyles();
@@ -54,7 +54,7 @@ const Users: React.FunctionComponent<Props> = props => {
                 <TableBody>
                     {allUsers.map(user => {
                         const isCurrent = user.id === authenticatedUser.id;
-                        const isAvailable = accessibleAccounts.some(
+                        const hasAccess = usersThatHaveAccess.some(
                             account => account.id === user.id
                         );
                         return (
@@ -62,7 +62,7 @@ const Users: React.FunctionComponent<Props> = props => {
                                 key={"user-row-" + user.id}
                                 user={user}
                                 isCurrent={isCurrent}
-                                isAvailable={isAvailable}
+                                hasAccess={hasAccess}
                             />
                         );
                     })}

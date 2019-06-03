@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
+import { SnackbarProvider } from "notistack";
 
 import withTheme from "@material-ui/core/styles/withTheme";
 
@@ -19,11 +20,17 @@ type Props = IAppProps;
 class App extends React.Component<Props> {
     public render() {
         return (
-            <Provider store={store}>
-                <ConnectedRouter history={history}>
-                    <PageComponentRouter />
-                </ConnectedRouter>
-            </Provider>
+            <SnackbarProvider
+                maxSnack={3}
+                autoHideDuration={2000}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Provider store={store}>
+                    <ConnectedRouter history={history}>
+                        <PageComponentRouter />
+                    </ConnectedRouter>
+                </Provider>
+            </SnackbarProvider>
         );
     }
 }

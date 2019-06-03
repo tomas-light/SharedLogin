@@ -9,7 +9,7 @@ import {
 const mapStateToProps = (state: Reducers): IUsersProps => {
     return {
         authenticatedUser: state.layoutStore.authenticatedAccount,
-        accessibleAccounts: state.layoutStore.accessibleAccounts,
+        usersThatHaveAccess: state.usersStore.usersThatHaveAccess,
         allUsers: state.usersStore.allUsers
     };
 };

@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { toast } from "react-toastify";
 
 import { urls } from "@app/PageComponentRouter";
 import { sessionStorageKeys } from "@app/Login/LoginPage/saga/LoginPage.saga";
@@ -59,7 +58,7 @@ export class HttpInterceptor {
     };
 
     private showError(error: AxiosError) {
-        const message = error.response.data;
-        toast.error(message);
+        // const message = error.response.data;
+        // toast.error(message);
     }
 }

@@ -23,4 +23,8 @@ export class AccountController {
     public static deleteAccess(accountId: string): CallEffect {
         return call(Http.delete, "api/account/access/" + accountId);
     }
+
+    public static getAccountsThatHaveAccess(): CallEffect {
+        return call(Http.get, "api/account/access");
+    }
 }

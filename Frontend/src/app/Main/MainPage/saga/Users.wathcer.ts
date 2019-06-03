@@ -11,25 +11,25 @@ export class UsersWatcher {
         );
     }
 
-    public static *watchAddAccess(): IterableIterator<ForkEffect> {
+    public static *watchGrantAccess(): IterableIterator<ForkEffect> {
         yield takeLatest(
-            UsersActions.ADD_ACCESS,
-            UsersSaga.addAccess
+            UsersActions.GRANT_ACCESS,
+            UsersSaga.grantAccess
         );
     }
 
-    public static *watchRemoveAccess(): IterableIterator<ForkEffect> {
+    public static *watchRestrictAccess(): IterableIterator<ForkEffect> {
         yield takeLatest(
-            UsersActions.REMOVE_ACCESS,
-            UsersSaga.removeAccess
+            UsersActions.RESTRICT_ACCESS,
+            UsersSaga.restrictAccess
         );
     }
 
     public static get wathcers(): Array<() => IterableIterator<ForkEffect>> {
         return [
             UsersWatcher.watchLoadUsers,
-            UsersWatcher.watchAddAccess,
-            UsersWatcher.watchRemoveAccess
+            UsersWatcher.watchGrantAccess,
+            UsersWatcher.watchRestrictAccess
         ];
     }
 }

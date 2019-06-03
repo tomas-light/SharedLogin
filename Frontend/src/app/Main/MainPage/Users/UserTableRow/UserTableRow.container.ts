@@ -13,10 +13,10 @@ const mapDispatchToProps = (
     dispatch: Dispatch<AnyAction>
 ): IUserTableRowCallProps => {
     return {
-        addAccess: (accountId: string) =>
-            dispatch(UsersActions.addAccess(accountId)),
-        removeAccess: (accountId: string) =>
-            dispatch(UsersActions.removeAccess(accountId))
+        grantAccess: (accountId: string) =>
+            dispatch(UsersActions.grantAccess(accountId)),
+        restrictAccess: (accountId: string) =>
+            dispatch(UsersActions.restrictAccess(accountId))
     };
 };
 
