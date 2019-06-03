@@ -16,3 +16,8 @@ public void ConfigureServices(IServiceCollection services)
 Scheme of application modules:
 
 ![module scheme](./Images/Scheme.png)
+
+
+## Client interface 
+![video](https://www.youtube.com/watch?v=UnpitCKyKf0).
+Test client interface implementation to display of usage example.
