@@ -21,6 +21,13 @@
 		Task<List<History>> FindByAccountIdAsync(int accountId);
 
 		/// <summary>
+		/// Get list of <see cref="History"/>s by <see cref="Account"/> id list
+		/// </summary>
+		/// <param name="accountIds"><see cref="Account"/> identificators</param>
+		/// <returns>list of <see cref="History"/>s</returns>
+		Task<List<History>> FindByAccountIdsAsync(int[] accountIds);
+
+		/// <summary>
 		/// Add new <see cref="History"/> and save db context
 		/// </summary>
 		/// <param name="history"><see cref="History"/></param>

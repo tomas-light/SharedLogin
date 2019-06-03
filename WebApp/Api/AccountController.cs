@@ -147,17 +147,15 @@
 			var data = from userRole in this.dbContext.UserRoles
 					   join user in this.dbContext.Users on userRole.UserId equals user.Id
 					   join role in this.dbContext.Roles on userRole.RoleId equals role.Id
-					   select
-						   new AccountDTO
-						   {
-							   Id = user.Id,
-							   Name = user.Name,
-							   Email = user.Email,
-							   Avatar = user.Avatar,
-							   RoleId = role.Id,
-							   RoleName = role.Name,
-						   };
+					   select this.MapToAccount(user, role);
 			return data;
+		}
+
+		private AccountDTO MapToAccount(User user, Role role)
+		{
+			var account = this.mapper.Map<User, AccountDTO>(user);
+			this.mapper.Map(role, account);
+			return account;
 		}
 
 		[Route("activate")]

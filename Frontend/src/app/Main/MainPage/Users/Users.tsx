@@ -17,8 +17,6 @@ const useStyles = makeStyles(theme =>
             width: "100%",
             margin: 24,
             overflowY: "auto"
-        },
-        table: {
         }
     })
 );
@@ -42,7 +40,7 @@ const Users: React.FunctionComponent<Props> = props => {
 
     return (
         <Paper className={classes.root}>
-            <Table className={classes.table}>
+            <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell>Avatar</TableCell>

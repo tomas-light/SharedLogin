@@ -22,6 +22,13 @@
 		Task<List<History>> GetByAccountIdAsync(int accountId);
 
 		/// <summary>
+		/// Get list of <see cref="History"/> by <see cref="Account"/> id list
+		/// </summary>
+		/// <param name="accountIds"><see cref="Account"/> identificators</param>
+		/// <returns>list of <see cref="History"/>s</returns>
+		Task<List<History>> GetByAccountIdsAsync(int[] accountIds);
+
+		/// <summary>
 		/// Add information about <see cref="Account"/> authorization to <see cref="History"/>
 		/// </summary>
 		/// <param name="account">authorized <see cref="Account"/></param>

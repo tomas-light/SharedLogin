@@ -1,7 +1,7 @@
 import { call, CallEffect } from "redux-saga/effects";
 
 import { Http } from "@utils/http/Http";
-import {ActivateAccountDTO} from "@models/accounts/ActivateAccountDTO";
+import { ActivateAccountDTO } from "@models/accounts/ActivateAccountDTO";
 
 export class AccountController {
     public static getCurrentInformation(): CallEffect {

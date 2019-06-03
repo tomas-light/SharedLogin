@@ -19,6 +19,7 @@
           "@api": "./src/api",
           "@config": "./src/config",
           "@models": "./src/models",
+          "@shared": "./src/shared",
           "@utils": "./src/utils"
         }
       }

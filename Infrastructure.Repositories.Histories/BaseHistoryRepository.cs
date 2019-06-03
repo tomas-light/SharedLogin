@@ -30,6 +30,13 @@
 					.ToListAsync();
 		}
 
+		public Task<List<History>> FindByAccountIdsAsync(int[] accountIds)
+		{
+			return dbContext.Histories.AsNoTracking()
+					.Where(history => accountIds.Contains(history.AccountId))
+					.ToListAsync();
+		}
+
 		public async Task<History> AddAsync(History history)
 		{
 			await dbContext.Histories.AddAsync(history);

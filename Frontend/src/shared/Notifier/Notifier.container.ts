@@ -4,6 +4,8 @@ import { Reducers } from "@reducers";
 import { INotifierCallProps, INotifierProps } from "./Notifier.interfaces";
 import { NotifierActions } from "./redux/Notifier.actions";
 import { Notifier } from "./Notifier";
+import { Dispatch } from "redux";
+import { AppAction } from "@utils/types/AppAction";
 
 const mapStateToProps = (state: Reducers): INotifierProps => {
     return {
@@ -11,7 +13,7 @@ const mapStateToProps = (state: Reducers): INotifierProps => {
     };
 };
 
-const mapDispatchToProps = (dispatch): Partial<INotifierCallProps> => {
+const mapDispatchToProps = (dispatch: Dispatch<AppAction>): Partial<INotifierCallProps> => {
     return {
         dispatch,
         removeSnackbar: (key: string) =>

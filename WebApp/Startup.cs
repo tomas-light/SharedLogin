@@ -91,7 +91,10 @@
 			};
 
 			builder.AddSharedLoginServices<ApplicationDbContext, User, Role, string>(
-				mc => mc.AddProfile<AccountMappingProfile>(),
+				mc => {
+					mc.AddProfile<AccountMappingProfile>();
+					mc.AddProfile<HistoryMappingProfile>();
+				},
 				dbConfiguration,
 				DbConfigurationOptions.Sql);
 

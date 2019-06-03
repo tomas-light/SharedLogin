@@ -7,7 +7,7 @@ import {
     IUserTableRowCallProps,
     UserTableRow
 } from "./UserTableRow";
-import { UsersActions } from "@app/Main/MainPage/redux/Users.actions";
+import { UsersActions } from "@app/Main/MainPage/Users/redux/Users.actions";
 
 const mapDispatchToProps = (
     dispatch: Dispatch<AnyAction>

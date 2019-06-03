@@ -22,6 +22,7 @@
       "@app/*": ["app/*"],
       "@config/*": ["config/*"],
       "@models/*": ["models/*"],
+      "@shared/*": ["shared/*"],
       "@utils/*": ["utils/*"]
     },
 

@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 
 import { Reducers } from "@reducers";
 import { IMainPageProps, IMainPageCallProps, MainPage } from "./MainPage";
-import { UsersActions } from "@app/Main/MainPage/redux/Users.actions";
+import { UsersActions } from "@app/Main/MainPage/Users/redux/Users.actions";
+import { HistoryActions } from "@app/Main/MainPage/Histories/redux/History.actions";
 
 const mapStateToProps = (state: Reducers): IMainPageProps => {
     return {
@@ -15,7 +16,8 @@ const mapStateToProps = (state: Reducers): IMainPageProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): IMainPageCallProps => {
     return {
-        loadUsers: () => dispatch(UsersActions.loadUsers())
+        loadUsers: () => dispatch(UsersActions.loadUsers()),
+        loadAccessHistories: () => dispatch(HistoryActions.load())
     };
 };
 
