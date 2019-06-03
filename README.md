@@ -19,5 +19,6 @@ Scheme of application modules:
 
 
 ## Client interface 
-![video](https://www.youtube.com/watch?v=UnpitCKyKf0).
+https://www.youtube.com/watch?v=UnpitCKyKf0
+
 Test client interface implementation to display of usage example.
