@@ -1,11 +1,10 @@
-import { applyMiddleware, createStore, Store } from "redux";
+import { applyMiddleware, createStore, Store} from "redux";
 import createSagaMiddleware, { SagaMiddleware } from "redux-saga";
 
 import { routerMiddleware } from "connected-react-router";
-import { History } from "history";
-import createBrowserHistory from "history/createBrowserHistory";
+import { createBrowserHistory, History } from "history";
 
-import { createReducers } from "@reducers";
+import {createReducers, Reducers} from "@reducers";
 import { rootSaga } from "./sagas/rootSaga";
 
 export function configureApp() {
@@ -15,7 +14,7 @@ export function configureApp() {
         routerMiddleware(history),
         sagaMiddleware
     );
-    const store = createStore(createReducers(history), middleware);
+    const store: Store<Reducers> = createStore(createReducers(history), middleware);
     rootSaga(sagaMiddleware);
 
     return { store, history };

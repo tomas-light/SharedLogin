@@ -1,102 +1,105 @@
 import * as React from "react";
 
-import { Callback } from "@utils/types/Callback";
+import { makeStyles, Theme } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Toolbar from "@material-ui/core/Toolbar";
+import MenuIcon from "@material-ui/icons/Menu";
+import { ExpandMore } from "@material-ui/icons";
 
-export interface INavBarProps {}
+import { Callback } from "@utils/types/Callback";
+import { AccountDTO } from "@models/accounts/AccountDTO";
+import { AccountItem } from "@app/Layout/NavBar/AccountItem/AccountItem";
+import { NavBarMenuContainer } from "@app/Layout/NavBar/NavBarMenu/NavBarMenuContainer";
+import createStyles from "@material-ui/core/styles/createStyles";
+import { Grid } from "@material-ui/core";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            flexGrow: 1
+        },
+        menuButton: {
+            marginRight: theme.spacing(2)
+        },
+        title: {
+            flexGrow: 1
+        },
+        account: {
+            width: "auto"
+        }
+    })
+);
+
+export interface INavBarProps {
+    authenticatedAccount: AccountDTO;
+    activeAccount: AccountDTO;
+}
 
 export interface INavBarCallProps {
-    redirectToLogin: Callback;
-    redirectToNewBug: Callback;
-    redirectToBugList: Callback;
-    redirectToUserList: Callback;
-    redirectToNewUser: Callback;
     logout: Callback;
 }
 
 type Props = INavBarProps & INavBarCallProps;
 
-class State {}
+const NavBar: React.FunctionComponent<Props> = props => {
+    const { authenticatedAccount, activeAccount, logout } = props;
 
-export class NavBar extends React.Component<Props, State> {
-    render() {
-        const {
-            redirectToLogin,
-            redirectToBugList,
-            redirectToUserList,
-            redirectToNewBug,
-            redirectToNewUser,
-            logout
-        } = this.props;
+    const classes = useStyles();
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
 
-        return (
-            <nav className="navbar navbar-inverse navbar-fixed-top">
-                <div className="container">
-                    <div className="navbar-header">
-                        <button
-                            type="button"
-                            className="navbar-toggle"
-                            data-toggle="collapse"
-                            data-target=".navbar-collapse"
-                        >
-                            <span className="sr-only">Toggle navigation</span>
-                            <span className="icon-bar" />
-                            <span className="icon-bar" />
-                            <span className="icon-bar" />
-                        </button>
-                    </div>
-                    <div className="navbar-collapse collapse">
-                        <div className="navbar-collapse collapse">
-                            <ul className="nav navbar-nav">
-                                <li>
-                                    <button
-                                        className="btn btn-default navbar-btn"
-                                        onClick={redirectToLogin}
-                                    >
-                                        Login
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        className="btn btn-default navbar-btn"
-                                        onClick={redirectToBugList}
-                                    >
-                                        Backlog
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        className="btn btn-default navbar-btn"
-                                        onClick={redirectToNewBug}
-                                    >
-                                        New bug
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        className="btn btn-default navbar-btn"
-                                        onClick={redirectToUserList}
-                                    >
-                                        Users
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        className="btn btn-default navbar-btn"
-                                        onClick={redirectToNewUser}
-                                    >
-                                        New user
-                                    </button>
-                                </li>
-                                {/*<li>
-                                    <button className="btn btn-default navbar-btn" onClick={logout}>
-                                        Sign out
-                                    </button>
-                                </li>*/}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        );
+    function handleMenu(event: React.MouseEvent<HTMLElement>) {
+        setAnchorEl(event.currentTarget.parentElement);
     }
-}
+
+    function handleClose() {
+        setAnchorEl(null);
+    }
+
+    return (
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        edge="start"
+                        className={classes.menuButton}
+                        color="inherit"
+                        aria-label="Menu"
+                    >
+                        <MenuIcon />
+                    </IconButton>
+
+                    <Typography variant="h6" className={classes.title}>
+                        Shared login
+                    </Typography>
+
+                    <Grid className={classes.account}>
+                        <AccountItem
+                            account={authenticatedAccount}
+                            icon={
+                                <IconButton onClick={handleMenu}>
+                                    <ExpandMore />
+                                </IconButton>
+                            }
+                        />
+                    </Grid>
+
+                    <NavBarMenuContainer
+                        anchorEl={anchorEl}
+                        isOpen={open}
+                        onClose={handleClose}
+                    />
+
+                    <Button color="inherit" onClick={logout}>
+                        Logout
+                    </Button>
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
+};
+
+export { NavBar };

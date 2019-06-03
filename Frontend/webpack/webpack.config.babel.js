@@ -2,6 +2,7 @@ import path from "path";
 import merge from "webpack-merge";
 
 import { tsxRule } from "./rules/tsx-rule";
+import { fontRule } from "./rules/font-rule";
 
 import { forkTsCheckerWebpackPlugin } from "./plugins/fork-ts-checker-webpack-plugin";
 
@@ -30,5 +31,6 @@ module.exports = merge(
         }
     },
     tsxRule(),
+    fontRule(),
     forkTsCheckerWebpackPlugin()
 );

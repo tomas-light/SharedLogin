@@ -2,7 +2,6 @@
 {
 	using Microsoft.AspNetCore.Builder;
 	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Identity.UI;
 	using Microsoft.AspNetCore.Hosting;
 	using Microsoft.AspNetCore.Http;
 	using Microsoft.AspNetCore.Mvc;
@@ -10,13 +9,21 @@
 	using Microsoft.Extensions.Configuration;
 	using Microsoft.Extensions.DependencyInjection;
 
-	using Configuration;
 	using WebApp.Data;
 	using System;
 	using Infrastructure.DbContexts.Sql;
-	using Infrastructure.DbContexts.PostgreSql;
+    using WebApp.Controllers;
+    using Configuration;
+    using WebApp.AppConfiguration;
+    using Autofac.Extensions.DependencyInjection;
+    using WebApp.Mappings;
+    using Autofac;
+    using AutoMapper;
+    using System.Net;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-	public class Startup
+    public class Startup
 	{
 		public Startup(IConfiguration configuration)
 		{
@@ -29,19 +36,52 @@
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
 				options.CheckConsentNeeded = context => true;
-				options.MinimumSameSitePolicy = SameSiteMode.None;
+				//options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
+
+			services.Configure<IdentityOptions>(options =>
+			{
+				options.Password.RequireDigit = true;
+				options.Password.RequiredLength = 6;
+				options.Password.RequireLowercase = true;
+				options.Password.RequireNonAlphanumeric = true;
+				options.Password.RequireUppercase = true;
+
+				options.SignIn.RequireConfirmedEmail = false;
+				options.SignIn.RequireConfirmedPhoneNumber = false;
+
+				options.User.AllowedUserNameCharacters =
+						"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+				options.User.RequireUniqueEmail = true;
+			});
+
+			//services.ConfigureApplicationCookie(options =>
+			//{
+			//	options.ExpireTimeSpan = TimeSpan.FromHours(Configuration.GetValue<double>("CookieLifetime"));
+			//	options.SlidingExpiration = true;
+			//});
+
+			//services.Configure<SecurityStampValidatorOptions>(opt => { opt.ValidationInterval = TimeSpan.Zero; });
 
 			this.AddSqlContext(services);
 
-			services.AddDefaultIdentity<IdentityUser>()
-				.AddDefaultUI(UIFramework.Bootstrap4)
-				.AddEntityFrameworkStores<ApplicationDbContext>();
+			services
+				.AddIdentity<User, Role>()
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders();
+
+			var jwtBearerConfigurator = new JwtBearerConfigurator();
+
+			services.AddAuthorization()
+					.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+					.AddJwtBearer(options => jwtBearerConfigurator.CreateOptions(options));
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+			var configurator = new Configurator();
+			var builder = configurator.ConfigureDependencies();
+			
 			var dbConfiguration = new SqlDbConfiguration
 			{
 				Database = Configuration.GetValue<string>("ConnectionStrings:Sql:Database"),
@@ -49,7 +89,14 @@
 				IsMultipleActiveResultSets = Configuration.GetValue<bool>("ConnectionStrings:Sql:MultipleActiveResultSets"),
 				IsTrastedConnection = Configuration.GetValue<bool>("ConnectionStrings:Sql:Trusted_Connection"),
 			};
-			return services.AddSharedLogin<ApplicationDbContext, IdentityUser, IdentityRole, string>(dbConfiguration, DbConfigurationOptions.Sql);
+
+			builder.AddSharedLoginServices<ApplicationDbContext, User, Role, string>(
+				mc => {
+					mc.AddProfile<AccountMappingProfile>();
+					mc.AddProfile<HistoryMappingProfile>();
+				},
+				dbConfiguration,
+				DbConfigurationOptions.Sql);
 
 			//var dbConfiguration = new PostgreSqlDbConfiguration
 			//{
@@ -60,6 +107,9 @@
 			//	Database = Configuration.GetValue<string>("ConnectionStrings:PostgreSql:Database"),
 			//};
 			//return services.AddSharedLogin<ApplicationDbContext, IdentityUser, IdentityRole, string>(dbConfiguration, DbConfigurationOptions.PostgreSql);
+
+			builder.Populate(services);
+			return new AutofacServiceProvider(builder.Build());
 		}
 
 		private void AddSqlContext(IServiceCollection services)
@@ -101,9 +151,25 @@
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute(
-					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+					"default",
+					"{controller}/{action}",
+					new { Controller = "Home", Action = nameof(HomeController.Index) });
 			});
+
+			app.MapWhen(
+				context =>
+				{
+					return !context.Request.Path.Value.ToLower().StartsWith("/api");
+				},
+				builder =>
+				{
+					builder.UseMvc(routes =>
+					{
+						routes.MapSpaFallbackRoute(
+							"spa",
+							new { Controller = "Home", Action = nameof(HomeController.Index) });
+					});
+				});
 		}
 	}
 }

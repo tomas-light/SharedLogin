@@ -10,7 +10,8 @@
 		public HistoryMappingProfile()
 		{
 			CreateMap<Domain.History, Data.History>();
-			CreateMap<Data.History, Domain.History>();
+			CreateMap<Data.History, Domain.History>()
+				.ForMember(domain => domain.Id, opt => opt.MapFrom(data => data.AccountId));
 		}
 	}
 }

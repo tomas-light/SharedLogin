@@ -27,14 +27,14 @@
 		public virtual Task<List<Account>> FindByUserIdAsync(string ownerId)
 		{
 			return dbContext.Accounts.AsNoTracking()
-					.Where(account => account.UserId.Equals(ownerId))
+					.Where(account => account.UserId.Equals(ownerId) && account.IsAllow)
 					.ToListAsync();
 		}
 
 		public virtual Task<List<Account>> FindByAccessibleAccountIdAsync(string accessibleAccountId)
 		{
 			return dbContext.Accounts.AsNoTracking()
-					.Where(account => account.AccessibleAccountId.Equals(accessibleAccountId))
+					.Where(account => account.AccessibleAccountId.Equals(accessibleAccountId) && account.IsAllow)
 					.ToListAsync();
 		}
 
@@ -59,7 +59,20 @@
 
 		public virtual async Task<Account> AddAsync(Account account)
 		{
-			await dbContext.Accounts.AddAsync(account);
+			var existingAccount = dbContext.Accounts.FirstOrDefault(a => 
+														a.Id == account.Id || 
+														a.UserId == account.UserId && 
+														a.AccessibleAccountId == account.AccessibleAccountId);
+			if (existingAccount == null)
+			{
+				await dbContext.Accounts.AddAsync(account);
+			}
+			else
+			{
+				existingAccount.IsAllow = true;
+				dbContext.Accounts.Update(account);
+			}
+
 			await dbContext.SaveChangesAsync();
 			return account;
 		}
@@ -69,13 +82,15 @@
 		public virtual async Task RemoveByIdAsync(int id)
 		{
 			var account = await this.FindByIdAsync(id);
-			dbContext.Accounts.Remove(account);
+			account.IsAllow = false;
+			dbContext.Accounts.Update(account);
 			await dbContext.SaveChangesAsync();
 		}
 
 		public virtual async Task RemoveAsync(Account account)
 		{
-			dbContext.Accounts.Remove(account);
+			account.IsAllow = false;
+			dbContext.Accounts.Update(account);
 			await dbContext.SaveChangesAsync();
 		}
 	}

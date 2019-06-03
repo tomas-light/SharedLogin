@@ -27,6 +27,8 @@ namespace Infrastructure.DbContexts.Sql.Migrations
 
                     b.Property<string>("AccessibleAccountId");
 
+                    b.Property<bool>("IsAllow");
+
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
@@ -66,7 +68,7 @@ namespace Infrastructure.DbContexts.Sql.Migrations
                     b.HasOne("Infrastructure.Entities.Account", "AccessibleAccount")
                         .WithMany()
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Infrastructure.Entities.Account")
                         .WithMany("AccessHistories")

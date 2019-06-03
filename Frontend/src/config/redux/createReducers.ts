@@ -2,22 +2,18 @@ import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
 import { History } from "history";
 
-/*
-import { BugsStoreReducer } from "@core/Bugs/PageBugs/redux/BugsStoreReducer";
-import { BugEditorStoreReducer } from "@core/Bugs/PageBugEditor/redux/BugEditorStoreReducer";
-import { UsersStoreReducer } from "@core/Users/PageUsers/redux/UsersStore.reducer";
-import { UserEditorStoreReducer } from "@core/Users/PageUserEditor/redux/UserEditorStoreReducer";
-*/
+import { LayoutReducer } from "@app/Layout/redux/Layout.reducer";
+import { Reducers } from "@reducers";
+import { UsersReducer } from "@app/Main/MainPage/Users/redux/Users.reducer";
+import { HistoryReducer } from "@app/Main/MainPage/Histories/redux/History.reducers";
+import { NotifierReducer } from "@shared/Notifier/redux/Notifier.reducer";
 
 export function createReducers(history: History) {
-    return combineReducers({
-        router: connectRouter(history)
-        /*
-        bugsStore: BugsStoreReducer,
-        bugEditorStore: BugEditorStoreReducer,
-
-        usersStore: UsersStoreReducer,
-        userEditorStore: UserEditorStoreReducer
-        */
+    return combineReducers<Reducers>({
+        router: connectRouter(history),
+        layoutStore: LayoutReducer,
+        usersStore: UsersReducer,
+        historyStore: HistoryReducer,
+        notifierStore: NotifierReducer
     });
 }

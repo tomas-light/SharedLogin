@@ -1,7 +1,6 @@
 ﻿namespace Core.Services.Accounts
 {
     using AutoMapper;
-    using System;
 	using Domain = Core.Models;
 	using Data = Infrastructure.Entities;
 

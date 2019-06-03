@@ -39,6 +39,12 @@
 			return histories.Select(mapDataToDomain).ToList();
 		}
 
+		public async Task<List<Domain.History>> GetByAccountIdsAsync(int[] accountIds)
+		{
+			var histories = await this.repository.FindByAccountIdsAsync(accountIds);
+			return histories.Select(mapDataToDomain).ToList();
+		}
+
 		public async Task<Domain.History> AddAsync(
 			Domain.Account account,
 			string userName,

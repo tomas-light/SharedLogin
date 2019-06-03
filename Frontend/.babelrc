@@ -17,7 +17,9 @@
           "@reducers": "./src/config/redux/Reducers",
           "@app": "./src/app",
           "@api": "./src/api",
+          "@config": "./src/config",
           "@models": "./src/models",
+          "@shared": "./src/shared",
           "@utils": "./src/utils"
         }
       }
