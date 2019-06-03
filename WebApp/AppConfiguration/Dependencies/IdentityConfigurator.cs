@@ -22,6 +22,8 @@
 			builder.RegisterType<Logger<SignInManager<User>>>().As<ILogger<SignInManager<User>>>().InstancePerDependency();
 			builder.RegisterType<AuthenticationSchemeProvider>().As<IAuthenticationSchemeProvider>().InstancePerDependency();
 
+			builder.RegisterType<DbContextInitializer>().AsSelf().InstancePerDependency();
+
 			builder.RegisterType<SignInManager<User>>().AsSelf().InstancePerDependency();
 
 			return builder;

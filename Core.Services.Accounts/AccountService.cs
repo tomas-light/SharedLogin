@@ -205,7 +205,10 @@
 			var newAccountClaim = new Claim(CoreClaimTypes.ActiveAccountId, accessibleAccountId.ToString());
 			claimsIdentity.AddClaim(newAccountClaim);
 
-			await this.historyService.AddAsync(account, owner.UserName, accessibleUser.UserName, loginDateTime);
+			if (!owner.Id.Equals(accessibleAccountId))
+			{
+				await this.historyService.AddAsync(account, owner.UserName, accessibleUser.UserName, loginDateTime);
+			}
 
 			var role = await this.roleManager.FindByNameAsync(accountRoles.First());
 			if (role == null)

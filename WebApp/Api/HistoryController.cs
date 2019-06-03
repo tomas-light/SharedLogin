@@ -1,6 +1,5 @@
-﻿namespace WebApp.Controllers
+﻿namespace WebApp.Api
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -17,24 +16,15 @@
 	[Route("api/history")]
 	public class HistoryController : Controller
 	{
-		private readonly ApplicationDbContext dbContext;
-		private readonly UserManager<User> userManager;
-		private readonly RoleManager<Role> roleManager;
 		private readonly IAccountService<User, Role, string> accountService;
 		private readonly IHistoryService historyService;
 		private readonly IMapper mapper;
 
 		public HistoryController(
-			UserManager<User> userManager,
-			RoleManager<Role> roleManager,
-			ApplicationDbContext applicationDbContext,
 			IAccountService<User, Role, string> accountService,
 			IHistoryService historyService,
 			IMapper mapper)
 		{
-			this.userManager = userManager;
-			this.roleManager = roleManager;
-			this.dbContext = applicationDbContext;
 			this.accountService = accountService;
 			this.historyService = historyService;
 			this.mapper = mapper;

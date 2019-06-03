@@ -7,7 +7,6 @@
 	{
 		public void Configure(BaseDbContext context)
 		{
-			context.Database.EnsureCreated();
 			context.Database.Migrate();
 		}
 	}

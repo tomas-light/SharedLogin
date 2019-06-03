@@ -6,8 +6,8 @@
 	{
 		public string UserId { get; set; }
 
-		public DateTime LoginDateTime { get; set; }
+		public string LoginDateTime { get; set; }
 
-		public DateTime? LogoutDateTime { get; set; }
+		public string LogoutDateTime { get; set; }
 	}
 }
