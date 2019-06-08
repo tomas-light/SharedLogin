@@ -3,13 +3,32 @@
 How to setup for Asp.Net Core:
 
 ```csharp
-public void ConfigureServices(IServiceCollection services)
+public IServiceProvider ConfigureServices(IServiceCollection services)
 {
     services.AddMvc();
     
     // other code
     
-    Configger.Configure(services, Configuration, Configuration.GetConnectionString("DefaultConnection"), DbConfigurationOptions.Sql);
+    var jwtBearerConfigurator = new JwtBearerConfigurator();
+
+    services.AddAuthorization()
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => jwtBearerConfigurator.CreateOptions(options));
+        
+    var containerBuilder = new ContainerBuilder();
+    var repositoryDependenciesModule = DbContextConfigurator.GetDbContextDependencies(
+        dbConfiguration, 
+        DbConfigurationOptions.Sql);
+        
+    containerBuilder.AddSharedLoginDependecies<ApplicationDbContext, User, Role, string>(
+        mapperConfiguration => {
+            mapperConfiguration.AddProfile<Mappings.AccountMappingProfile>();
+            mapperConfiguration.AddProfile<Mappings.HistoryMappingProfile>();
+        },
+        repositoryDependenciesModule);
+        
+    containerBuilder.Populate(services);
+    return new AutofacServiceProvider(containerBuilder.Build());
 }
 ```
 
