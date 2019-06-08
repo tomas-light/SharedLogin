@@ -9,10 +9,8 @@
 
     public static class IdentityConfigurator
 	{
-		public static ContainerBuilder Configure()
+		public static ContainerBuilder RegisterDependencies(ContainerBuilder builder)
 		{
-			var builder = new ContainerBuilder();
-
 			builder.RegisterType<UserManager<User>>().AsSelf().InstancePerDependency();
 			builder.RegisterType<RoleManager<Role>>().AsSelf().InstancePerDependency();
 

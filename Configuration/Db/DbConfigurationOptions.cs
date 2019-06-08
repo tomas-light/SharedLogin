@@ -1,4 +1,4 @@
-﻿namespace Configuration
+﻿namespace Configuration.Db
 {
 	public enum DbConfigurationOptions
 	{

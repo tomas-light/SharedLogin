@@ -24,7 +24,7 @@
 				ValidAudience = SharedAuthOptions.Audience,
 
 				// будет ли валидироваться время существования
-				//ValidateLifetime = true,
+				ValidateLifetime = true,
 
 				// установка ключа безопасности
 				IssuerSigningKey = SharedAuthOptions.GenerateSymmetricSecurityKey(),
