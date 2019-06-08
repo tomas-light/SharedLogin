@@ -153,7 +153,7 @@
 
 		private AccountDTO MapToAccount(User user, Role role)
 		{
-			var account = this.mapper.Map<User, AccountDTO>(user);
+			var account = this.mapper.Map<AccountDTO>(user);
 			this.mapper.Map(role, account);
 			return account;
 		}

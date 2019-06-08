@@ -1,6 +1,7 @@
 ﻿namespace Configuration.Dependencies.Strategies
 {
-	using System;
+    using Configuration.Db;
+    using System;
 
 	internal class DbContextDependenciesStrategyFactory
 	{
