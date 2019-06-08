@@ -16,6 +16,9 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
             .AddJwtBearer(options => jwtBearerConfigurator.CreateOptions(options));
         
     var containerBuilder = new ContainerBuilder();
+    
+    // register own dependencies
+    
     var repositoryDependenciesModule = DbContextConfigurator.GetDbContextDependencies(
         dbConfiguration, 
         DbConfigurationOptions.Sql);
