@@ -8,6 +8,7 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
     services.AddMvc();
     
     // other code
+    // ...
     
     var jwtBearerConfigurator = new JwtBearerConfigurator();
 
@@ -18,6 +19,7 @@ public IServiceProvider ConfigureServices(IServiceCollection services)
     var containerBuilder = new ContainerBuilder();
     
     // register own dependencies
+    // ...
     
     var repositoryDependenciesModule = DbContextConfigurator.GetDbContextDependencies(
         dbConfiguration, 
